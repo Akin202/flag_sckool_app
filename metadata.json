@@ -1,6 +1,0 @@
-{
-  "name": "Flag Skool",
-  "description": "Visual front-end for Flag Skool AI education platform for Nigerian students",
-  "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
-}

@@ -91,6 +91,7 @@ export interface CopyConfig {
   freePreviewCaption: string;
   outcomeBullets: OutcomeBullet[];
   instructorBioParagraphs: string[];
+  auth: AuthCopyConfig;
 }
 
 export type VideoQuality = '360p' | '480p' | '720p' | '1080p';
@@ -99,6 +100,28 @@ export interface PlayerConfig {
   defaultQuality: VideoQuality;
   dataSaverQuality: VideoQuality;
   availableQualities: VideoQuality[];
+  /** How often playback position is persisted to lesson_progress. */
+  savePositionEverySeconds: number;
+  /** Watched fraction (0-100) at which a lesson auto-marks complete. */
+  markCompleteAtPercent: number;
+}
+
+export interface VideoConfig {
+  /** TTL for a signed Bunny Stream URL. Short, because URLs get shared. */
+  signedUrlTtlSeconds: number;
+}
+
+export interface AuthScreenCopy {
+  title: string;
+  subtitle?: string;
+}
+
+export interface AuthCopyConfig {
+  login: AuthScreenCopy;
+  signup: AuthScreenCopy;
+  forgot: AuthScreenCopy;
+  reset: AuthScreenCopy;
+  verifyEmail: AuthScreenCopy;
 }
 
 export interface FlagSkoolConfig {
@@ -106,6 +129,7 @@ export interface FlagSkoolConfig {
   org: OrgConfig;
   promo: PromoConfig;
   player: PlayerConfig;
+  video: VideoConfig;
   copy: CopyConfig;
   pricing: {
     recordings: PricingTier;
@@ -316,9 +340,13 @@ export interface ResetPasswordFormValues {
   confirmPassword: string;
 }
 
-export interface AuthFormProps<T = void> {
-  state: LoadState<T>;
-  onSubmit: (values: any) => void;
+/**
+ * The generic is the shape the form SUBMITS. The load state carries no payload
+ * — these forms only ever report idle/loading/success/error.
+ */
+export interface AuthFormProps<TValues = void> {
+  state: LoadState<void>;
+  onSubmit: (values: TValues) => void;
   onGoogleSignIn?: () => void;
   onNavigate?: (page: Page) => void;
 }

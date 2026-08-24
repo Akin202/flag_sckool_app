@@ -27,9 +27,16 @@ export const config: FlagSkoolConfig = {
     active: true,
   },
   player: {
+    // 480p, never 'auto'. Thirteen two-hour lessons at 720p is ~20GB per
+    // student on Nigerian mobile data. Do not raise this default.
     defaultQuality: '480p',
     dataSaverQuality: '360p',
     availableQualities: ['360p', '480p', '720p', '1080p'],
+    savePositionEverySeconds: 10,
+    markCompleteAtPercent: 90,
+  },
+  video: {
+    signedUrlTtlSeconds: 300,
   },
   copy: {
     heroHeadline: 'Build and Deploy Production AI Systems in Nigeria',
@@ -60,6 +67,21 @@ export const config: FlagSkoolConfig = {
         iconName: 'rocket',
       },
     ],
+    auth: {
+      login: {
+        title: 'Sign In to Student Portal',
+        subtitle:
+          'Access your lecture recordings, n8n templates, and live weekend sessions.',
+      },
+      signup: {
+        title: 'Create Student Account',
+        subtitle:
+          'Join 750+ Nigerian engineers mastering autonomous agents & enterprise AI workflows.',
+      },
+      forgot: { title: 'Reset Password' },
+      reset: { title: 'Set New Password' },
+      verifyEmail: { title: 'Verify Email Address' },
+    },
     instructorBioParagraphs: [
       '// TODO(handoff): Replace with final verified instructor bio from leadership team.',
       'Lead AI Engineer and Systems Architect with 8+ years building distributed backends, LLM agents, and automated data pipelines across Lagos and international tech ecosystems. Passionate about equipping West African engineers with world-class, commercial AI tooling.',

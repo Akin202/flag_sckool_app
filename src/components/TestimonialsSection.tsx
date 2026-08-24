@@ -1,17 +1,18 @@
 import React from 'react';
 import { Testimonial, TestimonialsState } from '@/types/index';
-import { MOCK_TESTIMONIALS } from '@/lib/mock-data';
 import { Card } from './ui/Card';
 import { Avatar } from './ui/Avatar';
 import { EmptyState } from './ui/EmptyState';
 import { MessageSquare, Star, Quote } from 'lucide-react';
 
 export interface TestimonialsSectionProps {
+  testimonials: Testimonial[];
   testimonialsState: TestimonialsState;
   onShareStoryClick?: () => void;
 }
 
 export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({
+  testimonials,
   testimonialsState,
   onShareStoryClick,
 }) => {
@@ -36,7 +37,7 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({
 
       {isPopulated ? (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
-          {MOCK_TESTIMONIALS.map((t) => (
+          {testimonials.map((t) => (
             <Card
               key={t.id}
               id={`testimonial-card-${t.id}`}

@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
-import { MOCK_FAQS } from '@/lib/mock-data';
 import { Accordion } from './ui/Accordion';
 import { HelpCircle, Mail } from 'lucide-react';
-import { FlagSkoolConfig } from '@/types/index';
+import { FAQItem, FlagSkoolConfig } from '@/types/index';
 
 export interface FaqSectionProps {
   config: FlagSkoolConfig;
+  faqs: FAQItem[];
 }
 
-export const FaqSection: React.FC<FaqSectionProps> = ({ config }) => {
+export const FaqSection: React.FC<FaqSectionProps> = ({ config, faqs }) => {
   // First FAQ open by default
   const [openIds, setOpenIds] = useState<string[]>(['faq-1']);
 
@@ -18,7 +18,7 @@ export const FaqSection: React.FC<FaqSectionProps> = ({ config }) => {
     );
   };
 
-  const accordionItems = MOCK_FAQS.map((faq) => ({
+  const accordionItems = faqs.map((faq) => ({
     id: faq.id,
     trigger: (
       <div className="flex items-center gap-3">

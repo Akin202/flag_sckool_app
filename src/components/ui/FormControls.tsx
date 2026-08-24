@@ -10,7 +10,7 @@ export interface BaseFieldProps {
 }
 
 export interface InputProps
-  extends React.InputHTMLAttributes<HTMLInputElement>,
+  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'id'>,
     BaseFieldProps {
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
@@ -75,7 +75,7 @@ export const Input: React.FC<InputProps> = ({
 };
 
 export interface TextareaProps
-  extends React.TextareaHTMLAttributes<HTMLTextAreaElement>,
+  extends Omit<React.TextareaHTMLAttributes<HTMLTextAreaElement>, 'id'>,
     BaseFieldProps {}
 
 export const Textarea: React.FC<TextareaProps> = ({
@@ -128,7 +128,7 @@ export interface SelectOption {
 }
 
 export interface SelectProps
-  extends React.SelectHTMLAttributes<HTMLSelectElement>,
+  extends Omit<React.SelectHTMLAttributes<HTMLSelectElement>, 'id'>,
     BaseFieldProps {
   options: SelectOption[];
 }
