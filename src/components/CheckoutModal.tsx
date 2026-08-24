@@ -3,7 +3,7 @@ import { X, ShieldCheck, Lock, CheckCircle2, ArrowRight } from 'lucide-react';
 import { Button } from './ui/Button';
 import { Input, Select } from './ui/FormControls';
 import { Badge } from './ui/Badge';
-import { FlagSkoolConfig, PromoState, koboToNaira } from '@/types/index';
+import { FlagSkoolConfig, PromoState, activePriceKobo, koboToNaira } from '@/types/index';
 
 export interface CheckoutModalProps {
   isOpen: boolean;
@@ -33,7 +33,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
 
   const isPromoLive = promoState === 'live';
   const tier = activeTier === 'recordings' ? config.pricing.recordings : config.pricing.cohort;
-  const currentPrice = isPromoLive ? tier.promoPriceNgn || tier.fullPriceNgn : tier.fullPriceNgn;
+  const currentPriceKobo = activePriceKobo(tier, isPromoLive);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -85,7 +85,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
             <div className="p-4 rounded-xl bg-[#030617] border border-[#1A2342] font-mono text-xs text-[#8492A6] text-left max-w-md mx-auto space-y-1">
               <div>// TODO(handoff): wire to checkout</div>
               <div>// Tier: {tier.name}</div>
-              <div>// Amount: {koboToNaira(currentPrice * 100)}</div>
+              <div>// Amount: {koboToNaira(currentPriceKobo)}</div>
               <div>// Payment Provider: {paymentMethod}</div>
             </div>
             <div className="pt-4 flex justify-center gap-3">
@@ -119,11 +119,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                     {isPromoLive && <Badge variant="accent" size="sm">50% OFF</Badge>}
                   </div>
                   <div className="font-mono text-lg font-bold text-[#F8FAFC]">
-                    {koboToNaira(
-                      (isPromoLive
-                        ? config.pricing.recordings.promoPriceNgn || 50000
-                        : config.pricing.recordings.fullPriceNgn) * 100
-                    )}
+                    {koboToNaira(activePriceKobo(config.pricing.recordings, isPromoLive))}
                   </div>
                 </button>
 
@@ -141,11 +137,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                     <Badge variant="accent" size="sm">Premium</Badge>
                   </div>
                   <div className="font-mono text-lg font-bold text-[#F8FAFC]">
-                    {koboToNaira(
-                      (isPromoLive
-                        ? config.pricing.cohort.promoPriceNgn || 100000
-                        : config.pricing.cohort.fullPriceNgn) * 100
-                    )}
+                    {koboToNaira(activePriceKobo(config.pricing.cohort, isPromoLive))}
                   </div>
                 </button>
               </div>
@@ -202,7 +194,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
               <div>
                 <span className="text-xs text-[#8492A6] block">Total Amount Due</span>
                 <span className="font-mono text-2xl sm:text-3xl font-bold text-[#F8FAFC]">
-                  {koboToNaira(currentPrice * 100)}
+                  {koboToNaira(currentPriceKobo)}
                 </span>
               </div>
 

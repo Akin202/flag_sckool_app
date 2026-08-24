@@ -406,7 +406,7 @@ export const AccountPage: React.FC<AccountPageProps> = ({
                           <div className="flex justify-between">
                             <span>Amount:</span>
                             <span className="text-[#CBD5E1]">
-                              {koboToNaira(enr.amountPaidNgn * 100)}
+                              {koboToNaira(enr.amountPaidKobo)}
                             </span>
                           </div>
                           <div className="flex justify-between">

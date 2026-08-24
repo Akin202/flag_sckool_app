@@ -40,8 +40,8 @@ export interface PricingTier {
   id: 'recordings' | 'cohort';
   name: string;
   tag?: string;
-  fullPriceNgn: number;
-  promoPriceNgn?: number;
+  fullPriceKobo: number;
+  promoPriceKobo?: number;
   isPremium?: boolean;
   description: string;
   features: string[];
@@ -436,7 +436,7 @@ export interface Enrollment {
   tierId: 'recordings' | 'cohort';
   tierName: string;
   purchaseDate: string;
-  amountPaidNgn: number;
+  amountPaidKobo: number;
   status: 'active' | 'expired';
   reference: string;
 }
@@ -458,6 +458,18 @@ export function koboToNaira(amountInKobo: number): string {
  * - 720p: ~1.8 Mbps (~13.5 MB/min)
  * - 1080p: ~3.5 Mbps (~26.25 MB/min)
  */
+/**
+ * The price to charge for a tier right now, in kobo. Single definition so the
+ * promo ternary cannot drift between the pricing table, the modal, and
+ * checkout.
+ */
+export function activePriceKobo(tier: PricingTier, isPromoActive: boolean): number {
+  if (isPromoActive && typeof tier.promoPriceKobo === 'number') {
+    return tier.promoPriceKobo;
+  }
+  return tier.fullPriceKobo;
+}
+
 export function estimateDataUsageMb(remainingMinutes: number, quality: VideoQuality): number {
   const mbPerMinMap: Record<VideoQuality, number> = {
     '360p': 3.4,

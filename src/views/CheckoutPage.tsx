@@ -22,6 +22,7 @@ import {
   DiscountPreview,
   Page,
   koboToNaira,
+  activePriceKobo,
 } from '@/types/index';
 
 export interface CheckoutPageProps {
@@ -44,8 +45,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
 
   // Selected product
   const tier = config.pricing[productSku] || config.pricing.cohort;
-  const basePriceNgn = config.promo.active ? (tier.promoPriceNgn || tier.fullPriceNgn) : tier.fullPriceNgn;
-  const basePriceKobo = basePriceNgn * 100;
+  const basePriceKobo = activePriceKobo(tier, config.promo.active);
 
   // Payer form fields
   const [name, setName] = useState('Chidi Okonkwo');

@@ -92,8 +92,8 @@ export const config: FlagSkoolConfig = {
       id: 'recordings',
       name: 'On-Demand Recordings',
       tag: 'Self-Paced',
-      fullPriceNgn: 100000,
-      promoPriceNgn: 50000,
+      fullPriceKobo: 10000000,
+      promoPriceKobo: 5000000,
       isPremium: false,
       description: 'Immediate lifetime access to all Cohort 1 video lectures, code repositories, and automation blueprints.',
       features: [
@@ -110,8 +110,8 @@ export const config: FlagSkoolConfig = {
       id: 'cohort',
       name: 'Live Cohort 2 + Complete Archive',
       tag: 'Most Recommended',
-      fullPriceNgn: 150000,
-      promoPriceNgn: 100000,
+      fullPriceKobo: 15000000,
+      promoPriceKobo: 10000000,
       isPremium: true,
       description: 'Live interactive weekend masterclasses, weekly office hours, code reviews, plus the entire Cohort 1 archive.',
       features: [

@@ -1,5 +1,5 @@
 import React from 'react';
-import { FlagSkoolConfig, PromoState, koboToNaira } from '@/types/index';
+import { FlagSkoolConfig, PromoState, activePriceKobo, koboToNaira } from '@/types/index';
 import { Card } from './ui/Card';
 import { Button } from './ui/Button';
 import { Badge } from './ui/Badge';
@@ -69,15 +69,15 @@ export const PricingSection: React.FC<PricingSectionProps> = ({
                 {isPromoLive ? (
                   <>
                     <span className="font-mono text-3xl sm:text-4xl font-bold text-[#F8FAFC]">
-                      {koboToNaira((recordings.promoPriceNgn || 50000) * 100)}
+                      {koboToNaira(activePriceKobo(recordings, true))}
                     </span>
                     <span className="font-mono text-lg sm:text-xl text-[#8492A6] line-through">
-                      {koboToNaira(recordings.fullPriceNgn * 100)}
+                      {koboToNaira(recordings.fullPriceKobo)}
                     </span>
                   </>
                 ) : (
                   <span className="font-mono text-3xl sm:text-4xl font-bold text-[#F8FAFC]">
-                    {koboToNaira(recordings.fullPriceNgn * 100)}
+                    {koboToNaira(recordings.fullPriceKobo)}
                   </span>
                 )}
               </div>
@@ -156,15 +156,15 @@ export const PricingSection: React.FC<PricingSectionProps> = ({
                 {isPromoLive ? (
                   <>
                     <span className="font-mono text-3xl sm:text-4xl font-bold text-[#F8FAFC]">
-                      {koboToNaira((cohort.promoPriceNgn || 100000) * 100)}
+                      {koboToNaira(activePriceKobo(cohort, true))}
                     </span>
                     <span className="font-mono text-lg sm:text-xl text-[#8492A6] line-through">
-                      {koboToNaira(cohort.fullPriceNgn * 100)}
+                      {koboToNaira(cohort.fullPriceKobo)}
                     </span>
                   </>
                 ) : (
                   <span className="font-mono text-3xl sm:text-4xl font-bold text-[#F8FAFC]">
-                    {koboToNaira(cohort.fullPriceNgn * 100)}
+                    {koboToNaira(cohort.fullPriceKobo)}
                   </span>
                 )}
               </div>
