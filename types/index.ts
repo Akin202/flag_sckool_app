@@ -154,13 +154,119 @@ export type Page =
   | 'dashboard'
   | 'learn'
   | 'vault'
-  | 'account';
+  | 'account'
+  | 'admin'
+  | 'admin/students'
+  | 'admin/sales'
+  | 'admin/codes'
+  | 'admin/content';
 
 export type LoadState<T = void> =
   | { status: 'idle' }
   | { status: 'loading' }
   | { status: 'success'; data: T }
   | { status: 'error'; error: string };
+
+// ----------------------------------------------------
+// ADMIN CONTRACTS
+// ----------------------------------------------------
+
+export interface AdminTransaction {
+  id: string;
+  date: string;
+  studentName: string;
+  studentEmail: string;
+  product: 'cohort' | 'recordings';
+  productName: string;
+  amountKobo: number;
+  discountCode?: string;
+  status: 'paid' | 'pending' | 'refunded' | 'failed';
+  reference: string;
+}
+
+export interface AdminOverviewStats {
+  totalStudents: number;
+  totalRevenueKobo: number;
+  enrollmentsThisWeek: number;
+  avgCourseCompletionPercent: number;
+  recentTransactions: AdminTransaction[];
+}
+
+export interface StudentLessonProgressDetail {
+  lessonId: string;
+  lessonTitle: string;
+  moduleNumber: number;
+  moduleTitle: string;
+  durationMinutes: number;
+  isCompleted: boolean;
+  lastPositionSeconds: number;
+  lastPositionFormatted: string;
+  completedAt?: string;
+}
+
+export interface AdminStudent {
+  id: string;
+  name: string;
+  email: string;
+  enrollments: string[];
+  tier: 'cohort' | 'recordings';
+  progressPercent: number;
+  completedLessonsCount: number;
+  totalLessonsCount: number;
+  lastActive: string;
+  joinedDate: string;
+  isAlumni: boolean;
+  lessonProgressList: StudentLessonProgressDetail[];
+}
+
+export interface AdminDiscountCode {
+  id: string;
+  code: string;
+  kind: 'invite' | 'promo' | 'alumni';
+  valueDescription: string;
+  discountPercent?: number;
+  discountKobo?: number;
+  appliesTo: 'all' | 'cohort' | 'recordings';
+  redemptionsUsed: number;
+  maxRedemptions: number | null;
+  expiryDate: string | null;
+  isActive: boolean;
+  createdAt: string;
+}
+
+export interface GenerateCodesParams {
+  count: number;
+  product: 'all' | 'cohort' | 'recordings';
+  kind: 'invite' | 'promo' | 'alumni';
+  discountPercent?: number;
+  discountKobo?: number;
+  expiryDate?: string;
+  maxRedemptionsPerCode?: number;
+}
+
+export interface AdminLesson extends Lesson {
+  isPublished: boolean;
+  resources: LessonResource[];
+}
+
+export interface AdminModule {
+  id: string;
+  number: number;
+  title: string;
+  description?: string;
+  lessonCount: number;
+  totalDurationMinutes: number;
+  lessons: AdminLesson[];
+}
+
+export interface AdminLessonUpdatePayload {
+  title: string;
+  description: string;
+  bunnyVideoId: string;
+  durationMinutes: number;
+  isFree: boolean;
+  isPublished: boolean;
+}
 
 export interface DiscountPreview {
   code: string;

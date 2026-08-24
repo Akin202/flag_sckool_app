@@ -50,6 +50,14 @@ import { LearnPage } from './pages/LearnPage';
 import { VaultPage } from './pages/VaultPage';
 import { AccountPage } from './pages/AccountPage';
 
+// Admin Founder Pages & Layout
+import { AdminLayout } from './components/admin/AdminLayout';
+import { AdminOverviewPage } from './pages/admin/AdminOverviewPage';
+import { AdminStudentsPage } from './pages/admin/AdminStudentsPage';
+import { AdminSalesPage } from './pages/admin/AdminSalesPage';
+import { AdminCodesPage } from './pages/admin/AdminCodesPage';
+import { AdminContentPage } from './pages/admin/AdminContentPage';
+
 // Dev State Switcher
 import { DevStateSwitcher } from './components/DevStateSwitcher';
 
@@ -57,9 +65,7 @@ export default function App() {
   // Navigation State (Default to landing or hash-based route)
   const [currentPage, setCurrentPage] = useState<Page>(() => {
     if (typeof window !== 'undefined' && window.location.hash) {
-      const raw = window.location.hash.replace('#/', '').replace('#', '');
-      const parts = raw.split('/');
-      const route = parts[0] as Page;
+      const raw = window.location.hash.replace(/^#\/?/, '');
       const validPages: Page[] = [
         'landing',
         'login',
@@ -74,8 +80,15 @@ export default function App() {
         'learn',
         'vault',
         'account',
+        'admin',
+        'admin/students',
+        'admin/sales',
+        'admin/codes',
+        'admin/content',
       ];
-      if (validPages.includes(route)) return route;
+      if (validPages.includes(raw as Page)) return raw as Page;
+      const primary = raw.split('/')[0] as Page;
+      if (validPages.includes(primary)) return primary;
     }
     return 'landing';
   });
@@ -380,6 +393,39 @@ export default function App() {
           onNavigate={handleNavigate}
           onLogout={() => handleNavigate('login')}
         />
+      )}
+
+      {/* -------------------------------------------------- */}
+      {/* ADMIN FOUNDER CONSOLE ROUTES */}
+      {/* -------------------------------------------------- */}
+      {currentPage === 'admin' && (
+        <AdminLayout currentPage={currentPage} onNavigate={handleNavigate}>
+          <AdminOverviewPage onNavigate={handleNavigate} />
+        </AdminLayout>
+      )}
+
+      {currentPage === 'admin/students' && (
+        <AdminLayout currentPage={currentPage} onNavigate={handleNavigate}>
+          <AdminStudentsPage onNavigate={handleNavigate} />
+        </AdminLayout>
+      )}
+
+      {currentPage === 'admin/sales' && (
+        <AdminLayout currentPage={currentPage} onNavigate={handleNavigate}>
+          <AdminSalesPage onNavigate={handleNavigate} />
+        </AdminLayout>
+      )}
+
+      {currentPage === 'admin/codes' && (
+        <AdminLayout currentPage={currentPage} onNavigate={handleNavigate}>
+          <AdminCodesPage onNavigate={handleNavigate} />
+        </AdminLayout>
+      )}
+
+      {currentPage === 'admin/content' && (
+        <AdminLayout currentPage={currentPage} onNavigate={handleNavigate}>
+          <AdminContentPage onNavigate={handleNavigate} />
+        </AdminLayout>
       )}
 
       {/* -------------------------------------------------- */}
