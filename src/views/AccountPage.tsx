@@ -136,7 +136,7 @@ export const AccountPage: React.FC<AccountPageProps> = ({
   };
 
   return (
-    <div className="min-h-screen bg-[#030617] text-[#CBD5E1] flex flex-col justify-between">
+    <div className="min-h-screen bg-ink-deep text-body-text flex flex-col justify-between">
       <div>
         {/* Student Top Navigation */}
         <StudentNav
@@ -152,10 +152,10 @@ export const AccountPage: React.FC<AccountPageProps> = ({
           
           {/* Header */}
           <div className="space-y-1">
-            <h1 className="font-display font-black text-2xl sm:text-3xl text-[#F8FAFC]">
+            <h1 className="font-display font-black text-2xl sm:text-3xl text-paper-soft">
               Account Settings
             </h1>
-            <p className="text-sm text-[#8492A6]">
+            <p className="text-sm text-muted-text">
               Manage your personal student credentials, enrollment access, and security.
             </p>
           </div>
@@ -166,13 +166,13 @@ export const AccountPage: React.FC<AccountPageProps> = ({
             <div className="md:col-span-2 space-y-6">
               
               {/* Profile Card */}
-              <Card className="p-6 bg-[#0A0F29] border border-[#1A2342] space-y-6">
-                <div className="flex items-center justify-between pb-3 border-b border-[#1A2342]">
-                  <h2 className="font-display font-bold text-lg text-[#F8FAFC] flex items-center gap-2">
-                    <User className="w-5 h-5 text-[#CA3A32]" />
+              <Card className="p-6 bg-ink-raised border border-ink-border space-y-6">
+                <div className="flex items-center justify-between pb-3 border-b border-ink-border">
+                  <h2 className="font-display font-bold text-lg text-paper-soft flex items-center gap-2">
+                    <User className="w-5 h-5 text-flag-red" />
                     <span>Personal Profile</span>
                   </h2>
-                  <span className="text-xs font-mono text-[#8492A6]">
+                  <span className="text-xs font-mono text-muted-text">
                     ID: usr-4911
                   </span>
                 </div>
@@ -193,7 +193,7 @@ export const AccountPage: React.FC<AccountPageProps> = ({
                     {/* Avatar Upload Placeholder */}
                     <div className="flex items-center gap-4">
                       <div className="relative group">
-                        <div className="w-16 h-16 rounded-full bg-[#CA3A32] text-[#F8FAFC] flex items-center justify-center font-display font-bold text-xl ring-2 ring-[#1A2342]">
+                        <div className="w-16 h-16 rounded-full bg-flag-red text-paper-soft flex items-center justify-center font-display font-bold text-xl ring-2 ring-ink-border">
                           {userState.data.fullName
                             .split(' ')
                             .map((n) => n[0])
@@ -203,7 +203,7 @@ export const AccountPage: React.FC<AccountPageProps> = ({
                         </div>
                         {/* // TODO(handoff): avatar upload S3 / Bunny Storage */}
                         <div
-                          className="absolute inset-0 rounded-full bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center cursor-pointer transition-opacity text-[#F8FAFC]"
+                          className="absolute inset-0 rounded-full bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center cursor-pointer transition-opacity text-paper-soft"
                           title="Change profile avatar placeholder"
                         >
                           <Camera className="w-5 h-5" />
@@ -211,10 +211,10 @@ export const AccountPage: React.FC<AccountPageProps> = ({
                       </div>
 
                       <div className="space-y-1">
-                        <h3 className="text-base font-bold text-[#F8FAFC]">
+                        <h3 className="text-base font-bold text-paper-soft">
                           {userState.data.fullName}
                         </h3>
-                        <p className="text-xs font-mono text-[#8492A6]">
+                        <p className="text-xs font-mono text-muted-text">
                           Joined {userState.data.joinedDate}
                         </p>
                       </div>
@@ -223,7 +223,7 @@ export const AccountPage: React.FC<AccountPageProps> = ({
                     {/* Form Fields */}
                     <div className="space-y-4">
                       <div className="space-y-1.5">
-                        <label className="block text-xs font-mono uppercase text-[#8492A6]">
+                        <label className="block text-xs font-mono uppercase text-muted-text">
                           Full Name
                         </label>
                         <input
@@ -231,13 +231,13 @@ export const AccountPage: React.FC<AccountPageProps> = ({
                           type="text"
                           value={fullName}
                           onChange={(e) => setFullName(e.target.value)}
-                          className="w-full bg-[#030617] border border-[#1A2342] focus:border-[#CA3A32] rounded-lg p-3 text-sm text-[#F8FAFC] focus:outline-none focus:ring-1 focus:ring-[#CA3A32]"
+                          className="w-full bg-ink-deep border border-ink-border focus:border-flag-red rounded-lg p-3 text-sm text-paper-soft focus:outline-none focus:ring-1 focus:ring-flag-red"
                           required
                         />
                       </div>
 
                       <div className="space-y-1.5">
-                        <label className="block text-xs font-mono uppercase text-[#8492A6]">
+                        <label className="block text-xs font-mono uppercase text-muted-text">
                           Email Address
                         </label>
                         <div className="relative">
@@ -245,11 +245,11 @@ export const AccountPage: React.FC<AccountPageProps> = ({
                             type="email"
                             value={userState.data.email}
                             disabled
-                            className="w-full bg-[#030617]/50 border border-[#1A2342] rounded-lg p-3 text-sm text-[#8492A6] cursor-not-allowed pr-10"
+                            className="w-full bg-ink-deep/50 border border-ink-border rounded-lg p-3 text-sm text-muted-text cursor-not-allowed pr-10"
                           />
                           <ShieldCheck className="w-4 h-4 text-[#10B981] absolute right-3 top-1/2 -translate-y-1/2" />
                         </div>
-                        <p className="text-[11px] text-[#8492A6]">
+                        <p className="text-[11px] text-muted-text">
                           Email is locked for certificate verification. Contact support to change.
                         </p>
                       </div>
@@ -279,17 +279,17 @@ export const AccountPage: React.FC<AccountPageProps> = ({
               </Card>
 
               {/* Password Change Card */}
-              <Card className="p-6 bg-[#0A0F29] border border-[#1A2342] space-y-6">
-                <div className="flex items-center justify-between pb-3 border-b border-[#1A2342]">
-                  <h2 className="font-display font-bold text-lg text-[#F8FAFC] flex items-center gap-2">
-                    <KeyRound className="w-5 h-5 text-[#CA3A32]" />
+              <Card className="p-6 bg-ink-raised border border-ink-border space-y-6">
+                <div className="flex items-center justify-between pb-3 border-b border-ink-border">
+                  <h2 className="font-display font-bold text-lg text-paper-soft flex items-center gap-2">
+                    <KeyRound className="w-5 h-5 text-flag-red" />
                     <span>Change Password</span>
                   </h2>
                 </div>
 
                 <form onSubmit={handleChangePassword} className="space-y-4">
                   <div className="space-y-1.5">
-                    <label className="block text-xs font-mono uppercase text-[#8492A6]">
+                    <label className="block text-xs font-mono uppercase text-muted-text">
                       Current Password
                     </label>
                     <input
@@ -298,14 +298,14 @@ export const AccountPage: React.FC<AccountPageProps> = ({
                       value={currentPassword}
                       onChange={(e) => setCurrentPassword(e.target.value)}
                       placeholder="••••••••••••"
-                      className="w-full bg-[#030617] border border-[#1A2342] focus:border-[#CA3A32] rounded-lg p-3 text-sm text-[#F8FAFC] focus:outline-none focus:ring-1 focus:ring-[#CA3A32]"
+                      className="w-full bg-ink-deep border border-ink-border focus:border-flag-red rounded-lg p-3 text-sm text-paper-soft focus:outline-none focus:ring-1 focus:ring-flag-red"
                       required
                     />
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-1.5">
-                      <label className="block text-xs font-mono uppercase text-[#8492A6]">
+                      <label className="block text-xs font-mono uppercase text-muted-text">
                         New Password
                       </label>
                       <input
@@ -314,13 +314,13 @@ export const AccountPage: React.FC<AccountPageProps> = ({
                         value={newPassword}
                         onChange={(e) => setNewPassword(e.target.value)}
                         placeholder="••••••••••••"
-                        className="w-full bg-[#030617] border border-[#1A2342] focus:border-[#CA3A32] rounded-lg p-3 text-sm text-[#F8FAFC] focus:outline-none focus:ring-1 focus:ring-[#CA3A32]"
+                        className="w-full bg-ink-deep border border-ink-border focus:border-flag-red rounded-lg p-3 text-sm text-paper-soft focus:outline-none focus:ring-1 focus:ring-flag-red"
                         required
                       />
                     </div>
 
                     <div className="space-y-1.5">
-                      <label className="block text-xs font-mono uppercase text-[#8492A6]">
+                      <label className="block text-xs font-mono uppercase text-muted-text">
                         Confirm New Password
                       </label>
                       <input
@@ -329,14 +329,14 @@ export const AccountPage: React.FC<AccountPageProps> = ({
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
                         placeholder="••••••••••••"
-                        className="w-full bg-[#030617] border border-[#1A2342] focus:border-[#CA3A32] rounded-lg p-3 text-sm text-[#F8FAFC] focus:outline-none focus:ring-1 focus:ring-[#CA3A32]"
+                        className="w-full bg-ink-deep border border-ink-border focus:border-flag-red rounded-lg p-3 text-sm text-paper-soft focus:outline-none focus:ring-1 focus:ring-flag-red"
                         required
                       />
                     </div>
                   </div>
 
                   {passwordError && (
-                    <div className="p-3 rounded-lg bg-[#CA3A32]/15 border border-[#CA3A32]/30 text-[#CA3A32] text-xs flex items-center gap-2">
+                    <div className="p-3 rounded-lg bg-flag-red/15 border border-flag-red/30 text-flag-red text-xs flex items-center gap-2">
                       <AlertCircle className="w-4 h-4 flex-shrink-0" />
                       <span>{passwordError}</span>
                     </div>
@@ -369,10 +369,10 @@ export const AccountPage: React.FC<AccountPageProps> = ({
             <div className="space-y-6">
               
               {/* Active Enrollments Card */}
-              <Card className="p-6 bg-[#0A0F29] border border-[#1A2342] space-y-4">
-                <div className="flex items-center justify-between pb-3 border-b border-[#1A2342]">
-                  <h2 className="font-display font-bold text-base text-[#F8FAFC] flex items-center gap-2">
-                    <Receipt className="w-4 h-4 text-[#CA3A32]" />
+              <Card className="p-6 bg-ink-raised border border-ink-border space-y-4">
+                <div className="flex items-center justify-between pb-3 border-b border-ink-border">
+                  <h2 className="font-display font-bold text-base text-paper-soft flex items-center gap-2">
+                    <Receipt className="w-4 h-4 text-flag-red" />
                     <span>Active Enrollments</span>
                   </h2>
                 </div>
@@ -387,10 +387,10 @@ export const AccountPage: React.FC<AccountPageProps> = ({
                     {enrollmentsState.data.map((enr) => (
                       <div
                         key={enr.id}
-                        className="p-3.5 rounded-xl border border-[#1A2342] bg-[#030617] space-y-2"
+                        className="p-3.5 rounded-xl border border-ink-border bg-ink-deep space-y-2"
                       >
                         <div className="flex items-start justify-between gap-2">
-                          <span className="text-xs font-bold text-[#F8FAFC]">
+                          <span className="text-xs font-bold text-paper-soft">
                             {enr.tierName}
                           </span>
                           <span className="px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-[#059669]/20 text-[#10B981]">
@@ -398,20 +398,20 @@ export const AccountPage: React.FC<AccountPageProps> = ({
                           </span>
                         </div>
 
-                        <div className="space-y-1 text-[11px] font-mono text-[#8492A6]">
+                        <div className="space-y-1 text-[11px] font-mono text-muted-text">
                           <div className="flex justify-between">
                             <span>Purchased:</span>
-                            <span className="text-[#CBD5E1]">{enr.purchaseDate}</span>
+                            <span className="text-body-text">{enr.purchaseDate}</span>
                           </div>
                           <div className="flex justify-between">
                             <span>Amount:</span>
-                            <span className="text-[#CBD5E1]">
+                            <span className="text-body-text">
                               {koboToNaira(enr.amountPaidKobo)}
                             </span>
                           </div>
                           <div className="flex justify-between">
                             <span>Ref:</span>
-                            <span className="text-[#8492A6]">{enr.reference}</span>
+                            <span className="text-muted-text">{enr.reference}</span>
                           </div>
                         </div>
                       </div>
@@ -421,16 +421,16 @@ export const AccountPage: React.FC<AccountPageProps> = ({
               </Card>
 
               {/* Student Support & Help */}
-              <Card className="p-5 bg-[#0A0F29] border border-[#1A2342] space-y-3">
-                <h3 className="font-display font-bold text-sm text-[#F8FAFC]">
+              <Card className="p-5 bg-ink-raised border border-ink-border space-y-3">
+                <h3 className="font-display font-bold text-sm text-paper-soft">
                   Need Admissions Help?
                 </h3>
-                <p className="text-xs text-[#8492A6] leading-relaxed">
+                <p className="text-xs text-muted-text leading-relaxed">
                   Questions regarding live session schedules, invoice receipts, or Telegram access? Contact Tobi and the Flag Skool team directly:
                 </p>
                 <a
                   href={`mailto:${config.org.supportEmail}`}
-                  className="inline-flex items-center gap-1.5 text-xs text-[#CA3A32] hover:underline font-mono"
+                  className="inline-flex items-center gap-1.5 text-xs text-flag-red hover:underline font-mono"
                 >
                   <Mail className="w-3.5 h-3.5" />
                   <span>{config.org.supportEmail}</span>
@@ -445,8 +445,8 @@ export const AccountPage: React.FC<AccountPageProps> = ({
                   size="md"
                   fullWidth
                   onClick={() => onLogout && onLogout()}
-                  leftIcon={<LogOut className="w-4 h-4 text-[#CA3A32]" />}
-                  className="text-xs text-[#8492A6] hover:text-[#CA3A32]"
+                  leftIcon={<LogOut className="w-4 h-4 text-flag-red" />}
+                  className="text-xs text-muted-text hover:text-flag-red"
                 >
                   Sign Out of Flag Skool
                 </Button>

@@ -61,11 +61,11 @@ export const Countdown: React.FC<CountdownProps> = ({
     return (
       <div
         className={clsx(
-          'inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#1A2342]/60 border border-[#1A2342] text-[#8492A6] text-[15px]',
+          'inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-ink-border/60 border border-ink-border text-muted-text text-[15px]',
           className
         )}
       >
-        <Clock className="w-4 h-4 text-[#8492A6]" />
+        <Clock className="w-4 h-4 text-muted-text" />
         <span>Offer expired — Standard pricing applies</span>
       </div>
     );
@@ -75,35 +75,35 @@ export const Countdown: React.FC<CountdownProps> = ({
 
   return (
     <div className={clsx('flex items-center gap-2 sm:gap-3', className)}>
-      <div className="flex flex-col items-center bg-[#0A0F29] border border-[#1A2342] rounded-lg px-3 py-2 min-w-[56px]">
-        <span className="font-mono text-xl sm:text-2xl font-bold text-[#F8FAFC]">
+      <div className="flex flex-col items-center bg-ink-raised border border-ink-border rounded-lg px-3 py-2 min-w-[56px]">
+        <span className="font-mono text-xl sm:text-2xl font-bold text-paper-soft">
           {formatUnit(time.days)}
         </span>
-        <span className="text-[11px] uppercase tracking-wider text-[#8492A6] font-medium">Days</span>
+        <span className="text-[11px] uppercase tracking-wider text-muted-text font-medium">Days</span>
       </div>
-      <span className="font-mono text-xl font-bold text-[#8492A6] -mt-3">:</span>
+      <span className="font-mono text-xl font-bold text-muted-text -mt-3">:</span>
 
-      <div className="flex flex-col items-center bg-[#0A0F29] border border-[#1A2342] rounded-lg px-3 py-2 min-w-[56px]">
-        <span className="font-mono text-xl sm:text-2xl font-bold text-[#F8FAFC]">
+      <div className="flex flex-col items-center bg-ink-raised border border-ink-border rounded-lg px-3 py-2 min-w-[56px]">
+        <span className="font-mono text-xl sm:text-2xl font-bold text-paper-soft">
           {formatUnit(time.hours)}
         </span>
-        <span className="text-[11px] uppercase tracking-wider text-[#8492A6] font-medium">Hours</span>
+        <span className="text-[11px] uppercase tracking-wider text-muted-text font-medium">Hours</span>
       </div>
-      <span className="font-mono text-xl font-bold text-[#8492A6] -mt-3">:</span>
+      <span className="font-mono text-xl font-bold text-muted-text -mt-3">:</span>
 
-      <div className="flex flex-col items-center bg-[#0A0F29] border border-[#1A2342] rounded-lg px-3 py-2 min-w-[56px]">
-        <span className="font-mono text-xl sm:text-2xl font-bold text-[#F8FAFC]">
+      <div className="flex flex-col items-center bg-ink-raised border border-ink-border rounded-lg px-3 py-2 min-w-[56px]">
+        <span className="font-mono text-xl sm:text-2xl font-bold text-paper-soft">
           {formatUnit(time.minutes)}
         </span>
-        <span className="text-[11px] uppercase tracking-wider text-[#8492A6] font-medium">Mins</span>
+        <span className="text-[11px] uppercase tracking-wider text-muted-text font-medium">Mins</span>
       </div>
-      <span className="font-mono text-xl font-bold text-[#8492A6] -mt-3">:</span>
+      <span className="font-mono text-xl font-bold text-muted-text -mt-3">:</span>
 
-      <div className="flex flex-col items-center bg-[#0A0F29] border border-[#1A2342] rounded-lg px-3 py-2 min-w-[56px]">
-        <span className="font-mono text-xl sm:text-2xl font-bold text-[#F8FAFC]">
+      <div className="flex flex-col items-center bg-ink-raised border border-ink-border rounded-lg px-3 py-2 min-w-[56px]">
+        <span className="font-mono text-xl sm:text-2xl font-bold text-paper-soft">
           {formatUnit(time.seconds)}
         </span>
-        <span className="text-[11px] uppercase tracking-wider text-[#8492A6] font-medium">Secs</span>
+        <span className="text-[11px] uppercase tracking-wider text-muted-text font-medium">Secs</span>
       </div>
     </div>
   );

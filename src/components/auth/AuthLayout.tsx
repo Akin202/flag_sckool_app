@@ -19,22 +19,22 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({
   children,
 }) => {
   return (
-    <div className="min-h-screen bg-[#030617] flex flex-col justify-between py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+    <div className="min-h-screen bg-ink-deep flex flex-col justify-between py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
       {/* Subtle top glow */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-48 bg-[#CA3A32]/10 blur-[100px] pointer-events-none" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-48 bg-flag-red/10 blur-[100px] pointer-events-none" />
 
       {/* Header with Wordmark and Back Link */}
       <div className="w-full max-w-md mx-auto flex items-center justify-between mb-8 z-10">
         <button
           type="button"
           onClick={() => onNavigate && onNavigate('landing')}
-          className="flex items-center gap-2 text-left focus:outline-none focus:ring-2 focus:ring-[#CA3A32] rounded-lg p-1"
+          className="flex items-center gap-2 text-left focus:outline-none focus:ring-2 focus:ring-flag-red rounded-lg p-1"
           aria-label="Return to Flag Skool homepage"
         >
-          <div className="w-8 h-8 rounded-lg bg-[#CA3A32] flex items-center justify-center font-display font-black text-sm text-[#F8FAFC]">
+          <div className="w-8 h-8 rounded-lg bg-flag-red flex items-center justify-center font-display font-black text-sm text-paper-soft">
             FS
           </div>
-          <span className="font-display font-black tracking-wider text-base text-[#F8FAFC]">
+          <span className="font-display font-black tracking-wider text-base text-paper-soft">
             {config.org.wordmark}
           </span>
         </button>
@@ -43,7 +43,7 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({
           <button
             type="button"
             onClick={() => onNavigate('landing')}
-            className="text-xs font-mono text-[#8492A6] hover:text-[#CBD5E1] flex items-center gap-1 transition-colors"
+            className="text-xs font-mono text-muted-text hover:text-body-text flex items-center gap-1 transition-colors"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             Home
@@ -53,13 +53,13 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({
 
       {/* Centered Auth Card */}
       <div className="w-full max-w-md mx-auto z-10">
-        <Card className="p-6 sm:p-8 bg-[#0A0F29] border-[#1A2342] shadow-2xl shadow-black/60 rounded-2xl">
+        <Card className="p-6 sm:p-8 bg-ink-raised border-ink-border shadow-2xl shadow-black/60 rounded-2xl">
           <div className="mb-6 text-left">
-            <h1 className="font-display font-bold text-2xl sm:text-3xl text-[#F8FAFC] tracking-tight">
+            <h1 className="font-display font-bold text-2xl sm:text-3xl text-paper-soft tracking-tight">
               {title}
             </h1>
             {subtitle && (
-              <p className="text-sm text-[#8492A6] mt-1.5 leading-relaxed">
+              <p className="text-sm text-muted-text mt-1.5 leading-relaxed">
                 {subtitle}
               </p>
             )}
@@ -69,7 +69,7 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({
       </div>
 
       {/* Trust Footer */}
-      <div className="w-full max-w-md mx-auto mt-8 text-center text-xs text-[#8492A6] z-10 flex items-center justify-center gap-2">
+      <div className="w-full max-w-md mx-auto mt-8 text-center text-xs text-muted-text z-10 flex items-center justify-center gap-2">
         <ShieldCheck className="w-4 h-4 text-[#059669]" />
         <span>Official {config.org.name} Student Authentication Gateway</span>
       </div>

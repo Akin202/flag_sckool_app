@@ -447,7 +447,7 @@ export function AdminCodesPage({ onNavigate }: AdminCodesPageProps) {
                       <button
                         onClick={() => handleDelete(c.id)}
                         title="Delete code"
-                        className="p-1 text-gray-400 hover:text-[#CA3A32] hover:bg-red-50 rounded transition-colors"
+                        className="p-1 text-gray-400 hover:text-flag-red hover:bg-red-50 rounded transition-colors"
                       >
                         <Trash2 className="w-3.5 h-3.5" />
                       </button>

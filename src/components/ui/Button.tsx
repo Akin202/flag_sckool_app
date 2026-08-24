@@ -28,7 +28,7 @@ export const Button: React.FC<ButtonProps> = ({
   const isButtonLoading = isLoading || loading;
 
   const baseStyles =
-    'inline-flex items-center justify-center font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#CA3A32] disabled:opacity-50 disabled:cursor-not-allowed select-none min-h-[48px] min-w-[48px] rounded-lg tracking-tight';
+    'inline-flex items-center justify-center font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-flag-red disabled:opacity-50 disabled:cursor-not-allowed select-none min-h-[48px] min-w-[48px] rounded-lg tracking-tight';
 
   const sizeStyles = {
     sm: 'text-[15px] px-4 py-2.5 gap-2',
@@ -39,13 +39,13 @@ export const Button: React.FC<ButtonProps> = ({
   // Flag Red (#CA3A32) is used as a background with Paper Soft (#F8FAFC) text for contrast AA verification
   const variantStyles = {
     primary:
-      'bg-[#CA3A32] text-[#F8FAFC] hover:bg-[#B32E27] active:bg-[#9B2520] shadow-sm border border-transparent',
+      'bg-flag-red text-paper-soft hover:bg-[#B32E27] active:bg-[#9B2520] shadow-sm border border-transparent',
     secondary:
-      'bg-[#0A0F29] text-[#F8FAFC] hover:bg-[#121A3F] active:bg-[#1A2342] border border-[#1A2342] hover:border-[#2D3A63]',
+      'bg-ink-raised text-paper-soft hover:bg-[#121A3F] active:bg-ink-border border border-ink-border hover:border-[#2D3A63]',
     ghost:
-      'bg-transparent text-[#CBD5E1] hover:text-[#F8FAFC] hover:bg-[#0A0F29]/60 active:bg-[#0A0F29] border border-transparent',
+      'bg-transparent text-body-text hover:text-paper-soft hover:bg-ink-raised/60 active:bg-ink-raised border border-transparent',
     danger:
-      'bg-[#991B1B] text-[#F8FAFC] hover:bg-[#7F1D1D] active:bg-[#5C1414] border border-transparent',
+      'bg-[#991B1B] text-paper-soft hover:bg-[#7F1D1D] active:bg-[#5C1414] border border-transparent',
   };
 
   return (

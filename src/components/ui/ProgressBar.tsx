@@ -21,20 +21,20 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
   return (
     <div className={clsx('w-full', className)} {...props}>
       {(label || showPercent) && (
-        <div className="flex justify-between items-center text-[14px] text-[#8492A6] mb-2 font-medium">
+        <div className="flex justify-between items-center text-[14px] text-muted-text mb-2 font-medium">
           {label && <span>{label}</span>}
           {showPercent && <span className="font-mono">{Math.round(percentage)}%</span>}
         </div>
       )}
       <div
-        className="w-full h-2.5 bg-[#1A2342] rounded-full overflow-hidden"
+        className="w-full h-2.5 bg-ink-border rounded-full overflow-hidden"
         role="progressbar"
         aria-valuenow={percentage}
         aria-valuemin={0}
         aria-valuemax={100}
       >
         <div
-          className="h-full bg-[#CA3A32] rounded-full transition-all duration-300 ease-out"
+          className="h-full bg-flag-red rounded-full transition-all duration-300 ease-out"
           style={{ width: `${percentage}%` }}
         />
       </div>

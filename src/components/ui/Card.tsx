@@ -14,16 +14,16 @@ export const Card: React.FC<CardProps> = ({
   ...props
 }) => {
   const variantStyles = {
-    raised: 'bg-[#0A0F29] text-[#CBD5E1]',
-    flat: 'bg-[#030617] text-[#CBD5E1]',
-    highlight: 'bg-[#0A0F29] border-[#CA3A32]/40 text-[#CBD5E1]',
+    raised: 'bg-ink-raised text-body-text',
+    flat: 'bg-ink-deep text-body-text',
+    highlight: 'bg-ink-raised border-flag-red/40 text-body-text',
   };
 
   return (
     <div
       className={clsx(
         'rounded-xl p-6 md:p-8',
-        hasBorder && 'border border-[#1A2342]',
+        hasBorder && 'border border-ink-border',
         variantStyles[variant],
         className
       )}

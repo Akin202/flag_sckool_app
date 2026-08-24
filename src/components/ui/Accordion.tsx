@@ -24,7 +24,7 @@ export const Accordion: React.FC<AccordionProps> = ({
   className,
 }) => {
   return (
-    <div className={clsx('divide-y divide-[#1A2342] border-y border-[#1A2342]', className)}>
+    <div className={clsx('divide-y divide-ink-border border-y border-ink-border', className)}>
       {items.map((item) => {
         const isOpen = openIds.includes(item.id);
 
@@ -38,15 +38,15 @@ export const Accordion: React.FC<AccordionProps> = ({
               disabled={item.disabled}
               onClick={() => !item.disabled && onToggle(item.id)}
               className={clsx(
-                'w-full py-5 sm:py-6 flex items-center justify-between text-left transition-colors min-h-[48px] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#CA3A32] rounded-md',
-                item.disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer hover:text-[#F8FAFC]'
+                'w-full py-5 sm:py-6 flex items-center justify-between text-left transition-colors min-h-[48px] focus:outline-none focus-visible:ring-2 focus-visible:ring-flag-red rounded-md',
+                item.disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer hover:text-paper-soft'
               )}
             >
               <div className="flex-1 pr-4">{item.trigger}</div>
               <div
                 className={clsx(
-                  'w-8 h-8 rounded-full bg-[#0A0F29] border border-[#1A2342] flex items-center justify-center shrink-0 transition-transform duration-200 ease-out',
-                  isOpen ? 'rotate-180 border-[#CA3A32]/40 text-[#F8FAFC]' : 'text-[#8492A6]'
+                  'w-8 h-8 rounded-full bg-ink-raised border border-ink-border flex items-center justify-center shrink-0 transition-transform duration-200 ease-out',
+                  isOpen ? 'rotate-180 border-flag-red/40 text-paper-soft' : 'text-muted-text'
                 )}
               >
                 <ChevronDown className="w-4 h-4" />
@@ -58,7 +58,7 @@ export const Accordion: React.FC<AccordionProps> = ({
                 id={`accordion-content-${item.id}`}
                 role="region"
                 aria-labelledby={`accordion-trigger-${item.id}`}
-                className="pb-6 pt-1 text-[#CBD5E1] transition-opacity duration-200"
+                className="pb-6 pt-1 text-body-text transition-opacity duration-200"
               >
                 {item.content}
               </div>

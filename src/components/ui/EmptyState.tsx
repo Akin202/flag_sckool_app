@@ -22,15 +22,15 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
   return (
     <div
       className={clsx(
-        'flex flex-col items-center justify-center text-center p-8 sm:p-12 rounded-xl bg-[#0A0F29]/60 border border-dashed border-[#1A2342]',
+        'flex flex-col items-center justify-center text-center p-8 sm:p-12 rounded-xl bg-ink-raised/60 border border-dashed border-ink-border',
         className
       )}
     >
-      <div className="w-14 h-14 rounded-full bg-[#1A2342]/70 flex items-center justify-center text-[#8492A6] mb-4">
+      <div className="w-14 h-14 rounded-full bg-ink-border/70 flex items-center justify-center text-muted-text mb-4">
         {icon}
       </div>
-      <h3 className="text-xl font-bold text-[#F8FAFC] mb-2">{headline}</h3>
-      <p className="text-[#8492A6] max-w-md text-[16px] leading-relaxed mb-6">
+      <h3 className="text-xl font-bold text-paper-soft mb-2">{headline}</h3>
+      <p className="text-muted-text max-w-md text-[16px] leading-relaxed mb-6">
         {body}
       </p>
       {actionLabel && onAction && (

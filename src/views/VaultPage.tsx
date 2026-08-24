@@ -80,7 +80,7 @@ export const VaultPage: React.FC<VaultPageProps> = ({
   const getResourceIcon = (format: string, kind: string) => {
     const fmt = format.toUpperCase();
     if (fmt === 'JSON' || kind === 'blueprint') {
-      return <FileJson className="w-6 h-6 text-[#CA3A32]" />;
+      return <FileJson className="w-6 h-6 text-flag-red" />;
     }
     if (fmt === 'ZIP' || kind === 'code') {
       return <FileCode className="w-6 h-6 text-[#38BDF8]" />;
@@ -122,7 +122,7 @@ export const VaultPage: React.FC<VaultPageProps> = ({
   };
 
   return (
-    <div className="min-h-screen bg-[#030617] text-[#CBD5E1] flex flex-col justify-between">
+    <div className="min-h-screen bg-ink-deep text-body-text flex flex-col justify-between">
       <div>
         {/* Navigation Bar */}
         <StudentNav
@@ -138,39 +138,39 @@ export const VaultPage: React.FC<VaultPageProps> = ({
           {/* Header Banner */}
           <div className="space-y-3">
             <div className="flex items-center gap-2">
-              <span className="p-1.5 rounded-lg bg-[#CA3A32]/20 text-[#CA3A32]">
+              <span className="p-1.5 rounded-lg bg-flag-red/20 text-flag-red">
                 <FolderLock className="w-5 h-5" />
               </span>
-              <span className="text-xs uppercase font-mono text-[#8492A6] tracking-wider">
+              <span className="text-xs uppercase font-mono text-muted-text tracking-wider">
                 Asset Vault & Blueprint Library
               </span>
             </div>
-            <h1 className="font-display font-black text-2xl sm:text-3xl lg:text-4xl text-[#F8FAFC]">
+            <h1 className="font-display font-black text-2xl sm:text-3xl lg:text-4xl text-paper-soft">
               Commercial AI Vault
             </h1>
-            <p className="text-sm sm:text-base text-[#8492A6] max-w-2xl leading-relaxed">
+            <p className="text-sm sm:text-base text-muted-text max-w-2xl leading-relaxed">
               Every production n8n JSON workflow blueprint, Python agent repository, masterclass slide deck, and fine-tuning dataset included in your Flag Skool access.
             </p>
           </div>
 
           {/* Search & Filter Controls */}
-          <div className="p-4 sm:p-5 rounded-2xl bg-[#0A0F29] border border-[#1A2342] space-y-4">
+          <div className="p-4 sm:p-5 rounded-2xl bg-ink-raised border border-ink-border space-y-4">
             {/* Search Input */}
             <div className="relative">
-              <Search className="w-5 h-5 text-[#8492A6] absolute left-3.5 top-1/2 -translate-y-1/2" />
+              <Search className="w-5 h-5 text-muted-text absolute left-3.5 top-1/2 -translate-y-1/2" />
               <input
                 id="vault-search-input"
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search workflows, prompt guides, FastAPI scaffolds, datasets..."
-                className="w-full bg-[#030617] border border-[#1A2342] focus:border-[#CA3A32] rounded-xl pl-11 pr-10 py-3 text-sm text-[#F8FAFC] placeholder-[#8492A6] focus:outline-none focus:ring-1 focus:ring-[#CA3A32]"
+                className="w-full bg-ink-deep border border-ink-border focus:border-flag-red rounded-xl pl-11 pr-10 py-3 text-sm text-paper-soft placeholder-muted-text focus:outline-none focus:ring-1 focus:ring-flag-red"
               />
               {searchQuery && (
                 <button
                   type="button"
                   onClick={() => setSearchQuery('')}
-                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#8492A6] hover:text-[#F8FAFC]"
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-muted-text hover:text-paper-soft"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -179,7 +179,7 @@ export const VaultPage: React.FC<VaultPageProps> = ({
 
             {/* Filter Chips: Resource Kinds */}
             <div className="flex items-center gap-2 overflow-x-auto pb-1 text-xs">
-              <span className="text-[#8492A6] font-mono whitespace-nowrap pl-1 pr-2">
+              <span className="text-muted-text font-mono whitespace-nowrap pl-1 pr-2">
                 Type:
               </span>
               {[
@@ -197,8 +197,8 @@ export const VaultPage: React.FC<VaultPageProps> = ({
                   onClick={() => setSelectedKind(k.id)}
                   className={`px-3 py-1.5 rounded-lg whitespace-nowrap font-medium transition-colors ${
                     selectedKind === k.id
-                      ? 'bg-[#CA3A32] text-[#F8FAFC] font-semibold'
-                      : 'bg-[#1A2342]/70 text-[#8492A6] hover:text-[#F8FAFC] hover:bg-[#1A2342]'
+                      ? 'bg-flag-red text-paper-soft font-semibold'
+                      : 'bg-ink-border/70 text-muted-text hover:text-paper-soft hover:bg-ink-border'
                   }`}
                 >
                   {k.label}
@@ -207,8 +207,8 @@ export const VaultPage: React.FC<VaultPageProps> = ({
             </div>
 
             {/* Filter Chips: Modules */}
-            <div className="flex items-center gap-2 overflow-x-auto pb-1 text-xs border-t border-[#1A2342]/60 pt-3">
-              <span className="text-[#8492A6] font-mono whitespace-nowrap pl-1 pr-2">
+            <div className="flex items-center gap-2 overflow-x-auto pb-1 text-xs border-t border-ink-border/60 pt-3">
+              <span className="text-muted-text font-mono whitespace-nowrap pl-1 pr-2">
                 Module:
               </span>
               {[
@@ -226,8 +226,8 @@ export const VaultPage: React.FC<VaultPageProps> = ({
                   onClick={() => setSelectedModule(m.id)}
                   className={`px-3 py-1 rounded-md whitespace-nowrap font-mono transition-colors ${
                     selectedModule === m.id
-                      ? 'bg-[#CBD5E1] text-[#030617] font-bold'
-                      : 'bg-[#1A2342]/40 text-[#8492A6] hover:text-[#CBD5E1]'
+                      ? 'bg-body-text text-ink-deep font-bold'
+                      : 'bg-ink-border/40 text-muted-text hover:text-body-text'
                   }`}
                 >
                   {m.label}
@@ -240,7 +240,7 @@ export const VaultPage: React.FC<VaultPageProps> = ({
           {loadState.status === 'loading' ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {[1, 2, 3, 4, 5, 6].map((n) => (
-                <Card key={n} className="p-5 bg-[#0A0F29] border-[#1A2342] space-y-4">
+                <Card key={n} className="p-5 bg-ink-raised border-ink-border space-y-4">
                   <Skeleton height={36} width={36} />
                   <Skeleton height={20} width="80%" />
                   <Skeleton height={14} width="100%" />
@@ -252,14 +252,14 @@ export const VaultPage: React.FC<VaultPageProps> = ({
             loadState.data.length === 0 ? (
               /* EMPTY VAULT STATE */
               <EmptyState
-                icon={<FolderLock className="w-10 h-10 text-[#8492A6]" />}
+                icon={<FolderLock className="w-10 h-10 text-muted-text" />}
                 headline="Vault Currently Empty"
                 body="No downloadable assets were returned for your current tier configuration."
               />
             ) : filteredResources.length === 0 ? (
               /* NO FILTER RESULTS STATE */
               <EmptyState
-                icon={<Search className="w-10 h-10 text-[#8492A6]" />}
+                icon={<Search className="w-10 h-10 text-muted-text" />}
                 headline="No Matching Resources"
                 body={`No assets match your search "${searchQuery}" and selected filters.`}
                 actionLabel="Clear Filters"
@@ -272,38 +272,38 @@ export const VaultPage: React.FC<VaultPageProps> = ({
                   <Card
                     key={res.id}
                     id={`vault-card-${res.id}`}
-                    className="p-5 bg-[#0A0F29] border border-[#1A2342] hover:border-[#2D3A63] transition-all flex flex-col justify-between space-y-4 relative group"
+                    className="p-5 bg-ink-raised border border-ink-border hover:border-[#2D3A63] transition-all flex flex-col justify-between space-y-4 relative group"
                   >
                     <div className="space-y-3">
                       {/* Card Header: Icon, format & module badge */}
                       <div className="flex items-center justify-between gap-2">
-                        <div className="w-11 h-11 rounded-xl bg-[#1A2342] flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform">
+                        <div className="w-11 h-11 rounded-xl bg-ink-border flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform">
                           {getResourceIcon(res.fileFormat, res.kind)}
                         </div>
 
                         <div className="flex items-center gap-1.5">
-                          <span className="font-mono text-[11px] px-2 py-0.5 rounded bg-[#1A2342] text-[#CBD5E1] font-semibold uppercase">
+                          <span className="font-mono text-[11px] px-2 py-0.5 rounded bg-ink-border text-body-text font-semibold uppercase">
                             {res.fileFormat}
                           </span>
-                          <span className="font-mono text-[11px] text-[#8492A6]">
+                          <span className="font-mono text-[11px] text-muted-text">
                             {res.sizeFormatted}
                           </span>
                         </div>
                       </div>
 
                       {/* Module context tag */}
-                      <div className="text-[11px] font-mono font-bold text-[#CA3A32] uppercase">
+                      <div className="text-[11px] font-mono font-bold text-flag-red uppercase">
                         Module 0{res.moduleNumber} · {res.moduleTitle}
                       </div>
 
                       {/* Title */}
-                      <h3 className="font-display font-bold text-base text-[#F8FAFC] leading-snug">
+                      <h3 className="font-display font-bold text-base text-paper-soft leading-snug">
                         {res.title}
                       </h3>
 
                       {/* Description */}
                       {res.description && (
-                        <p className="text-xs text-[#8492A6] leading-relaxed line-clamp-3">
+                        <p className="text-xs text-muted-text leading-relaxed line-clamp-3">
                           {res.description}
                         </p>
                       )}
@@ -311,12 +311,12 @@ export const VaultPage: React.FC<VaultPageProps> = ({
 
                     {/* Download Button */}
                     {/* // TODO(handoff): signed download URL */}
-                    <div className="pt-3 border-t border-[#1A2342]">
+                    <div className="pt-3 border-t border-ink-border">
                       <a
                         id={`vault-download-${res.id}`}
                         href={res.downloadUrl}
                         download
-                        className="w-full min-h-[44px] px-4 py-2.5 rounded-lg bg-[#1A2342] hover:bg-[#CA3A32] text-[#F8FAFC] text-xs font-semibold flex items-center justify-center gap-2 transition-colors focus:ring-2 focus:ring-[#CA3A32]"
+                        className="w-full min-h-[44px] px-4 py-2.5 rounded-lg bg-ink-border hover:bg-flag-red text-paper-soft text-xs font-semibold flex items-center justify-center gap-2 transition-colors focus:ring-2 focus:ring-flag-red"
                       >
                         <Download className="w-4 h-4" />
                         <span>Download Asset</span>
@@ -327,8 +327,8 @@ export const VaultPage: React.FC<VaultPageProps> = ({
               </div>
             )
           ) : (
-            <Card className="p-6 bg-[#0A0F29] border-[#CA3A32]/40 text-center space-y-2">
-              <p className="text-sm text-[#CA3A32]">
+            <Card className="p-6 bg-ink-raised border-flag-red/40 text-center space-y-2">
+              <p className="text-sm text-flag-red">
                 {loadState.status === 'error' ? loadState.error : 'Error loading vault'}
               </p>
               <Button

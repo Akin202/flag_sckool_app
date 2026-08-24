@@ -102,21 +102,21 @@ export const RedeemPage: React.FC<RedeemPageProps> = ({
   const isChecking = activeState.status === 'checking';
 
   return (
-    <div className="min-h-screen bg-[#030617] flex flex-col justify-between py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+    <div className="min-h-screen bg-ink-deep flex flex-col justify-between py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
       {/* Subtle warm glow background */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[500px] h-[300px] bg-[#CA3A32]/10 blur-[120px] pointer-events-none" />
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[500px] h-[300px] bg-flag-red/10 blur-[120px] pointer-events-none" />
 
       {/* Header */}
       <div className="w-full max-w-md mx-auto flex items-center justify-between mb-8 z-10">
         <button
           type="button"
           onClick={() => onNavigate && onNavigate('landing')}
-          className="flex items-center gap-2 text-left focus:outline-none focus:ring-2 focus:ring-[#CA3A32] rounded-lg p-1"
+          className="flex items-center gap-2 text-left focus:outline-none focus:ring-2 focus:ring-flag-red rounded-lg p-1"
         >
-          <div className="w-8 h-8 rounded-lg bg-[#CA3A32] flex items-center justify-center font-display font-black text-sm text-[#F8FAFC]">
+          <div className="w-8 h-8 rounded-lg bg-flag-red flex items-center justify-center font-display font-black text-sm text-paper-soft">
             FS
           </div>
-          <span className="font-display font-black tracking-wider text-base text-[#F8FAFC]">
+          <span className="font-display font-black tracking-wider text-base text-paper-soft">
             {config.org.wordmark}
           </span>
         </button>
@@ -125,7 +125,7 @@ export const RedeemPage: React.FC<RedeemPageProps> = ({
           <button
             type="button"
             onClick={() => onNavigate('landing')}
-            className="text-xs font-mono text-[#8492A6] hover:text-[#CBD5E1] transition-colors"
+            className="text-xs font-mono text-muted-text hover:text-body-text transition-colors"
           >
             ← Home
           </button>
@@ -134,7 +134,7 @@ export const RedeemPage: React.FC<RedeemPageProps> = ({
 
       {/* Main Centered Gift Card */}
       <div className="w-full max-w-lg mx-auto z-10">
-        <Card className="p-8 sm:p-10 bg-[#0A0F29] border-[#1A2342] shadow-2xl rounded-2xl">
+        <Card className="p-8 sm:p-10 bg-ink-raised border-ink-border shadow-2xl rounded-2xl">
           
           {/* SUCCESS STATE: Celebratory but restrained */}
           {activeState.status === 'success' ? (
@@ -158,13 +158,13 @@ export const RedeemPage: React.FC<RedeemPageProps> = ({
                 <span className="font-mono text-xs uppercase tracking-widest text-[#059669] font-semibold block">
                   Alumni Access Granted
                 </span>
-                <h1 className="font-display font-bold text-2xl sm:text-3xl text-[#F8FAFC]">
+                <h1 className="font-display font-bold text-2xl sm:text-3xl text-paper-soft">
                   {activeState.productName}
                 </h1>
-                <p className="text-lg text-[#CBD5E1] font-medium pt-1">
+                <p className="text-lg text-body-text font-medium pt-1">
                   You have lifetime access.
                 </p>
-                <p className="text-xs text-[#8492A6]">
+                <p className="text-xs text-muted-text">
                   Your account is unlocked with all live masterclasses, n8n templates, and Discord/Telegram channels.
                 </p>
               </div>
@@ -185,41 +185,41 @@ export const RedeemPage: React.FC<RedeemPageProps> = ({
           ) : (
             /* INPUT & VERIFICATION FORM */
             <div className="space-y-6 text-center">
-              <div className="w-14 h-14 rounded-2xl bg-[#CA3A32]/10 border border-[#CA3A32]/30 text-[#CA3A32] flex items-center justify-center mx-auto">
+              <div className="w-14 h-14 rounded-2xl bg-flag-red/10 border border-flag-red/30 text-flag-red flex items-center justify-center mx-auto">
                 <Gift className="w-7 h-7" />
               </div>
 
               <div className="space-y-2">
-                <span className="font-mono text-xs uppercase tracking-widest text-[#CA3A32] font-semibold block">
+                <span className="font-mono text-xs uppercase tracking-widest text-flag-red font-semibold block">
                   Cohort 1 Alumni Recognition
                 </span>
-                <h1 className="font-display font-bold text-2xl sm:text-3xl text-[#F8FAFC]">
+                <h1 className="font-display font-bold text-2xl sm:text-3xl text-paper-soft">
                   Claim Your Cohort 2 Access
                 </h1>
-                <p className="text-[15px] text-[#8492A6] leading-relaxed max-w-sm mx-auto">
+                <p className="text-[15px] text-muted-text leading-relaxed max-w-sm mx-auto">
                   As promised to our founding students, your loyalty unlocks the upgraded live curriculum with zero tuition fee.
                 </p>
               </div>
 
               {/* Status Alert Banners */}
               {activeState.status === 'invalid' && (
-                <div className="p-3.5 rounded-xl bg-[#CA3A32]/10 border border-[#CA3A32]/30 text-left flex items-start gap-2.5">
-                  <AlertCircle className="w-4 h-4 text-[#CA3A32] shrink-0 mt-0.5" />
-                  <p className="text-xs text-[#F8FAFC]">{activeState.error}</p>
+                <div className="p-3.5 rounded-xl bg-flag-red/10 border border-flag-red/30 text-left flex items-start gap-2.5">
+                  <AlertCircle className="w-4 h-4 text-flag-red shrink-0 mt-0.5" />
+                  <p className="text-xs text-paper-soft">{activeState.error}</p>
                 </div>
               )}
 
               {activeState.status === 'already-redeemed' && (
                 <div className="p-3.5 rounded-xl bg-[#EAB308]/10 border border-[#EAB308]/30 text-left flex items-start gap-2.5">
                   <AlertCircle className="w-4 h-4 text-[#EAB308] shrink-0 mt-0.5" />
-                  <p className="text-xs text-[#F8FAFC]">{activeState.error}</p>
+                  <p className="text-xs text-paper-soft">{activeState.error}</p>
                 </div>
               )}
 
               {activeState.status === 'error' && (
-                <div className="p-3.5 rounded-xl bg-[#CA3A32]/10 border border-[#CA3A32]/30 text-left flex items-start gap-2.5">
-                  <AlertCircle className="w-4 h-4 text-[#CA3A32] shrink-0 mt-0.5" />
-                  <p className="text-xs text-[#F8FAFC]">{activeState.error}</p>
+                <div className="p-3.5 rounded-xl bg-flag-red/10 border border-flag-red/30 text-left flex items-start gap-2.5">
+                  <AlertCircle className="w-4 h-4 text-flag-red shrink-0 mt-0.5" />
+                  <p className="text-xs text-paper-soft">{activeState.error}</p>
                 </div>
               )}
 
@@ -227,7 +227,7 @@ export const RedeemPage: React.FC<RedeemPageProps> = ({
                 <div className="space-y-1.5 text-left">
                   <label
                     htmlFor="alumni-code-input"
-                    className="block text-xs uppercase font-mono tracking-wider text-[#8492A6]"
+                    className="block text-xs uppercase font-mono tracking-wider text-muted-text"
                   >
                     Your Unique Alumni Voucher
                   </label>
@@ -239,9 +239,9 @@ export const RedeemPage: React.FC<RedeemPageProps> = ({
                     onChange={handleInputChange}
                     disabled={isChecking}
                     required
-                    className="w-full text-center px-4 py-3.5 bg-[#030617] border border-[#1A2342] focus:border-[#CA3A32] focus:ring-1 focus:ring-[#CA3A32] text-lg font-mono font-bold tracking-wider uppercase text-[#F8FAFC] placeholder-[#8492A6]/60 rounded-xl outline-none transition-colors"
+                    className="w-full text-center px-4 py-3.5 bg-ink-deep border border-ink-border focus:border-flag-red focus:ring-1 focus:ring-flag-red text-lg font-mono font-bold tracking-wider uppercase text-paper-soft placeholder-muted-text/60 rounded-xl outline-none transition-colors"
                   />
-                  <span className="text-[11px] text-[#8492A6] block text-center pt-1">
+                  <span className="text-[11px] text-muted-text block text-center pt-1">
                     Auto-formats with the ALUMNI- prefix
                   </span>
                 </div>
@@ -260,12 +260,12 @@ export const RedeemPage: React.FC<RedeemPageProps> = ({
                 </Button>
               </form>
 
-              <div className="pt-4 border-t border-[#1A2342] text-xs text-[#8492A6] space-y-1">
+              <div className="pt-4 border-t border-ink-border text-xs text-muted-text space-y-1">
                 <p>
                   Questions about your code? Email{' '}
                   <a
                     href={`mailto:${config.org.supportEmail}?subject=Alumni%20Voucher%20Assistance`}
-                    className="text-[#CA3A32] underline"
+                    className="text-flag-red underline"
                   >
                     {config.org.supportEmail}
                   </a>
@@ -277,7 +277,7 @@ export const RedeemPage: React.FC<RedeemPageProps> = ({
       </div>
 
       {/* Footer */}
-      <div className="w-full max-w-md mx-auto text-center text-xs text-[#8492A6] z-10 flex items-center justify-center gap-2">
+      <div className="w-full max-w-md mx-auto text-center text-xs text-muted-text z-10 flex items-center justify-center gap-2">
         <ShieldCheck className="w-4 h-4 text-[#059669]" />
         <span>Verified Flag Skool Alumni Program</span>
       </div>

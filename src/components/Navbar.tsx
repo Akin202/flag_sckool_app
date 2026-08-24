@@ -30,7 +30,7 @@ export const Navbar: React.FC<NavbarProps> = ({
       id="main-nav"
       className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
         isScrolled
-          ? 'bg-[#030617]/85 backdrop-blur-md border-b border-[#1A2342]/80 py-3.5 shadow-lg shadow-black/20'
+          ? 'bg-ink-deep/85 backdrop-blur-md border-b border-ink-border/80 py-3.5 shadow-lg shadow-black/20'
           : 'bg-transparent py-5'
       }`}
     >
@@ -38,13 +38,13 @@ export const Navbar: React.FC<NavbarProps> = ({
         {/* Wordmark Left */}
         <a
           href="#"
-          className="flex items-center gap-2.5 group focus:outline-none focus-visible:ring-2 focus-visible:ring-[#CA3A32] rounded-md"
+          className="flex items-center gap-2.5 group focus:outline-none focus-visible:ring-2 focus-visible:ring-flag-red rounded-md"
           id="nav-brand-logo"
         >
-          <div className="w-8 h-8 rounded bg-[#CA3A32] flex items-center justify-center text-[#F8FAFC] font-black text-lg tracking-tighter">
+          <div className="w-8 h-8 rounded bg-flag-red flex items-center justify-center text-paper-soft font-black text-lg tracking-tighter">
             F
           </div>
-          <span className="font-display font-black text-xl sm:text-2xl tracking-tight text-[#F8FAFC] group-hover:text-[#CBD5E1] transition-colors">
+          <span className="font-display font-black text-xl sm:text-2xl tracking-tight text-paper-soft group-hover:text-body-text transition-colors">
             {config.org.wordmark}
           </span>
         </a>
@@ -56,7 +56,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             variant="ghost"
             size="sm"
             onClick={onLoginClick}
-            className="text-[15px] text-[#CBD5E1] hover:text-[#F8FAFC]"
+            className="text-[15px] text-body-text hover:text-paper-soft"
           >
             Log in
           </Button>

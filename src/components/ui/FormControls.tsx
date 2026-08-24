@@ -30,22 +30,22 @@ export const Input: React.FC<InputProps> = ({
   return (
     <div className="w-full">
       {label && (
-        <label htmlFor={id} className="block text-[15px] font-medium text-[#F8FAFC] mb-1.5">
+        <label htmlFor={id} className="block text-[15px] font-medium text-paper-soft mb-1.5">
           {label}
-          {required && <span className="text-[#CA3A32] ml-1">*</span>}
+          {required && <span className="text-flag-red ml-1">*</span>}
         </label>
       )}
       <div className="relative flex items-center">
         {leftIcon && (
-          <div className="absolute left-3.5 pointer-events-none text-[#8492A6]">
+          <div className="absolute left-3.5 pointer-events-none text-muted-text">
             {leftIcon}
           </div>
         )}
         <input
           id={id}
           className={clsx(
-            'w-full min-h-[48px] px-4 py-3 bg-[#0A0F29] border rounded-lg text-[16px] text-[#F8FAFC] placeholder-[#8492A6] transition-colors focus:outline-none focus:ring-2 focus:ring-[#CA3A32] focus:border-transparent',
-            error ? 'border-[#CA3A32]' : 'border-[#1A2342] hover:border-[#2D3A63]',
+            'w-full min-h-[48px] px-4 py-3 bg-ink-raised border rounded-lg text-[16px] text-paper-soft placeholder-muted-text transition-colors focus:outline-none focus:ring-2 focus:ring-flag-red focus:border-transparent',
+            error ? 'border-flag-red' : 'border-ink-border hover:border-[#2D3A63]',
             leftIcon && 'pl-11',
             rightIcon && 'pr-11',
             className
@@ -55,18 +55,18 @@ export const Input: React.FC<InputProps> = ({
           {...props}
         />
         {rightIcon && (
-          <div className="absolute right-3.5 pointer-events-none text-[#8492A6]">
+          <div className="absolute right-3.5 pointer-events-none text-muted-text">
             {rightIcon}
           </div>
         )}
       </div>
       {error && (
-        <p id={`${id}-error`} className="mt-1.5 text-[14px] text-[#CA3A32] font-medium">
+        <p id={`${id}-error`} className="mt-1.5 text-[14px] text-flag-red font-medium">
           {error}
         </p>
       )}
       {!error && helperText && (
-        <p id={`${id}-helper`} className="mt-1.5 text-[14px] text-[#8492A6]">
+        <p id={`${id}-helper`} className="mt-1.5 text-[14px] text-muted-text">
           {helperText}
         </p>
       )}
@@ -91,17 +91,17 @@ export const Textarea: React.FC<TextareaProps> = ({
   return (
     <div className="w-full">
       {label && (
-        <label htmlFor={id} className="block text-[15px] font-medium text-[#F8FAFC] mb-1.5">
+        <label htmlFor={id} className="block text-[15px] font-medium text-paper-soft mb-1.5">
           {label}
-          {required && <span className="text-[#CA3A32] ml-1">*</span>}
+          {required && <span className="text-flag-red ml-1">*</span>}
         </label>
       )}
       <textarea
         id={id}
         rows={rows}
         className={clsx(
-          'w-full min-h-[48px] px-4 py-3 bg-[#0A0F29] border rounded-lg text-[16px] text-[#F8FAFC] placeholder-[#8492A6] transition-colors focus:outline-none focus:ring-2 focus:ring-[#CA3A32] focus:border-transparent',
-          error ? 'border-[#CA3A32]' : 'border-[#1A2342] hover:border-[#2D3A63]',
+          'w-full min-h-[48px] px-4 py-3 bg-ink-raised border rounded-lg text-[16px] text-paper-soft placeholder-muted-text transition-colors focus:outline-none focus:ring-2 focus:ring-flag-red focus:border-transparent',
+          error ? 'border-flag-red' : 'border-ink-border hover:border-[#2D3A63]',
           className
         )}
         aria-invalid={!!error}
@@ -109,12 +109,12 @@ export const Textarea: React.FC<TextareaProps> = ({
         {...props}
       />
       {error && (
-        <p id={`${id}-error`} className="mt-1.5 text-[14px] text-[#CA3A32] font-medium">
+        <p id={`${id}-error`} className="mt-1.5 text-[14px] text-flag-red font-medium">
           {error}
         </p>
       )}
       {!error && helperText && (
-        <p id={`${id}-helper`} className="mt-1.5 text-[14px] text-[#8492A6]">
+        <p id={`${id}-helper`} className="mt-1.5 text-[14px] text-muted-text">
           {helperText}
         </p>
       )}
@@ -146,17 +146,17 @@ export const Select: React.FC<SelectProps> = ({
   return (
     <div className="w-full">
       {label && (
-        <label htmlFor={id} className="block text-[15px] font-medium text-[#F8FAFC] mb-1.5">
+        <label htmlFor={id} className="block text-[15px] font-medium text-paper-soft mb-1.5">
           {label}
-          {required && <span className="text-[#CA3A32] ml-1">*</span>}
+          {required && <span className="text-flag-red ml-1">*</span>}
         </label>
       )}
       <div className="relative">
         <select
           id={id}
           className={clsx(
-            'w-full min-h-[48px] px-4 py-3 bg-[#0A0F29] border rounded-lg text-[16px] text-[#F8FAFC] transition-colors appearance-none focus:outline-none focus:ring-2 focus:ring-[#CA3A32] focus:border-transparent cursor-pointer',
-            error ? 'border-[#CA3A32]' : 'border-[#1A2342] hover:border-[#2D3A63]',
+            'w-full min-h-[48px] px-4 py-3 bg-ink-raised border rounded-lg text-[16px] text-paper-soft transition-colors appearance-none focus:outline-none focus:ring-2 focus:ring-flag-red focus:border-transparent cursor-pointer',
+            error ? 'border-flag-red' : 'border-ink-border hover:border-[#2D3A63]',
             className
           )}
           aria-invalid={!!error}
@@ -164,22 +164,22 @@ export const Select: React.FC<SelectProps> = ({
           {...props}
         >
           {options.map((opt) => (
-            <option key={opt.value} value={opt.value} className="bg-[#0A0F29] text-[#F8FAFC]">
+            <option key={opt.value} value={opt.value} className="bg-ink-raised text-paper-soft">
               {opt.label}
             </option>
           ))}
         </select>
-        <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-[#8492A6]">
+        <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-muted-text">
           ▼
         </div>
       </div>
       {error && (
-        <p id={`${id}-error`} className="mt-1.5 text-[14px] text-[#CA3A32] font-medium">
+        <p id={`${id}-error`} className="mt-1.5 text-[14px] text-flag-red font-medium">
           {error}
         </p>
       )}
       {!error && helperText && (
-        <p id={`${id}-helper`} className="mt-1.5 text-[14px] text-[#8492A6]">
+        <p id={`${id}-helper`} className="mt-1.5 text-[14px] text-muted-text">
           {helperText}
         </p>
       )}

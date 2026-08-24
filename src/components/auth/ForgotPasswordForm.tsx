@@ -26,11 +26,11 @@ export const ForgotPasswordForm: React.FC<AuthFormProps<ForgotPasswordFormValues
           <CheckCircle2 className="w-6 h-6" />
         </div>
         <div className="space-y-2">
-          <h3 className="font-display font-bold text-xl text-[#F8FAFC]">
+          <h3 className="font-display font-bold text-xl text-paper-soft">
             Reset Link Dispatched
           </h3>
-          <p className="text-[14px] text-[#8492A6] leading-relaxed">
-            If an account exists for <span className="text-[#F8FAFC] font-medium">{email || 'your email'}</span>, you will receive password reset instructions within 2 minutes.
+          <p className="text-[14px] text-muted-text leading-relaxed">
+            If an account exists for <span className="text-paper-soft font-medium">{email || 'your email'}</span>, you will receive password reset instructions within 2 minutes.
           </p>
         </div>
 
@@ -52,12 +52,12 @@ export const ForgotPasswordForm: React.FC<AuthFormProps<ForgotPasswordFormValues
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       {state.status === 'error' && (
-        <div className="p-3.5 rounded-xl bg-[#CA3A32]/10 border border-[#CA3A32]/30 text-xs text-[#F8FAFC]">
+        <div className="p-3.5 rounded-xl bg-flag-red/10 border border-flag-red/30 text-xs text-paper-soft">
           {state.error}
         </div>
       )}
 
-      <p className="text-[14px] text-[#8492A6]">
+      <p className="text-[14px] text-muted-text">
         Enter your registered email address and we'll send a secure link to reset your password.
       </p>
 
@@ -87,12 +87,12 @@ export const ForgotPasswordForm: React.FC<AuthFormProps<ForgotPasswordFormValues
       </div>
 
       {onNavigate && (
-        <div className="pt-4 border-t border-[#1A2342] text-center text-sm text-[#8492A6]">
+        <div className="pt-4 border-t border-ink-border text-center text-sm text-muted-text">
           Remember your password?{' '}
           <button
             type="button"
             onClick={() => onNavigate('login')}
-            className="text-[#CA3A32] hover:underline font-semibold focus:outline-none focus:ring-1 focus:ring-[#CA3A32] rounded inline-flex items-center gap-1"
+            className="text-flag-red hover:underline font-semibold focus:outline-none focus:ring-1 focus:ring-flag-red rounded inline-flex items-center gap-1"
           >
             Back to login
           </button>

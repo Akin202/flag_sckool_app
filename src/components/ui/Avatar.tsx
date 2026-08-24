@@ -37,7 +37,7 @@ export const Avatar: React.FC<AvatarProps> = ({
   return (
     <div
       className={clsx(
-        'relative inline-flex items-center justify-center rounded-full overflow-hidden shrink-0 border border-[#1A2342] bg-[#0A0F29] text-[#F8FAFC]',
+        'relative inline-flex items-center justify-center rounded-full overflow-hidden shrink-0 border border-ink-border bg-ink-raised text-paper-soft',
         sizeStyles[size],
         className
       )}
@@ -52,7 +52,7 @@ export const Avatar: React.FC<AvatarProps> = ({
           referrerPolicy="no-referrer"
         />
       ) : (
-        <span className="font-mono select-none tracking-wider text-[#F8FAFC]">
+        <span className="font-mono select-none tracking-wider text-paper-soft">
           {calculatedInitials || 'FS'}
         </span>
       )}

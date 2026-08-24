@@ -21,16 +21,16 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({
   return (
     <section
       id="testimonials-section"
-      className="py-16 sm:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-b border-[#1A2342]/60"
+      className="py-16 sm:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-b border-ink-border/60"
     >
       <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
-        <span className="font-mono text-xs uppercase tracking-widest text-[#8492A6] block mb-2">
+        <span className="font-mono text-xs uppercase tracking-widest text-muted-text block mb-2">
           Real Alumni Outcomes
         </span>
-        <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-[#F8FAFC] tracking-tight mb-4">
+        <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-paper-soft tracking-tight mb-4">
           Built and Shipped by Our Students
         </h2>
-        <p className="text-lg text-[#8492A6]">
+        <p className="text-lg text-muted-text">
           Hear how engineers across Lagos, Abuja, Ibadan, and remote African tech ecosystems apply Flag Skool blueprints in production.
         </p>
       </div>
@@ -41,7 +41,7 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({
             <Card
               key={t.id}
               id={`testimonial-card-${t.id}`}
-              className="flex flex-col justify-between border-[#1A2342] hover:border-[#2D3A63] transition-colors relative"
+              className="flex flex-col justify-between border-ink-border hover:border-[#2D3A63] transition-colors relative"
             >
               <div>
                 <div className="flex items-center justify-between mb-4">
@@ -50,28 +50,28 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({
                       <Star key={i} className="w-4 h-4 fill-current" />
                     ))}
                   </div>
-                  <span className="font-mono text-xs text-[#8492A6]">
+                  <span className="font-mono text-xs text-muted-text">
                     {t.cohort}
                   </span>
                 </div>
 
-                <Quote className="w-8 h-8 text-[#1A2342] mb-3" />
-                <p className="text-[16px] text-[#CBD5E1] leading-relaxed italic mb-6">
+                <Quote className="w-8 h-8 text-ink-border mb-3" />
+                <p className="text-[16px] text-body-text leading-relaxed italic mb-6">
                   "{t.quote}"
                 </p>
               </div>
 
-              <div className="flex items-center gap-3.5 pt-4 border-t border-[#1A2342]">
+              <div className="flex items-center gap-3.5 pt-4 border-t border-ink-border">
                 <Avatar name={t.name} initials={t.initials} size="md" />
                 <div>
-                  <h3 className="text-[15px] font-bold text-[#F8FAFC] leading-snug">
+                  <h3 className="text-[15px] font-bold text-paper-soft leading-snug">
                     {t.name}
                   </h3>
-                  <p className="text-[13px] text-[#8492A6] leading-tight">
+                  <p className="text-[13px] text-muted-text leading-tight">
                     {t.role}
                   </p>
                   {t.company && (
-                    <p className="text-[12px] text-[#8492A6]/80">{t.company}</p>
+                    <p className="text-[12px] text-muted-text/80">{t.company}</p>
                   )}
                 </div>
               </div>
@@ -81,7 +81,7 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({
       ) : (
         /* Empty State */
         <EmptyState
-          icon={<MessageSquare className="w-6 h-6 text-[#8492A6]" />}
+          icon={<MessageSquare className="w-6 h-6 text-muted-text" />}
           headline="Testimonials being gathered for Cohort 2"
           body="Real verified student testimonials and project showcases are actively being curated from our Cohort 1 graduates. Check back soon or preview Lesson 1 above."
           actionLabel="Submit your project story"

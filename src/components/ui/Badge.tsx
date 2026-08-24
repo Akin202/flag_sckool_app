@@ -19,8 +19,8 @@ export const Badge: React.FC<BadgeProps> = ({
   };
 
   const variantStyles = {
-    neutral: 'bg-[#1A2342] text-[#E2E8F0] border border-[#2D3A63]/60',
-    accent: 'bg-[#CA3A32] text-[#F8FAFC] border border-[#E04B43]/50 font-bold',
+    neutral: 'bg-ink-border text-[#E2E8F0] border border-[#2D3A63]/60',
+    accent: 'bg-flag-red text-paper-soft border border-[#E04B43]/50 font-bold',
     success: 'bg-[#064E3B] text-[#A7F3D0] border border-[#059669]/40',
     warning: 'bg-[#78350F] text-[#FDE68A] border border-[#D97706]/40',
   };

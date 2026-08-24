@@ -37,10 +37,10 @@ export const ResetPasswordForm: React.FC<AuthFormProps<ResetPasswordFormValues>>
           <CheckCircle2 className="w-6 h-6" />
         </div>
         <div className="space-y-2">
-          <h3 className="font-display font-bold text-xl text-[#F8FAFC]">
+          <h3 className="font-display font-bold text-xl text-paper-soft">
             Password Reset Complete
           </h3>
-          <p className="text-[14px] text-[#8492A6] leading-relaxed">
+          <p className="text-[14px] text-muted-text leading-relaxed">
             Your credentials have been securely updated. You can now sign in to Flag Skool.
           </p>
         </div>
@@ -63,18 +63,18 @@ export const ResetPasswordForm: React.FC<AuthFormProps<ResetPasswordFormValues>>
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       {mismatchError && (
-        <div className="p-3.5 rounded-xl bg-[#CA3A32]/10 border border-[#CA3A32]/30 text-xs text-[#F8FAFC]">
+        <div className="p-3.5 rounded-xl bg-flag-red/10 border border-flag-red/30 text-xs text-paper-soft">
           {mismatchError}
         </div>
       )}
 
       {state.status === 'error' && (
-        <div className="p-3.5 rounded-xl bg-[#CA3A32]/10 border border-[#CA3A32]/30 text-xs text-[#F8FAFC]">
+        <div className="p-3.5 rounded-xl bg-flag-red/10 border border-flag-red/30 text-xs text-paper-soft">
           {state.error}
         </div>
       )}
 
-      <p className="text-[14px] text-[#8492A6]">
+      <p className="text-[14px] text-muted-text">
         Create a new, strong password for your Flag Skool account.
       </p>
 
@@ -115,11 +115,11 @@ export const ResetPasswordForm: React.FC<AuthFormProps<ResetPasswordFormValues>>
       </div>
 
       {onNavigate && (
-        <div className="pt-4 border-t border-[#1A2342] text-center text-sm text-[#8492A6]">
+        <div className="pt-4 border-t border-ink-border text-center text-sm text-muted-text">
           <button
             type="button"
             onClick={() => onNavigate('login')}
-            className="text-[#CA3A32] hover:underline font-semibold focus:outline-none focus:ring-1 focus:ring-[#CA3A32] rounded"
+            className="text-flag-red hover:underline font-semibold focus:outline-none focus:ring-1 focus:ring-flag-red rounded"
           >
             Cancel and return to login
           </button>

@@ -270,7 +270,7 @@ export const LearnPage: React.FC<LearnPageProps> = ({
   const getResourceIcon = (format: string, kind: string) => {
     const fmt = format.toUpperCase();
     if (fmt === 'JSON' || kind === 'blueprint') {
-      return <FileJson className="w-5 h-5 text-[#CA3A32]" />;
+      return <FileJson className="w-5 h-5 text-flag-red" />;
     }
     if (fmt === 'ZIP' || kind === 'code') {
       return <FileCode className="w-5 h-5 text-[#38BDF8]" />;
@@ -282,7 +282,7 @@ export const LearnPage: React.FC<LearnPageProps> = ({
   };
 
   return (
-    <div className="min-h-screen bg-[#030617] text-[#CBD5E1] flex flex-col justify-between">
+    <div className="min-h-screen bg-ink-deep text-body-text flex flex-col justify-between">
       <div>
         {/* Navigation Bar */}
         <StudentNav
@@ -304,25 +304,25 @@ export const LearnPage: React.FC<LearnPageProps> = ({
                 ref={playerContainerRef}
                 id="lesson-player-stage"
                 onMouseMove={handleMouseMove}
-                className="relative aspect-video w-full rounded-2xl bg-[#030617] border-2 border-[#1A2342] overflow-hidden flex flex-col justify-between select-none shadow-2xl"
+                className="relative aspect-video w-full rounded-2xl bg-ink-deep border-2 border-ink-border overflow-hidden flex flex-col justify-between select-none shadow-2xl"
               >
                 {/* 1. BUNNY EMBED IFRAME PLACEHOLDER */}
                 {/* // TODO(handoff): replace with signed Bunny Stream embed */}
                 {loadState.status === 'loading' ? (
-                  <div className="absolute inset-0 flex items-center justify-center bg-[#0A0F29]">
+                  <div className="absolute inset-0 flex items-center justify-center bg-ink-raised">
                     <Skeleton height="100%" width="100%" className="rounded-none" />
                   </div>
                 ) : loadState.status === 'success' && loadState.data.isLocked ? (
                   /* LOCKED LESSON COVER */
-                  <div className="absolute inset-0 bg-[#030617]/95 flex flex-col items-center justify-center p-6 text-center space-y-3 z-20">
-                    <div className="w-14 h-14 rounded-full bg-[#CA3A32]/20 border border-[#CA3A32]/40 text-[#CA3A32] flex items-center justify-center">
+                  <div className="absolute inset-0 bg-ink-deep/95 flex flex-col items-center justify-center p-6 text-center space-y-3 z-20">
+                    <div className="w-14 h-14 rounded-full bg-flag-red/20 border border-flag-red/40 text-flag-red flex items-center justify-center">
                       <Lock className="w-6 h-6" />
                     </div>
                     <div className="space-y-1">
-                      <h3 className="font-display font-bold text-xl text-[#F8FAFC]">
+                      <h3 className="font-display font-bold text-xl text-paper-soft">
                         Live Cohort 2 Exclusive Module
                       </h3>
-                      <p className="text-xs text-[#8492A6] max-w-sm">
+                      <p className="text-xs text-muted-text max-w-sm">
                         This advanced commercial deployment module is reserved for Live Cohort students with instructor review.
                       </p>
                     </div>
@@ -338,11 +338,11 @@ export const LearnPage: React.FC<LearnPageProps> = ({
                   /* VIDEO CANVAS SIMULATION */
                   <div
                     onClick={togglePlay}
-                    className="absolute inset-0 bg-gradient-to-t from-[#030617] via-[#0A0F29]/60 to-[#0A0F29] flex items-center justify-center cursor-pointer group"
+                    className="absolute inset-0 bg-gradient-to-t from-ink-deep via-ink-raised/60 to-ink-raised flex items-center justify-center cursor-pointer group"
                   >
                     {/* Centered Play Prompt (when paused) */}
                     {!isPlaying && (
-                      <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-[#CA3A32] text-[#F8FAFC] flex items-center justify-center shadow-2xl ring-4 ring-[#CA3A32]/30 transition-transform group-hover:scale-105">
+                      <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-flag-red text-paper-soft flex items-center justify-center shadow-2xl ring-4 ring-flag-red/30 transition-transform group-hover:scale-105">
                         <Play className="w-8 h-8 sm:w-10 sm:h-10 ml-1 fill-current" />
                       </div>
                     )}
@@ -352,7 +352,7 @@ export const LearnPage: React.FC<LearnPageProps> = ({
                 {/* 2. WATERMARK OVERLAY (STUDENT NAME & EMAIL, LOWER-RIGHT) */}
                 <div
                   id="player-watermark"
-                  className="absolute bottom-16 right-4 sm:bottom-20 sm:right-6 pointer-events-none z-10 opacity-35 text-[11px] sm:text-xs font-mono text-[#F8FAFC] drop-shadow-md select-none"
+                  className="absolute bottom-16 right-4 sm:bottom-20 sm:right-6 pointer-events-none z-10 opacity-35 text-[11px] sm:text-xs font-mono text-paper-soft drop-shadow-md select-none"
                 >
                   {user?.fullName || 'Chidi Okonkwo'} · {user?.email || 'chidi.okonkwo@gmail.com'}
                 </div>
@@ -360,7 +360,7 @@ export const LearnPage: React.FC<LearnPageProps> = ({
                 {/* 3. CUSTOM CONTROL STRIP (MIN 48PX TOUCH TARGETS, ONE-HANDED THUMB FRIENDLY) */}
                 <div
                   id="player-control-strip"
-                  className={`relative mt-auto w-full bg-gradient-to-t from-[#030617] via-[#0A0F29]/95 to-transparent px-3 sm:px-4 py-2 sm:py-3 space-y-2 z-20 transition-opacity duration-200 ${
+                  className={`relative mt-auto w-full bg-gradient-to-t from-ink-deep via-ink-raised/95 to-transparent px-3 sm:px-4 py-2 sm:py-3 space-y-2 z-20 transition-opacity duration-200 ${
                     showControls ? 'opacity-100' : 'opacity-0 pointer-events-none'
                   }`}
                 >
@@ -373,7 +373,7 @@ export const LearnPage: React.FC<LearnPageProps> = ({
                       max={totalSeconds}
                       value={currentTimeSeconds}
                       onChange={handleSeek}
-                      className="w-full h-1.5 bg-[#1A2342] rounded-lg appearance-none cursor-pointer accent-[#CA3A32] focus:outline-none"
+                      className="w-full h-1.5 bg-ink-border rounded-lg appearance-none cursor-pointer accent-flag-red focus:outline-none"
                       aria-label="Video scrubber"
                     />
                   </div>
@@ -386,7 +386,7 @@ export const LearnPage: React.FC<LearnPageProps> = ({
                         type="button"
                         id="player-play-pause-btn"
                         onClick={togglePlay}
-                        className="w-12 h-12 flex items-center justify-center rounded-lg bg-[#1A2342]/80 hover:bg-[#CA3A32] text-[#F8FAFC] transition-colors focus:ring-2 focus:ring-[#CA3A32]"
+                        className="w-12 h-12 flex items-center justify-center rounded-lg bg-ink-border/80 hover:bg-flag-red text-paper-soft transition-colors focus:ring-2 focus:ring-flag-red"
                         aria-label={isPlaying ? 'Pause' : 'Play'}
                       >
                         {isPlaying ? (
@@ -396,10 +396,10 @@ export const LearnPage: React.FC<LearnPageProps> = ({
                         )}
                       </button>
 
-                      <div className="font-mono text-xs text-[#CBD5E1] pl-1">
+                      <div className="font-mono text-xs text-body-text pl-1">
                         <span>{formatTime(currentTimeSeconds)}</span>
-                        <span className="text-[#8492A6]"> / </span>
-                        <span className="text-[#8492A6]">{formatTime(totalSeconds)}</span>
+                        <span className="text-muted-text"> / </span>
+                        <span className="text-muted-text">{formatTime(totalSeconds)}</span>
                       </div>
                     </div>
 
@@ -408,10 +408,10 @@ export const LearnPage: React.FC<LearnPageProps> = ({
                       {/* Live Data Usage Estimate */}
                       <div
                         id="player-data-estimate-badge"
-                        className="hidden md:flex items-center gap-1.5 text-[11px] font-mono px-2.5 py-1 rounded bg-[#1A2342]/70 text-[#CBD5E1] border border-[#1A2342]"
+                        className="hidden md:flex items-center gap-1.5 text-[11px] font-mono px-2.5 py-1 rounded bg-ink-border/70 text-body-text border border-ink-border"
                         title="Estimated Nigerian data consumption for remaining duration"
                       >
-                        <Wifi className="w-3 h-3 text-[#CA3A32]" />
+                        <Wifi className="w-3 h-3 text-flag-red" />
                         <span>~{estimatedRemainingMb} MB remaining at {quality}</span>
                       </div>
 
@@ -421,12 +421,12 @@ export const LearnPage: React.FC<LearnPageProps> = ({
                           id="player-quality-select"
                           value={quality}
                           onChange={(e) => handleQualityChange(e.target.value as VideoQuality)}
-                          className="min-h-[48px] px-2.5 py-1 text-xs font-mono font-medium rounded-lg bg-[#1A2342] text-[#F8FAFC] border border-[#2D3A63] focus:ring-2 focus:ring-[#CA3A32] focus:outline-none cursor-pointer"
+                          className="min-h-[48px] px-2.5 py-1 text-xs font-mono font-medium rounded-lg bg-ink-border text-paper-soft border border-[#2D3A63] focus:ring-2 focus:ring-flag-red focus:outline-none cursor-pointer"
                           aria-label="Select Video Stream Quality"
                         >
                           {(config.player?.availableQualities || ['360p', '480p', '720p', '1080p']).map(
                             (q) => (
-                              <option key={q} value={q} className="bg-[#0A0F29] text-[#F8FAFC]">
+                              <option key={q} value={q} className="bg-ink-raised text-paper-soft">
                                 {q}
                               </option>
                             )
@@ -439,10 +439,10 @@ export const LearnPage: React.FC<LearnPageProps> = ({
                         type="button"
                         id="player-data-saver-toggle"
                         onClick={handleDataSaverToggle}
-                        className={`min-h-[48px] px-3 py-1 text-xs font-mono font-medium rounded-lg border transition-colors flex items-center gap-1.5 focus:ring-2 focus:ring-[#CA3A32] ${
+                        className={`min-h-[48px] px-3 py-1 text-xs font-mono font-medium rounded-lg border transition-colors flex items-center gap-1.5 focus:ring-2 focus:ring-flag-red ${
                           dataSaver
-                            ? 'bg-[#CA3A32] text-[#F8FAFC] border-[#CA3A32]'
-                            : 'bg-[#1A2342]/80 text-[#8492A6] border-[#2D3A63] hover:text-[#CBD5E1]'
+                            ? 'bg-flag-red text-paper-soft border-flag-red'
+                            : 'bg-ink-border/80 text-muted-text border-[#2D3A63] hover:text-body-text'
                         }`}
                         title="Toggle Data Saver (Forces 360p mobile stream)"
                       >
@@ -455,7 +455,7 @@ export const LearnPage: React.FC<LearnPageProps> = ({
                         type="button"
                         id="player-fullscreen-btn"
                         onClick={toggleFullscreen}
-                        className="w-12 h-12 flex items-center justify-center rounded-lg bg-[#1A2342]/80 hover:bg-[#2D3A63] text-[#F8FAFC] transition-colors focus:ring-2 focus:ring-[#CA3A32]"
+                        className="w-12 h-12 flex items-center justify-center rounded-lg bg-ink-border/80 hover:bg-[#2D3A63] text-paper-soft transition-colors focus:ring-2 focus:ring-flag-red"
                         aria-label="Toggle Fullscreen"
                       >
                         {isFullscreen ? (
@@ -493,15 +493,15 @@ export const LearnPage: React.FC<LearnPageProps> = ({
               ) : loadState.status === 'success' ? (
                 <div className="space-y-4">
                   {/* Breadcrumb */}
-                  <div className="flex items-center gap-2 text-xs font-mono text-[#8492A6]">
+                  <div className="flex items-center gap-2 text-xs font-mono text-muted-text">
                     <span>Module {loadState.data.module.number}: {loadState.data.module.title}</span>
                     <ChevronRight className="w-3.5 h-3.5" />
-                    <span className="text-[#CA3A32] font-semibold">Active Lesson</span>
+                    <span className="text-flag-red font-semibold">Active Lesson</span>
                   </div>
 
                   {/* Title & Actions Row */}
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                    <h1 className="font-display font-black text-xl sm:text-2xl lg:text-3xl text-[#F8FAFC] tracking-tight">
+                    <h1 className="font-display font-black text-xl sm:text-2xl lg:text-3xl text-paper-soft tracking-tight">
                       {loadState.data.lesson.title}
                     </h1>
 
@@ -538,7 +538,7 @@ export const LearnPage: React.FC<LearnPageProps> = ({
 
                   {/* Description */}
                   {loadState.data.lesson.description && (
-                    <p className="text-sm text-[#8492A6] leading-relaxed max-w-3xl">
+                    <p className="text-sm text-muted-text leading-relaxed max-w-3xl">
                       {loadState.data.lesson.description}
                     </p>
                   )}
@@ -561,17 +561,17 @@ export const LearnPage: React.FC<LearnPageProps> = ({
 
               {/* MOBILE SYLLABUS ACCORDION (WHEN TOGGLED) */}
               {showMobileOutline && (
-                <div className="lg:hidden p-4 rounded-xl border border-[#1A2342] bg-[#0A0F29] space-y-4">
-                  <h3 className="font-display font-bold text-base text-[#F8FAFC]">
+                <div className="lg:hidden p-4 rounded-xl border border-ink-border bg-ink-raised space-y-4">
+                  <h3 className="font-display font-bold text-base text-paper-soft">
                     Course Syllabus
                   </h3>
                   <div className="space-y-4">
                     {modules.map((mod) => (
                       <div key={mod.id} className="space-y-1">
-                        <div className="text-xs font-mono font-semibold text-[#CA3A32]">
+                        <div className="text-xs font-mono font-semibold text-flag-red">
                           Module {mod.number}: {mod.title}
                         </div>
-                        <div className="space-y-1 pl-2 border-l border-[#1A2342]">
+                        <div className="space-y-1 pl-2 border-l border-ink-border">
                           {mod.lessons.map((les) => (
                             <button
                               key={les.id}
@@ -582,12 +582,12 @@ export const LearnPage: React.FC<LearnPageProps> = ({
                               }}
                               className={`w-full text-left p-2 rounded text-xs flex items-center justify-between ${
                                 les.id === lessonId
-                                  ? 'bg-[#CA3A32]/20 text-[#F8FAFC] font-bold border border-[#CA3A32]/50'
-                                  : 'text-[#8492A6] hover:bg-[#1A2342]'
+                                  ? 'bg-flag-red/20 text-paper-soft font-bold border border-flag-red/50'
+                                  : 'text-muted-text hover:bg-ink-border'
                               }`}
                             >
                               <span className="truncate pr-2">{les.title}</span>
-                              <span className="font-mono text-[10px] text-[#8492A6]">
+                              <span className="font-mono text-[10px] text-muted-text">
                                 {les.durationMinutes}m
                               </span>
                             </button>
@@ -600,9 +600,9 @@ export const LearnPage: React.FC<LearnPageProps> = ({
               )}
 
               {/* ATTACHED RESOURCES SECTION */}
-              <div className="space-y-4 pt-4 border-t border-[#1A2342]">
+              <div className="space-y-4 pt-4 border-t border-ink-border">
                 <div className="flex items-center justify-between">
-                  <h2 className="font-display font-bold text-lg text-[#F8FAFC] flex items-center gap-2">
+                  <h2 className="font-display font-bold text-lg text-paper-soft flex items-center gap-2">
                     <span>Lesson Resources & Blueprints</span>
                     <Badge variant="neutral" size="sm">
                       {resources.length}
@@ -611,7 +611,7 @@ export const LearnPage: React.FC<LearnPageProps> = ({
                   <button
                     type="button"
                     onClick={() => onNavigate && onNavigate('vault')}
-                    className="text-xs text-[#CA3A32] hover:underline font-mono"
+                    className="text-xs text-flag-red hover:underline font-mono"
                   >
                     Open all in Vault →
                   </button>
@@ -619,7 +619,7 @@ export const LearnPage: React.FC<LearnPageProps> = ({
 
                 {resources.length === 0 ? (
                   <EmptyState
-                    icon={<FileCode className="w-8 h-8 text-[#8492A6]" />}
+                    icon={<FileCode className="w-8 h-8 text-muted-text" />}
                     headline="No Attached Files"
                     body="This lesson is a pure conceptual walkthrough. General starter blueprints are in the Vault."
                   />
@@ -629,18 +629,18 @@ export const LearnPage: React.FC<LearnPageProps> = ({
                       <div
                         key={res.id}
                         id={`lesson-resource-row-${res.id}`}
-                        className="p-3 sm:p-4 rounded-xl border border-[#1A2342] bg-[#0A0F29]/70 hover:bg-[#1A2342]/40 transition-colors flex items-center justify-between gap-4"
+                        className="p-3 sm:p-4 rounded-xl border border-ink-border bg-ink-raised/70 hover:bg-ink-border/40 transition-colors flex items-center justify-between gap-4"
                       >
                         <div className="flex items-center gap-3 min-w-0">
-                          <div className="w-10 h-10 rounded-lg bg-[#1A2342] flex items-center justify-center flex-shrink-0">
+                          <div className="w-10 h-10 rounded-lg bg-ink-border flex items-center justify-center flex-shrink-0">
                             {getResourceIcon(res.fileFormat, res.kind)}
                           </div>
                           <div className="space-y-0.5 min-w-0">
-                            <h4 className="text-sm font-semibold text-[#F8FAFC] truncate">
+                            <h4 className="text-sm font-semibold text-paper-soft truncate">
                               {res.title}
                             </h4>
-                            <div className="flex items-center gap-2 text-xs font-mono text-[#8492A6]">
-                              <span className="px-1.5 py-0.2 bg-[#1A2342] rounded text-[10px] text-[#CBD5E1]">
+                            <div className="flex items-center gap-2 text-xs font-mono text-muted-text">
+                              <span className="px-1.5 py-0.2 bg-ink-border rounded text-[10px] text-body-text">
                                 {res.fileFormat}
                               </span>
                               <span>{res.sizeFormatted}</span>
@@ -653,7 +653,7 @@ export const LearnPage: React.FC<LearnPageProps> = ({
                           href={res.downloadUrl}
                           id={`download-btn-${res.id}`}
                           download
-                          className="min-h-[44px] px-3.5 py-2 rounded-lg bg-[#1A2342] hover:bg-[#CA3A32] text-[#F8FAFC] text-xs font-semibold flex items-center gap-1.5 transition-colors focus:ring-2 focus:ring-[#CA3A32] flex-shrink-0"
+                          className="min-h-[44px] px-3.5 py-2 rounded-lg bg-ink-border hover:bg-flag-red text-paper-soft text-xs font-semibold flex items-center gap-1.5 transition-colors focus:ring-2 focus:ring-flag-red flex-shrink-0"
                           title="Download Resource"
                         >
                           <Download className="w-4 h-4" />
@@ -666,15 +666,15 @@ export const LearnPage: React.FC<LearnPageProps> = ({
               </div>
 
               {/* COMMENTS & DISCUSSION SECTION */}
-              <div className="space-y-4 pt-4 border-t border-[#1A2342]">
+              <div className="space-y-4 pt-4 border-t border-ink-border">
                 <div className="flex items-center justify-between">
-                  <h2 className="font-display font-bold text-lg text-[#F8FAFC] flex items-center gap-2">
+                  <h2 className="font-display font-bold text-lg text-paper-soft flex items-center gap-2">
                     <span>Discussion & Questions</span>
                     <Badge variant="neutral" size="sm">
                       {comments.length}
                     </Badge>
                   </h2>
-                  <span className="text-xs font-mono text-[#8492A6]">
+                  <span className="text-xs font-mono text-muted-text">
                     Instructor replies in &lt; 12 hrs
                   </span>
                 </div>
@@ -683,7 +683,7 @@ export const LearnPage: React.FC<LearnPageProps> = ({
                 <form
                   onSubmit={handlePostComment}
                   id="lesson-comment-form"
-                  className="space-y-2 p-4 rounded-xl border border-[#1A2342] bg-[#0A0F29]"
+                  className="space-y-2 p-4 rounded-xl border border-ink-border bg-ink-raised"
                 >
                   <textarea
                     id="lesson-comment-textarea"
@@ -691,7 +691,7 @@ export const LearnPage: React.FC<LearnPageProps> = ({
                     onChange={(e) => setCommentText(e.target.value)}
                     placeholder="Ask a question about this lesson or share your build insight..."
                     rows={3}
-                    className="w-full bg-[#030617] border border-[#1A2342] focus:border-[#CA3A32] rounded-lg p-3 text-sm text-[#F8FAFC] placeholder-[#8492A6] focus:outline-none focus:ring-1 focus:ring-[#CA3A32] resize-none"
+                    className="w-full bg-ink-deep border border-ink-border focus:border-flag-red rounded-lg p-3 text-sm text-paper-soft placeholder-muted-text focus:outline-none focus:ring-1 focus:ring-flag-red resize-none"
                   />
                   <div className="flex justify-end">
                     <Button
@@ -711,7 +711,7 @@ export const LearnPage: React.FC<LearnPageProps> = ({
                 {/* Flat Comments List (Newest first, pinned at top) */}
                 {comments.length === 0 ? (
                   <EmptyState
-                    icon={<Info className="w-8 h-8 text-[#8492A6]" />}
+                    icon={<Info className="w-8 h-8 text-muted-text" />}
                     headline="No Questions Yet"
                     body="Be the first to post a question or share your progress from this lesson."
                   />
@@ -723,14 +723,14 @@ export const LearnPage: React.FC<LearnPageProps> = ({
                         id={`comment-item-${c.id}`}
                         className={`p-4 rounded-xl border transition-colors space-y-2 ${
                           c.isPinned
-                            ? 'bg-[#0D153B] border-[#CA3A32]/40 ring-1 ring-[#CA3A32]/20'
-                            : 'bg-[#0A0F29]/60 border-[#1A2342]'
+                            ? 'bg-[#0D153B] border-flag-red/40 ring-1 ring-flag-red/20'
+                            : 'bg-ink-raised/60 border-ink-border'
                         }`}
                       >
                         {/* Comment Header */}
                         <div className="flex items-center justify-between gap-2">
                           <div className="flex items-center gap-2">
-                            <div className="w-7 h-7 rounded-full bg-[#1A2342] text-[#F8FAFC] flex items-center justify-center text-xs font-bold font-mono">
+                            <div className="w-7 h-7 rounded-full bg-ink-border text-paper-soft flex items-center justify-center text-xs font-bold font-mono">
                               {c.authorName
                                 .split(' ')
                                 .map((n) => n[0])
@@ -738,19 +738,19 @@ export const LearnPage: React.FC<LearnPageProps> = ({
                                 .slice(0, 2)
                                 .toUpperCase()}
                             </div>
-                            <span className="text-xs font-bold text-[#F8FAFC]">
+                            <span className="text-xs font-bold text-paper-soft">
                               {c.authorName}
                             </span>
                             {c.authorIsAdmin && (
-                              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[#CA3A32] text-[#F8FAFC]">
+                              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-flag-red text-paper-soft">
                                 Instructor
                               </span>
                             )}
                           </div>
 
-                          <div className="flex items-center gap-2 text-[11px] font-mono text-[#8492A6]">
+                          <div className="flex items-center gap-2 text-[11px] font-mono text-muted-text">
                             {c.isPinned && (
-                              <span className="flex items-center gap-1 text-[#CA3A32]">
+                              <span className="flex items-center gap-1 text-flag-red">
                                 <Pin className="w-3 h-3 fill-current" />
                                 <span>Pinned</span>
                               </span>
@@ -760,7 +760,7 @@ export const LearnPage: React.FC<LearnPageProps> = ({
                         </div>
 
                         {/* Comment Body */}
-                        <p className="text-xs sm:text-sm text-[#CBD5E1] leading-relaxed pl-9">
+                        <p className="text-xs sm:text-sm text-body-text leading-relaxed pl-9">
                           {c.body}
                         </p>
                       </div>
@@ -772,13 +772,13 @@ export const LearnPage: React.FC<LearnPageProps> = ({
 
             {/* RIGHT 1/3 COLUMN: COURSE NAVIGATION RAIL (DESKTOP) */}
             <div className="hidden lg:block space-y-4 sticky top-20">
-              <div className="p-4 rounded-2xl border border-[#1A2342] bg-[#0A0F29] space-y-4">
-                <div className="flex items-center justify-between pb-3 border-b border-[#1A2342]">
-                  <h3 className="font-display font-bold text-base text-[#F8FAFC] flex items-center gap-2">
-                    <Layers className="w-4 h-4 text-[#CA3A32]" />
+              <div className="p-4 rounded-2xl border border-ink-border bg-ink-raised space-y-4">
+                <div className="flex items-center justify-between pb-3 border-b border-ink-border">
+                  <h3 className="font-display font-bold text-base text-paper-soft flex items-center gap-2">
+                    <Layers className="w-4 h-4 text-flag-red" />
                     <span>Course Syllabus</span>
                   </h3>
-                  <span className="text-xs font-mono text-[#8492A6]">
+                  <span className="text-xs font-mono text-muted-text">
                     {modules.length} Modules
                   </span>
                 </div>
@@ -787,16 +787,16 @@ export const LearnPage: React.FC<LearnPageProps> = ({
                 <div className="space-y-4 max-h-[calc(100vh-200px)] overflow-y-auto pr-1">
                   {modules.map((mod) => (
                     <div key={mod.id} className="space-y-1.5">
-                      <div className="text-xs font-mono font-bold text-[#CA3A32] flex items-center justify-between">
+                      <div className="text-xs font-mono font-bold text-flag-red flex items-center justify-between">
                         <span>Module 0{mod.number}</span>
-                        <span className="text-[#8492A6] font-normal">{mod.lessons.length} lessons</span>
+                        <span className="text-muted-text font-normal">{mod.lessons.length} lessons</span>
                       </div>
-                      <div className="text-xs font-semibold text-[#CBD5E1] pb-1 truncate">
+                      <div className="text-xs font-semibold text-body-text pb-1 truncate">
                         {mod.title}
                       </div>
 
                       {/* Lessons list */}
-                      <div className="space-y-1 pl-2 border-l border-[#1A2342]">
+                      <div className="space-y-1 pl-2 border-l border-ink-border">
                         {mod.lessons.map((les, idx) => {
                           const isCurrent = les.id === lessonId;
                           return (
@@ -807,15 +807,15 @@ export const LearnPage: React.FC<LearnPageProps> = ({
                               onClick={() => onNavigate && onNavigate('learn', les.id)}
                               className={`w-full text-left p-2 rounded-lg text-xs flex items-center justify-between transition-colors ${
                                 isCurrent
-                                  ? 'bg-[#CA3A32] text-[#F8FAFC] font-bold shadow-md'
-                                  : 'text-[#8492A6] hover:text-[#F8FAFC] hover:bg-[#1A2342]/70'
+                                  ? 'bg-flag-red text-paper-soft font-bold shadow-md'
+                                  : 'text-muted-text hover:text-paper-soft hover:bg-ink-border/70'
                               }`}
                             >
                               <div className="flex items-center gap-2 min-w-0 pr-1">
                                 {isCurrent ? (
                                   <Play className="w-3.5 h-3.5 fill-current flex-shrink-0" />
                                 ) : (
-                                  <span className="font-mono text-[10px] text-[#8492A6] flex-shrink-0">
+                                  <span className="font-mono text-[10px] text-muted-text flex-shrink-0">
                                     {idx + 1}.
                                   </span>
                                 )}

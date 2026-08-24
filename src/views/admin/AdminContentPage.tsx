@@ -593,7 +593,7 @@ export function AdminContentPage({ onNavigate }: AdminContentPageProps) {
                         <button
                           type="button"
                           onClick={() => handleDeleteResource(res.id)}
-                          className="p-1 text-gray-400 hover:text-[#CA3A32] hover:bg-red-50 rounded"
+                          className="p-1 text-gray-400 hover:text-flag-red hover:bg-red-50 rounded"
                         >
                           <Trash2 className="w-3 h-3" />
                         </button>

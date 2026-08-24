@@ -67,22 +67,22 @@ export const CurriculumSection: React.FC<CurriculumSectionProps> = ({
     trigger: (
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-4">
         <div className="flex items-start sm:items-center gap-3.5">
-          <div className="w-9 h-9 rounded-md bg-[#1A2342] border border-[#2D3A63]/60 flex items-center justify-center font-mono text-sm font-bold text-[#F8FAFC] shrink-0">
+          <div className="w-9 h-9 rounded-md bg-ink-border border border-[#2D3A63]/60 flex items-center justify-center font-mono text-sm font-bold text-paper-soft shrink-0">
             0{mod.number}
           </div>
           <div>
-            <h3 className="font-display text-lg sm:text-xl font-bold text-[#F8FAFC] group-hover:text-[#F8FAFC] transition-colors leading-snug">
+            <h3 className="font-display text-lg sm:text-xl font-bold text-paper-soft group-hover:text-paper-soft transition-colors leading-snug">
               {mod.title}
             </h3>
             {mod.description && (
-              <p className="text-[14px] text-[#8492A6] line-clamp-1 mt-0.5">
+              <p className="text-[14px] text-muted-text line-clamp-1 mt-0.5">
                 {mod.description}
               </p>
             )}
           </div>
         </div>
 
-        <div className="flex items-center gap-3 text-[13px] sm:text-[14px] font-mono text-[#8492A6] pl-12 sm:pl-0 shrink-0">
+        <div className="flex items-center gap-3 text-[13px] sm:text-[14px] font-mono text-muted-text pl-12 sm:pl-0 shrink-0">
           <span className="flex items-center gap-1.5">
             <BookOpen className="w-3.5 h-3.5" />
             {mod.lessonCount} lessons
@@ -101,16 +101,16 @@ export const CurriculumSection: React.FC<CurriculumSectionProps> = ({
           <div
             key={lesson.id}
             id={`lesson-row-${lesson.id}`}
-            className="flex flex-col sm:flex-row sm:items-center justify-between p-3.5 sm:p-4 rounded-lg bg-[#030617] border border-[#1A2342] hover:border-[#2D3A63] transition-colors gap-2 sm:gap-4"
+            className="flex flex-col sm:flex-row sm:items-center justify-between p-3.5 sm:p-4 rounded-lg bg-ink-deep border border-ink-border hover:border-[#2D3A63] transition-colors gap-2 sm:gap-4"
           >
             <div className="flex items-start sm:items-center gap-3">
-              <PlayCircle className="w-4 h-4 text-[#8492A6] mt-1 sm:mt-0 shrink-0" />
+              <PlayCircle className="w-4 h-4 text-muted-text mt-1 sm:mt-0 shrink-0" />
               <div>
                 <div className="flex items-center gap-2 flex-wrap">
-                  <span className="font-mono text-xs text-[#8492A6]">
+                  <span className="font-mono text-xs text-muted-text">
                     0{mod.number}.{lIdx + 1}
                   </span>
-                  <span className="text-[15px] sm:text-[16px] font-medium text-[#F8FAFC]">
+                  <span className="text-[15px] sm:text-[16px] font-medium text-paper-soft">
                     {lesson.title}
                   </span>
                   {lesson.isFree && (
@@ -120,7 +120,7 @@ export const CurriculumSection: React.FC<CurriculumSectionProps> = ({
                   )}
                 </div>
                 {lesson.description && (
-                  <p className="text-[13px] text-[#8492A6] mt-1 max-w-2xl">
+                  <p className="text-[13px] text-muted-text mt-1 max-w-2xl">
                     {lesson.description}
                   </p>
                 )}
@@ -128,7 +128,7 @@ export const CurriculumSection: React.FC<CurriculumSectionProps> = ({
             </div>
 
             <div className="flex items-center justify-between sm:justify-end gap-3 pl-7 sm:pl-0 shrink-0">
-              <span className="font-mono text-[13px] text-[#8492A6] flex items-center gap-1">
+              <span className="font-mono text-[13px] text-muted-text flex items-center gap-1">
                 <Clock className="w-3.5 h-3.5" />
                 {lesson.durationMinutes}m
               </span>
@@ -136,7 +136,7 @@ export const CurriculumSection: React.FC<CurriculumSectionProps> = ({
                 <button
                   type="button"
                   onClick={() => onSelectFreeLesson(lesson.id)}
-                  className="text-[13px] font-medium text-[#CA3A32] hover:underline focus:outline-none"
+                  className="text-[13px] font-medium text-flag-red hover:underline focus:outline-none"
                 >
                   Watch stream →
                 </button>
@@ -151,22 +151,22 @@ export const CurriculumSection: React.FC<CurriculumSectionProps> = ({
   return (
     <section
       id="curriculum-section"
-      className="py-16 sm:py-24 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 border-b border-[#1A2342]/60"
+      className="py-16 sm:py-24 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 border-b border-ink-border/60"
     >
       <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-14">
-        <span className="font-mono text-xs uppercase tracking-widest text-[#8492A6] block mb-2">
+        <span className="font-mono text-xs uppercase tracking-widest text-muted-text block mb-2">
           In-Depth Engineering Syllabus
         </span>
-        <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-[#F8FAFC] tracking-tight mb-4">
+        <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-paper-soft tracking-tight mb-4">
           Complete Modular Curriculum
         </h2>
-        <p className="text-lg text-[#8492A6] mb-6">
+        <p className="text-lg text-muted-text mb-6">
           Over {formatHoursAndMins(totalCurriculumMinutes || 540)} of rigorous technical instruction, architectural blueprints, live coding walk-throughs, and deployable repositories.
         </p>
 
-        <div className="inline-flex items-center gap-4 px-4 py-2 rounded-lg bg-[#0A0F29] border border-[#1A2342] font-mono text-[14px] text-[#CBD5E1]">
+        <div className="inline-flex items-center gap-4 px-4 py-2 rounded-lg bg-ink-raised border border-ink-border font-mono text-[14px] text-body-text">
           <span className="flex items-center gap-1.5">
-            <Layers className="w-4 h-4 text-[#CA3A32]" />
+            <Layers className="w-4 h-4 text-flag-red" />
             {modules.length || 6} Modules
           </span>
           <span className="text-[#2D3A63]">•</span>
@@ -177,7 +177,7 @@ export const CurriculumSection: React.FC<CurriculumSectionProps> = ({
       </div>
 
       {/* Controlled Accordion or Skeletons */}
-      <div className="bg-[#0A0F29] rounded-2xl border border-[#1A2342] p-4 sm:p-8 shadow-xl">
+      <div className="bg-ink-raised rounded-2xl border border-ink-border p-4 sm:p-8 shadow-xl">
         {isLoading ? (
           <div className="space-y-4">
             <Skeleton height={56} width="100%" />

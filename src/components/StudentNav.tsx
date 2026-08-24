@@ -34,7 +34,7 @@ export const StudentNav: React.FC<StudentNavProps> = ({
   ];
 
   return (
-    <nav className="border-b border-[#1A2342] bg-[#0A0F29]/90 backdrop-blur-md sticky top-0 z-30">
+    <nav className="border-b border-ink-border bg-ink-raised/90 backdrop-blur-md sticky top-0 z-30">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         {/* Brand logo & back to landing */}
         <div className="flex items-center gap-3">
@@ -42,17 +42,17 @@ export const StudentNav: React.FC<StudentNavProps> = ({
             type="button"
             id="student-nav-brand-btn"
             onClick={() => onNavigate && onNavigate('dashboard')}
-            className="flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-[#CA3A32] rounded-lg p-1"
+            className="flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-flag-red rounded-lg p-1"
           >
-            <div className="w-8 h-8 rounded-lg bg-[#CA3A32] flex items-center justify-center font-display font-black text-sm text-[#F8FAFC] shadow-sm">
+            <div className="w-8 h-8 rounded-lg bg-flag-red flex items-center justify-center font-display font-black text-sm text-paper-soft shadow-sm">
               FS
             </div>
-            <span className="font-display font-black tracking-wider text-base text-[#F8FAFC] hidden sm:inline">
+            <span className="font-display font-black tracking-wider text-base text-paper-soft hidden sm:inline">
               {config.org.wordmark}
             </span>
           </button>
 
-          <span className="text-[#1A2342] hidden sm:inline">/</span>
+          <span className="text-ink-border hidden sm:inline">/</span>
 
           {/* Desktop Navigation Links */}
           <div className="hidden md:flex items-center gap-1">
@@ -67,8 +67,8 @@ export const StudentNav: React.FC<StudentNavProps> = ({
                   onClick={() => onNavigate && onNavigate(item.page)}
                   className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
                     isActive
-                      ? 'bg-[#1A2342] text-[#F8FAFC]'
-                      : 'text-[#8492A6] hover:text-[#F8FAFC] hover:bg-[#1A2342]/40'
+                      ? 'bg-ink-border text-paper-soft'
+                      : 'text-muted-text hover:text-paper-soft hover:bg-ink-border/40'
                   }`}
                 >
                   <Icon className="w-4 h-4" />
@@ -86,7 +86,7 @@ export const StudentNav: React.FC<StudentNavProps> = ({
             href={config.org.telegramUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#1A2342] hover:bg-[#222E54] text-xs font-medium text-[#F8FAFC] transition-colors focus:ring-2 focus:ring-[#CA3A32]"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-ink-border hover:bg-[#222E54] text-xs font-medium text-paper-soft transition-colors focus:ring-2 focus:ring-flag-red"
             title="Open Telegram Technical Community"
           >
             <Send className="w-3.5 h-3.5 text-[#0088CC]" />
@@ -97,10 +97,10 @@ export const StudentNav: React.FC<StudentNavProps> = ({
             type="button"
             id="student-nav-avatar-btn"
             onClick={() => onNavigate && onNavigate('account')}
-            className="flex items-center gap-2 p-1 rounded-lg hover:bg-[#1A2342] transition-colors focus:ring-2 focus:ring-[#CA3A32]"
+            className="flex items-center gap-2 p-1 rounded-lg hover:bg-ink-border transition-colors focus:ring-2 focus:ring-flag-red"
             title="Go to Account Settings"
           >
-            <div className="w-8 h-8 rounded-full bg-[#CA3A32] text-[#F8FAFC] flex items-center justify-center font-bold text-xs">
+            <div className="w-8 h-8 rounded-full bg-flag-red text-paper-soft flex items-center justify-center font-bold text-xs">
               {user?.fullName
                 ? user.fullName
                     .split(' ')
@@ -110,7 +110,7 @@ export const StudentNav: React.FC<StudentNavProps> = ({
                     .toUpperCase()
                 : 'CO'}
             </div>
-            <span className="text-xs font-medium text-[#CBD5E1] hidden lg:inline max-w-[120px] truncate">
+            <span className="text-xs font-medium text-body-text hidden lg:inline max-w-[120px] truncate">
               {user?.fullName || 'Chidi Okonkwo'}
             </span>
           </button>
@@ -118,7 +118,7 @@ export const StudentNav: React.FC<StudentNavProps> = ({
       </div>
 
       {/* Mobile Secondary Tab Bar */}
-      <div className="md:hidden flex border-t border-[#1A2342] bg-[#0A0F29] px-2 py-1 justify-around">
+      <div className="md:hidden flex border-t border-ink-border bg-ink-raised px-2 py-1 justify-around">
         {navItems.map((item) => {
           const Icon = item.icon;
           const isActive = currentPage === item.page;
@@ -129,8 +129,8 @@ export const StudentNav: React.FC<StudentNavProps> = ({
               onClick={() => onNavigate && onNavigate(item.page)}
               className={`flex items-center gap-1.5 px-3 py-2 text-xs font-medium rounded-md transition-colors ${
                 isActive
-                  ? 'text-[#CA3A32] bg-[#CA3A32]/10 font-bold'
-                  : 'text-[#8492A6] hover:text-[#CBD5E1]'
+                  ? 'text-flag-red bg-flag-red/10 font-bold'
+                  : 'text-muted-text hover:text-body-text'
               }`}
             >
               <Icon className="w-4 h-4" />

@@ -33,14 +33,14 @@ export const LoginModal: React.FC<LoginModalProps> = ({
       role="dialog"
       aria-modal="true"
       aria-labelledby="login-modal-title"
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-[#030617]/90 backdrop-blur-md"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-ink-deep/90 backdrop-blur-md"
     >
-      <div className="relative w-full max-w-md bg-[#0A0F29] border border-[#1A2342] rounded-2xl shadow-2xl overflow-hidden">
+      <div className="relative w-full max-w-md bg-ink-raised border border-ink-border rounded-2xl shadow-2xl overflow-hidden">
         {/* Header */}
-        <div className="p-5 border-b border-[#1A2342] flex items-center justify-between bg-[#030617]">
+        <div className="p-5 border-b border-ink-border flex items-center justify-between bg-ink-deep">
           <div className="flex items-center gap-2.5">
-            <Lock className="w-4 h-4 text-[#CA3A32]" />
-            <h3 id="login-modal-title" className="font-display font-bold text-lg text-[#F8FAFC]">
+            <Lock className="w-4 h-4 text-flag-red" />
+            <h3 id="login-modal-title" className="font-display font-bold text-lg text-paper-soft">
               Student Portal Access
             </h3>
           </div>
@@ -48,7 +48,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({
             type="button"
             onClick={onClose}
             aria-label="Close modal"
-            className="w-10 h-10 rounded-lg bg-[#1A2342]/60 hover:bg-[#1A2342] text-[#8492A6] hover:text-[#F8FAFC] flex items-center justify-center transition-colors focus:outline-none focus:ring-2 focus:ring-[#CA3A32]"
+            className="w-10 h-10 rounded-lg bg-ink-border/60 hover:bg-ink-border text-muted-text hover:text-paper-soft flex items-center justify-center transition-colors focus:outline-none focus:ring-2 focus:ring-flag-red"
           >
             <X className="w-5 h-5" />
           </button>
@@ -56,16 +56,16 @@ export const LoginModal: React.FC<LoginModalProps> = ({
 
         {submitted ? (
           <div className="p-6 text-center space-y-4">
-            <div className="w-12 h-12 rounded-full bg-[#1A2342] text-[#CA3A32] flex items-center justify-center mx-auto">
+            <div className="w-12 h-12 rounded-full bg-ink-border text-flag-red flex items-center justify-center mx-auto">
               <KeyRound className="w-6 h-6" />
             </div>
-            <h4 className="font-display text-xl font-bold text-[#F8FAFC]">
+            <h4 className="font-display text-xl font-bold text-paper-soft">
               Authentication Handoff
             </h4>
-            <p className="text-[15px] text-[#CBD5E1]">
+            <p className="text-[15px] text-body-text">
               Visual presentation only. No authentication is implemented on this client.
             </p>
-            <div className="p-3 bg-[#030617] rounded-lg border border-[#1A2342] font-mono text-xs text-[#8492A6]">
+            <div className="p-3 bg-ink-deep rounded-lg border border-ink-border font-mono text-xs text-muted-text">
               // TODO(handoff): wire to auth
             </div>
             <Button variant="secondary" size="md" fullWidth onClick={() => setSubmitted(false)}>
@@ -74,7 +74,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="p-6 space-y-4">
-            <p className="text-[14px] text-[#8492A6]">
+            <p className="text-[14px] text-muted-text">
               Enter your registered email to access recordings, download blueprints, and view live sessions.
             </p>
 
@@ -104,11 +104,11 @@ export const LoginModal: React.FC<LoginModalProps> = ({
               </Button>
             </div>
 
-            <div className="text-center pt-2 text-xs font-mono text-[#8492A6]">
+            <div className="text-center pt-2 text-xs font-mono text-muted-text">
               // TODO(handoff): wire to auth
             </div>
 
-            <div className="pt-3 border-t border-[#1A2342] text-center text-sm text-[#8492A6]">
+            <div className="pt-3 border-t border-ink-border text-center text-sm text-muted-text">
               Don't have access yet?{' '}
               <button
                 type="button"
@@ -116,7 +116,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({
                   onClose();
                   onGetAccessClick();
                 }}
-                className="text-[#CA3A32] hover:underline font-semibold"
+                className="text-flag-red hover:underline font-semibold"
               >
                 Enroll here
               </button>

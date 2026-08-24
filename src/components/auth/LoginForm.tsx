@@ -24,7 +24,7 @@ export const LoginForm: React.FC<AuthFormProps<LoginFormValues>> = ({
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       {state.status === 'error' && (
-        <div className="p-3.5 rounded-xl bg-[#CA3A32]/10 border border-[#CA3A32]/30 text-xs text-[#F8FAFC]">
+        <div className="p-3.5 rounded-xl bg-flag-red/10 border border-flag-red/30 text-xs text-paper-soft">
           {state.error}
         </div>
       )}
@@ -50,7 +50,7 @@ export const LoginForm: React.FC<AuthFormProps<LoginFormValues>> = ({
         <div className="flex items-center justify-between">
           <label
             htmlFor="login-password-input"
-            className="block text-xs uppercase font-mono tracking-wider text-[#8492A6]"
+            className="block text-xs uppercase font-mono tracking-wider text-muted-text"
           >
             Password
           </label>
@@ -58,7 +58,7 @@ export const LoginForm: React.FC<AuthFormProps<LoginFormValues>> = ({
             <button
               type="button"
               onClick={() => onNavigate('forgot')}
-              className="text-xs text-[#CA3A32] hover:underline focus:outline-none focus:ring-1 focus:ring-[#CA3A32] rounded"
+              className="text-xs text-flag-red hover:underline focus:outline-none focus:ring-1 focus:ring-flag-red rounded"
             >
               Forgot password?
             </button>
@@ -72,7 +72,7 @@ export const LoginForm: React.FC<AuthFormProps<LoginFormValues>> = ({
           onChange={(e) => setPassword(e.target.value)}
           required
           disabled={isLoading}
-          className="w-full px-4 py-3 bg-[#030617] border border-[#1A2342] focus:border-[#CA3A32] focus:ring-1 focus:ring-[#CA3A32] text-[16px] text-[#F8FAFC] placeholder-[#8492A6] rounded-xl outline-none transition-colors"
+          className="w-full px-4 py-3 bg-ink-deep border border-ink-border focus:border-flag-red focus:ring-1 focus:ring-flag-red text-[16px] text-paper-soft placeholder-muted-text rounded-xl outline-none transition-colors"
         />
       </div>
 
@@ -92,10 +92,10 @@ export const LoginForm: React.FC<AuthFormProps<LoginFormValues>> = ({
 
       <div className="relative my-4">
         <div className="absolute inset-0 flex items-center">
-          <div className="w-full border-t border-[#1A2342]" />
+          <div className="w-full border-t border-ink-border" />
         </div>
         <div className="relative flex justify-center text-xs uppercase font-mono">
-          <span className="bg-[#0A0F29] px-2 text-[#8492A6]">or</span>
+          <span className="bg-ink-raised px-2 text-muted-text">or</span>
         </div>
       </div>
 
@@ -104,7 +104,7 @@ export const LoginForm: React.FC<AuthFormProps<LoginFormValues>> = ({
         id="btn-google-login"
         onClick={onGoogleSignIn}
         disabled={isLoading}
-        className="w-full min-h-[48px] px-4 py-3 rounded-xl bg-[#030617] hover:bg-[#1A2342]/60 border border-[#1A2342] text-[#F8FAFC] text-[15px] font-medium flex items-center justify-center gap-3 transition-colors focus:outline-none focus:ring-2 focus:ring-[#CA3A32]"
+        className="w-full min-h-[48px] px-4 py-3 rounded-xl bg-ink-deep hover:bg-ink-border/60 border border-ink-border text-paper-soft text-[15px] font-medium flex items-center justify-center gap-3 transition-colors focus:outline-none focus:ring-2 focus:ring-flag-red"
       >
         <svg className="w-4 h-4" viewBox="0 0 24 24">
           <path
@@ -128,12 +128,12 @@ export const LoginForm: React.FC<AuthFormProps<LoginFormValues>> = ({
       </button>
 
       {onNavigate && (
-        <div className="pt-4 border-t border-[#1A2342] text-center text-sm text-[#8492A6]">
+        <div className="pt-4 border-t border-ink-border text-center text-sm text-muted-text">
           Don't have an account yet?{' '}
           <button
             type="button"
             onClick={() => onNavigate('signup')}
-            className="text-[#CA3A32] hover:underline font-semibold focus:outline-none focus:ring-1 focus:ring-[#CA3A32] rounded"
+            className="text-flag-red hover:underline font-semibold focus:outline-none focus:ring-1 focus:ring-flag-red rounded"
           >
             Create account
           </button>

@@ -155,23 +155,23 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
   const isRedirecting = activeState.status === 'redirecting';
 
   return (
-    <div className="min-h-screen bg-[#030617] text-[#CBD5E1] py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-ink-deep text-body-text py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
       {/* Header with Wordmark and Security badge */}
-      <div className="max-w-5xl mx-auto flex items-center justify-between pb-6 mb-8 border-b border-[#1A2342]">
+      <div className="max-w-5xl mx-auto flex items-center justify-between pb-6 mb-8 border-b border-ink-border">
         <button
           type="button"
           onClick={() => onNavigate && onNavigate('landing')}
-          className="flex items-center gap-2 text-left focus:outline-none focus:ring-2 focus:ring-[#CA3A32] rounded-lg p-1"
+          className="flex items-center gap-2 text-left focus:outline-none focus:ring-2 focus:ring-flag-red rounded-lg p-1"
         >
-          <div className="w-8 h-8 rounded-lg bg-[#CA3A32] flex items-center justify-center font-display font-black text-sm text-[#F8FAFC]">
+          <div className="w-8 h-8 rounded-lg bg-flag-red flex items-center justify-center font-display font-black text-sm text-paper-soft">
             FS
           </div>
-          <span className="font-display font-black tracking-wider text-base text-[#F8FAFC]">
+          <span className="font-display font-black tracking-wider text-base text-paper-soft">
             {config.org.wordmark}
           </span>
         </button>
 
-        <div className="flex items-center gap-3 text-xs font-mono text-[#8492A6]">
+        <div className="flex items-center gap-3 text-xs font-mono text-muted-text">
           <span className="hidden sm:flex items-center gap-1.5 text-[#059669]">
             <Lock className="w-3.5 h-3.5" /> 256-Bit SSL Encrypted
           </span>
@@ -179,7 +179,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
             <button
               type="button"
               onClick={() => onNavigate('landing')}
-              className="hover:text-[#F8FAFC] flex items-center gap-1 transition-colors"
+              className="hover:text-paper-soft flex items-center gap-1 transition-colors"
             >
               <ArrowLeft className="w-3.5 h-3.5" /> Back
             </button>
@@ -190,10 +190,10 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
       <div className="max-w-5xl mx-auto">
         {/* Title */}
         <div className="mb-8">
-          <h1 className="font-display font-bold text-2xl sm:text-3xl lg:text-4xl text-[#F8FAFC] tracking-tight">
+          <h1 className="font-display font-bold text-2xl sm:text-3xl lg:text-4xl text-paper-soft tracking-tight">
             Complete Your Enrollment
           </h1>
-          <p className="text-[15px] text-[#8492A6] mt-1">
+          <p className="text-[15px] text-muted-text mt-1">
             Instant dashboard unlock and Telegram community onboarding.
           </p>
         </div>
@@ -204,12 +204,12 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
             <div className="w-12 h-12 rounded-full bg-[#059669]/20 text-[#059669] flex items-center justify-center mx-auto">
               <CheckCircle2 className="w-7 h-7" />
             </div>
-            <h2 className="font-display font-bold text-2xl text-[#F8FAFC]">
+            <h2 className="font-display font-bold text-2xl text-paper-soft">
               Payment Successful & Enrollment Confirmed!
             </h2>
-            <p className="text-[15px] text-[#CBD5E1] max-w-md mx-auto">
-              Your access pass to <span className="text-[#F8FAFC] font-semibold">{tier.name}</span> has been granted.
-              Reference: <span className="font-mono text-[#F8FAFC]">{activeState.reference}</span>
+            <p className="text-[15px] text-body-text max-w-md mx-auto">
+              Your access pass to <span className="text-paper-soft font-semibold">{tier.name}</span> has been granted.
+              Reference: <span className="font-mono text-paper-soft">{activeState.reference}</span>
             </p>
             <div className="pt-2">
               <Button
@@ -224,11 +224,11 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
         )}
 
         {activeState.status === 'error' && (
-          <div className="mb-8 p-4 rounded-xl bg-[#CA3A32]/10 border border-[#CA3A32]/30 flex items-start gap-3">
-            <AlertCircle className="w-5 h-5 text-[#CA3A32] shrink-0 mt-0.5" />
+          <div className="mb-8 p-4 rounded-xl bg-flag-red/10 border border-flag-red/30 flex items-start gap-3">
+            <AlertCircle className="w-5 h-5 text-flag-red shrink-0 mt-0.5" />
             <div className="space-y-1">
-              <h4 className="font-bold text-[#F8FAFC] text-sm">Payment Processing Interrupted</h4>
-              <p className="text-xs text-[#CBD5E1]">{activeState.error}</p>
+              <h4 className="font-bold text-paper-soft text-sm">Payment Processing Interrupted</h4>
+              <p className="text-xs text-body-text">{activeState.error}</p>
             </div>
           </div>
         )}
@@ -238,9 +238,9 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
           
           {/* LEFT: Order Summary Card (On mobile, displayed first via order-1 lg:order-1) */}
           <div className="lg:col-span-6 order-1 lg:order-1">
-            <Card id="checkout-order-summary" className="p-6 sm:p-7 bg-[#0A0F29] border-[#1A2342] rounded-2xl">
-              <div className="flex items-center justify-between pb-4 border-b border-[#1A2342]">
-                <h3 className="font-display font-bold text-lg text-[#F8FAFC]">
+            <Card id="checkout-order-summary" className="p-6 sm:p-7 bg-ink-raised border-ink-border rounded-2xl">
+              <div className="flex items-center justify-between pb-4 border-b border-ink-border">
+                <h3 className="font-display font-bold text-lg text-paper-soft">
                   Order Summary
                 </h3>
                 <Badge variant={tier.isPremium ? 'accent' : 'neutral'} size="sm">
@@ -249,18 +249,18 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
               </div>
 
               {/* Product Info */}
-              <div className="py-5 border-b border-[#1A2342] space-y-2">
+              <div className="py-5 border-b border-ink-border space-y-2">
                 <div className="flex items-start justify-between gap-4">
                   <div>
-                    <h4 className="font-display font-bold text-lg text-[#F8FAFC]">
+                    <h4 className="font-display font-bold text-lg text-paper-soft">
                       {tier.name}
                     </h4>
-                    <p className="text-xs text-[#8492A6] mt-0.5">
+                    <p className="text-xs text-muted-text mt-0.5">
                       {tier.description}
                     </p>
                   </div>
                   <div className="text-right shrink-0">
-                    <span className="font-mono font-bold text-lg text-[#F8FAFC]">
+                    <span className="font-mono font-bold text-lg text-paper-soft">
                       {koboToNaira(basePriceKobo)}
                     </span>
                   </div>
@@ -268,16 +268,16 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
               </div>
 
               {/* Discount Code Input Section */}
-              <div className="py-5 border-b border-[#1A2342] space-y-3">
-                <label className="block text-xs uppercase font-mono tracking-wider text-[#8492A6]">
+              <div className="py-5 border-b border-ink-border space-y-3">
+                <label className="block text-xs uppercase font-mono tracking-wider text-muted-text">
                   Discount Code or Invite Voucher
                 </label>
 
                 {appliedPreview ? (
-                  <div className="p-3.5 rounded-xl bg-[#030617] border border-[#059669]/30 flex items-center justify-between">
+                  <div className="p-3.5 rounded-xl bg-ink-deep border border-[#059669]/30 flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <Tag className="w-4 h-4 text-[#059669]" />
-                      <span className="font-mono font-bold text-sm text-[#F8FAFC]">
+                      <span className="font-mono font-bold text-sm text-paper-soft">
                         {appliedPreview.code}
                       </span>
                       <Badge variant="success" size="sm">
@@ -288,7 +288,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
                       type="button"
                       onClick={handleRemoveCoupon}
                       aria-label="Remove applied discount code"
-                      className="p-1 rounded text-[#8492A6] hover:text-[#CA3A32] hover:bg-[#1A2342] transition-colors"
+                      className="p-1 rounded text-muted-text hover:text-flag-red hover:bg-ink-border transition-colors"
                     >
                       <X className="w-4 h-4" />
                     </button>
@@ -302,7 +302,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
                       value={couponInput}
                       onChange={(e) => setCouponInput(e.target.value.toUpperCase().replace(/\s+/g, ''))}
                       disabled={isValidating}
-                      className="flex-1 px-3.5 py-2.5 bg-[#030617] border border-[#1A2342] focus:border-[#CA3A32] focus:ring-1 focus:ring-[#CA3A32] text-[15px] font-mono uppercase text-[#F8FAFC] placeholder-[#8492A6] rounded-xl outline-none transition-colors"
+                      className="flex-1 px-3.5 py-2.5 bg-ink-deep border border-ink-border focus:border-flag-red focus:ring-1 focus:ring-flag-red text-[15px] font-mono uppercase text-paper-soft placeholder-muted-text rounded-xl outline-none transition-colors"
                     />
                     <Button
                       id="btn-apply-coupon"
@@ -318,7 +318,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
                 )}
 
                 {activeState.status === 'code-invalid' && (
-                  <p className="text-xs text-[#CA3A32] flex items-center gap-1 mt-1">
+                  <p className="text-xs text-flag-red flex items-center gap-1 mt-1">
                     <AlertCircle className="w-3.5 h-3.5 shrink-0" />
                     {activeState.error}
                   </p>
@@ -327,13 +327,13 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
 
               {/* Price Line Breakdown */}
               <div className="py-4 space-y-2.5 text-sm">
-                <div className="flex justify-between text-[#8492A6]">
+                <div className="flex justify-between text-muted-text">
                   <span>Subtotal</span>
                   <span className="font-mono">{koboToNaira(basePriceKobo)}</span>
                 </div>
 
                 {appliedPreview && (
-                  <div className="flex justify-between text-[#CA3A32] font-semibold">
+                  <div className="flex justify-between text-flag-red font-semibold">
                     <span className="flex items-center gap-1">
                       Discount ({appliedPreview.code})
                     </span>
@@ -343,22 +343,22 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
                   </div>
                 )}
 
-                <div className="pt-3 border-t border-[#1A2342] flex items-baseline justify-between">
+                <div className="pt-3 border-t border-ink-border flex items-baseline justify-between">
                   <div>
-                    <span className="font-display font-bold text-base text-[#F8FAFC]">
+                    <span className="font-display font-bold text-base text-paper-soft">
                       Total Due Today
                     </span>
-                    <span className="block text-[11px] text-[#8492A6]">
+                    <span className="block text-[11px] text-muted-text">
                       Includes all materials, taxes & updates
                     </span>
                   </div>
                   <div className="text-right">
                     {appliedPreview && (
-                      <span className="font-mono text-xs text-[#8492A6] line-through block">
+                      <span className="font-mono text-xs text-muted-text line-through block">
                         {koboToNaira(basePriceKobo)}
                       </span>
                     )}
-                    <span className="font-mono font-bold text-2xl text-[#F8FAFC]">
+                    <span className="font-mono font-bold text-2xl text-paper-soft">
                       {koboToNaira(finalAmountKobo)}
                     </span>
                   </div>
@@ -369,9 +369,9 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
 
           {/* RIGHT: Payer Details & Payment Gateway Action (Order 2) */}
           <div className="lg:col-span-6 order-2 lg:order-2">
-            <Card className="p-6 sm:p-7 bg-[#0A0F29] border-[#1A2342] rounded-2xl">
-              <div className="pb-4 mb-6 border-b border-[#1A2342] flex items-center justify-between">
-                <h3 className="font-display font-bold text-lg text-[#F8FAFC]">
+            <Card className="p-6 sm:p-7 bg-ink-raised border-ink-border rounded-2xl">
+              <div className="pb-4 mb-6 border-b border-ink-border flex items-center justify-between">
+                <h3 className="font-display font-bold text-lg text-paper-soft">
                   Student Access Details
                 </h3>
                 {isLoggedIn ? (
@@ -380,7 +380,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
                   <button
                     type="button"
                     onClick={() => onNavigate && onNavigate('login')}
-                    className="text-xs text-[#CA3A32] hover:underline"
+                    className="text-xs text-flag-red hover:underline"
                   >
                     Already a student? Log in
                   </button>
@@ -414,7 +414,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
                 {isFree ? (
                   <div className="pt-3 space-y-4">
                     <div className="p-4 rounded-xl bg-[#059669]/10 border border-[#059669]/30 text-xs text-[#10B981] space-y-1">
-                      <p className="font-bold flex items-center gap-1.5 text-sm text-[#F8FAFC]">
+                      <p className="font-bold flex items-center gap-1.5 text-sm text-paper-soft">
                         <Sparkles className="w-4 h-4 text-[#059669]" /> 100% Alumni Pass Activated
                       </p>
                       <p>
@@ -433,7 +433,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
                     >
                       Claim Full Access (Free)
                     </Button>
-                    <p className="font-mono text-[11px] text-[#8492A6] text-center">
+                    <p className="font-mono text-[11px] text-muted-text text-center">
                       // TODO(handoff): wire to enrollment
                     </p>
                   </div>
@@ -444,7 +444,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
                       id="btn-paystack-checkout"
                       type="submit"
                       disabled={isRedirecting}
-                      className="w-full min-h-[52px] px-6 py-3.5 rounded-xl bg-[#00C3F7] hover:bg-[#00B4E6] active:scale-[0.99] text-[#030617] font-bold text-base sm:text-lg flex items-center justify-center gap-2 shadow-xl shadow-[#00C3F7]/15 transition-all focus:outline-none focus:ring-2 focus:ring-[#00C3F7]"
+                      className="w-full min-h-[52px] px-6 py-3.5 rounded-xl bg-[#00C3F7] hover:bg-[#00B4E6] active:scale-[0.99] text-ink-deep font-bold text-base sm:text-lg flex items-center justify-center gap-2 shadow-xl shadow-[#00C3F7]/15 transition-all focus:outline-none focus:ring-2 focus:ring-[#00C3F7]"
                     >
                       {isRedirecting ? (
                         <>
@@ -459,28 +459,28 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
                       )}
                     </button>
 
-                    <div className="flex items-center justify-center gap-2 text-xs font-mono text-[#8492A6]">
-                      <Building2 className="w-3.5 h-3.5 text-[#8492A6]" />
+                    <div className="flex items-center justify-center gap-2 text-xs font-mono text-muted-text">
+                      <Building2 className="w-3.5 h-3.5 text-muted-text" />
                       <span>Card or bank transfer · Naira</span>
                     </div>
 
-                    <p className="font-mono text-[11px] text-[#8492A6] text-center">
+                    <p className="font-mono text-[11px] text-muted-text text-center">
                       // TODO(handoff): wire to checkout
                     </p>
                   </div>
                 )}
 
                 {/* Refund policy footer */}
-                <div className="pt-4 border-t border-[#1A2342] text-center">
-                  <p className="text-xs text-[#8492A6] leading-relaxed">
+                <div className="pt-4 border-t border-ink-border text-center">
+                  <p className="text-xs text-muted-text leading-relaxed">
                     Protected by the{' '}
-                    <span className="text-[#CBD5E1] font-semibold">
+                    <span className="text-body-text font-semibold">
                       Flag Skool 7-Day Money-Back Guarantee
                     </span>
                     . If the course does not deliver practical engineering value, email{' '}
                     <a
                       href={`mailto:${config.org.supportEmail}`}
-                      className="text-[#CA3A32] underline"
+                      className="text-flag-red underline"
                     >
                       {config.org.supportEmail}
                     </a>{' '}

@@ -58,18 +58,18 @@ export const PaymentPendingPage: React.FC<PaymentPendingPageProps> = ({
   };
 
   return (
-    <div className="min-h-screen bg-[#030617] flex flex-col justify-between py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-ink-deep flex flex-col justify-between py-12 px-4 sm:px-6 lg:px-8">
       {/* Header Wordmark */}
       <div className="w-full max-w-md mx-auto flex items-center justify-center mb-6">
         <button
           type="button"
           onClick={() => onNavigate && onNavigate('landing')}
-          className="flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-[#CA3A32] rounded-lg p-1"
+          className="flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-flag-red rounded-lg p-1"
         >
-          <div className="w-8 h-8 rounded-lg bg-[#CA3A32] flex items-center justify-center font-display font-black text-sm text-[#F8FAFC]">
+          <div className="w-8 h-8 rounded-lg bg-flag-red flex items-center justify-center font-display font-black text-sm text-paper-soft">
             FS
           </div>
-          <span className="font-display font-black tracking-wider text-base text-[#F8FAFC]">
+          <span className="font-display font-black tracking-wider text-base text-paper-soft">
             {config.org.wordmark}
           </span>
         </button>
@@ -77,12 +77,12 @@ export const PaymentPendingPage: React.FC<PaymentPendingPageProps> = ({
 
       {/* Centered Card */}
       <div className="w-full max-w-lg mx-auto">
-        <Card className="p-8 sm:p-10 bg-[#0A0F29] border-[#1A2342] shadow-2xl rounded-2xl text-center space-y-6">
+        <Card className="p-8 sm:p-10 bg-ink-raised border-ink-border shadow-2xl rounded-2xl text-center space-y-6">
           
           {/* Pulsing indicator (opacity only) */}
           <div className="flex justify-center">
             <div
-              className={`w-16 h-16 rounded-2xl bg-[#CA3A32]/10 border border-[#CA3A32]/30 flex items-center justify-center text-[#CA3A32] ${
+              className={`w-16 h-16 rounded-2xl bg-flag-red/10 border border-flag-red/30 flex items-center justify-center text-flag-red ${
                 prefersReducedMotion ? '' : 'animate-pulse'
               }`}
               style={{
@@ -93,17 +93,17 @@ export const PaymentPendingPage: React.FC<PaymentPendingPageProps> = ({
               {isDelayed ? (
                 <Clock className="w-8 h-8 text-[#EAB308]" />
               ) : (
-                <Loader2 className="w-8 h-8 animate-spin text-[#CA3A32]" />
+                <Loader2 className="w-8 h-8 animate-spin text-flag-red" />
               )}
             </div>
           </div>
 
           {/* Heading and subtext */}
           <div className="space-y-2">
-            <h1 className="font-display font-bold text-2xl sm:text-3xl text-[#F8FAFC] tracking-tight">
+            <h1 className="font-display font-bold text-2xl sm:text-3xl text-paper-soft tracking-tight">
               {isDelayed ? 'Taking longer than usual' : 'Confirming your payment…'}
             </h1>
-            <p className="text-[15px] text-[#8492A6] max-w-sm mx-auto leading-relaxed">
+            <p className="text-[15px] text-muted-text max-w-sm mx-auto leading-relaxed">
               {isDelayed
                 ? 'Paystack has received your transfer, but webhook confirmation is experiencing a brief network delay.'
                 : "This usually takes a few seconds. Don't close this page."}
@@ -113,19 +113,19 @@ export const PaymentPendingPage: React.FC<PaymentPendingPageProps> = ({
           {/* Fallback state displayed after 10 seconds or when triggered */}
           {isDelayed ? (
             <div className="space-y-5 pt-2 text-left">
-              <div className="p-4 rounded-xl bg-[#030617] border border-[#1A2342] space-y-2">
-                <span className="text-xs uppercase font-mono text-[#8492A6] block">
+              <div className="p-4 rounded-xl bg-ink-deep border border-ink-border space-y-2">
+                <span className="text-xs uppercase font-mono text-muted-text block">
                   Transaction Reference
                 </span>
                 <div className="flex items-center justify-between gap-3">
-                  <span className="font-mono text-sm sm:text-base text-[#F8FAFC] font-semibold break-all">
+                  <span className="font-mono text-sm sm:text-base text-paper-soft font-semibold break-all">
                     {reference}
                   </span>
                   <button
                     type="button"
                     onClick={handleCopyReference}
                     aria-label="Copy transaction reference"
-                    className="p-2 rounded-lg bg-[#1A2342]/60 hover:bg-[#1A2342] text-[#8492A6] hover:text-[#F8FAFC] transition-colors shrink-0 flex items-center gap-1 text-xs font-mono"
+                    className="p-2 rounded-lg bg-ink-border/60 hover:bg-ink-border text-muted-text hover:text-paper-soft transition-colors shrink-0 flex items-center gap-1 text-xs font-mono"
                   >
                     {copied ? (
                       <>
@@ -142,15 +142,15 @@ export const PaymentPendingPage: React.FC<PaymentPendingPageProps> = ({
                 </div>
               </div>
 
-              <div className="p-4 rounded-xl bg-[#CA3A32]/10 border border-[#CA3A32]/20 text-xs text-[#CBD5E1] space-y-1">
-                <p className="font-semibold text-[#F8FAFC] flex items-center gap-1.5">
-                  <ShieldAlert className="w-4 h-4 text-[#CA3A32]" /> Need instant assistance?
+              <div className="p-4 rounded-xl bg-flag-red/10 border border-flag-red/20 text-xs text-body-text space-y-1">
+                <p className="font-semibold text-paper-soft flex items-center gap-1.5">
+                  <ShieldAlert className="w-4 h-4 text-flag-red" /> Need instant assistance?
                 </p>
                 <p>
                   If this screen does not advance automatically within 1 minute, email{' '}
                   <a
                     href={`mailto:${config.org.supportEmail}?subject=Payment%20Reference%20${reference}`}
-                    className="text-[#CA3A32] underline font-semibold"
+                    className="text-flag-red underline font-semibold"
                   >
                     {config.org.supportEmail}
                   </a>{' '}
@@ -187,11 +187,11 @@ export const PaymentPendingPage: React.FC<PaymentPendingPageProps> = ({
             </div>
           ) : (
             <div className="pt-4 space-y-4">
-              <div className="p-3 bg-[#030617] rounded-xl border border-[#1A2342] text-xs font-mono text-[#8492A6] flex items-center justify-between">
+              <div className="p-3 bg-ink-deep rounded-xl border border-ink-border text-xs font-mono text-muted-text flex items-center justify-between">
                 <span>Reference:</span>
-                <span className="text-[#CBD5E1] font-semibold">{reference}</span>
+                <span className="text-body-text font-semibold">{reference}</span>
               </div>
-              <p className="text-xs text-[#8492A6]">
+              <p className="text-xs text-muted-text">
                 Simulating secure bank & webhook reconciliation ({elapsedSeconds}s)
               </p>
             </div>
@@ -200,7 +200,7 @@ export const PaymentPendingPage: React.FC<PaymentPendingPageProps> = ({
       </div>
 
       {/* Footer */}
-      <div className="w-full max-w-md mx-auto text-center text-xs text-[#8492A6]">
+      <div className="w-full max-w-md mx-auto text-center text-xs text-muted-text">
         Flag Skool Admissions · Secure Paystack Webhook Engine
       </div>
     </div>

@@ -27,21 +27,21 @@ export const VerifyEmailView: React.FC<VerifyEmailViewProps> = ({
 
   return (
     <div className="space-y-6 text-center">
-      <div className="relative mx-auto w-16 h-16 rounded-2xl bg-[#CA3A32]/10 border border-[#CA3A32]/30 flex items-center justify-center text-[#CA3A32]">
+      <div className="relative mx-auto w-16 h-16 rounded-2xl bg-flag-red/10 border border-flag-red/30 flex items-center justify-center text-flag-red">
         <Mail className="w-8 h-8" />
         <span className="absolute -top-1 -right-1 flex h-4 w-4">
-          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#CA3A32] opacity-75"></span>
-          <span className="relative inline-flex rounded-full h-4 w-4 bg-[#CA3A32]"></span>
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-flag-red opacity-75"></span>
+          <span className="relative inline-flex rounded-full h-4 w-4 bg-flag-red"></span>
         </span>
       </div>
 
       <div className="space-y-2">
-        <h2 className="font-display font-bold text-2xl text-[#F8FAFC]">
+        <h2 className="font-display font-bold text-2xl text-paper-soft">
           Check Your Inbox
         </h2>
-        <p className="text-[15px] text-[#8492A6] leading-relaxed max-w-sm mx-auto">
+        <p className="text-[15px] text-muted-text leading-relaxed max-w-sm mx-auto">
           We sent a verification link to{' '}
-          <span className="text-[#F8FAFC] font-semibold font-mono">{email}</span>. Click the link to activate your access.
+          <span className="text-paper-soft font-semibold font-mono">{email}</span>. Click the link to activate your access.
         </p>
       </div>
 
@@ -53,13 +53,13 @@ export const VerifyEmailView: React.FC<VerifyEmailViewProps> = ({
       )}
 
       {resendState.status === 'error' && (
-        <div className="p-3 rounded-xl bg-[#CA3A32]/10 border border-[#CA3A32]/30 text-xs text-[#F8FAFC]">
+        <div className="p-3 rounded-xl bg-flag-red/10 border border-flag-red/30 text-xs text-paper-soft">
           {resendState.error}
         </div>
       )}
 
-      <div className="p-4 rounded-xl bg-[#030617] border border-[#1A2342] text-xs text-[#8492A6] text-left space-y-1.5">
-        <p className="font-semibold text-[#CBD5E1]">Can't find the email?</p>
+      <div className="p-4 rounded-xl bg-ink-deep border border-ink-border text-xs text-muted-text text-left space-y-1.5">
+        <p className="font-semibold text-body-text">Can't find the email?</p>
         <ul className="list-disc pl-4 space-y-1">
           <li>Check your Promotions, Spam, or Junk folders.</li>
           <li>Ensure your email provider isn't blocking notifications.</li>
