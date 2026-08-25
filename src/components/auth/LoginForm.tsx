@@ -99,11 +99,17 @@ export const LoginForm: React.FC<AuthFormProps<LoginFormValues>> = ({
         </div>
       </div>
 
+      {/*
+        Google OAuth lands in Stage 2. Until the provider is configured in
+        Supabase the caller omits onGoogleSignIn, which greys this out rather
+        than letting it fail silently on click.
+      */}
       <button
         type="button"
         id="btn-google-login"
         onClick={onGoogleSignIn}
-        disabled={isLoading}
+        disabled={isLoading || !onGoogleSignIn}
+        title={onGoogleSignIn ? undefined : 'Google sign-in is coming soon'}
         className="w-full min-h-[48px] px-4 py-3 rounded-xl bg-ink-deep hover:bg-ink-border/60 border border-ink-border text-paper-soft text-[15px] font-medium flex items-center justify-center gap-3 transition-colors focus:outline-none focus:ring-2 focus:ring-flag-red"
       >
         <svg className="w-4 h-4" viewBox="0 0 24 24">
