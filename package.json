@@ -7,15 +7,22 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "tsc --noEmit"
+    "lint": "tsc --noEmit",
+    "rls:attack": "node --experimental-strip-types --env-file=.env.local scripts/rls-attack.ts",
+    "seed:test": "node --experimental-strip-types --env-file=.env.local scripts/seed-test-data.ts",
+    "db:push": "supabase db push",
+    "db:types": "supabase gen types typescript --linked > types/database.ts"
   },
   "dependencies": {
+    "@supabase/ssr": "^0.12.5",
+    "@supabase/supabase-js": "^2.112.4",
     "clsx": "^2.1.1",
     "lucide-react": "^0.546.0",
     "motion": "^12.23.24",
     "next": "^16.3.2",
     "react": "^19.0.1",
-    "react-dom": "^19.0.1"
+    "react-dom": "^19.0.1",
+    "server-only": "^0.0.1"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.3.3",
