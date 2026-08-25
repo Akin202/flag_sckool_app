@@ -32,6 +32,15 @@ const PROBE_EMAIL = `rls-attack-probe+${stamp}@flagskool.test`;
 const CONTROL_EMAIL = `rls-control-enrolled+${stamp}@flagskool.test`;
 const PASSWORD = `Probe!${stamp}aA1`;
 
+/**
+ * bunny_video_id is revoked at the column level, so `select *` on lessons
+ * errors for every client role. Naming the readable columns keeps the lesson
+ * attacks honest: they then prove the ROW policy denies access, rather than
+ * passing incidentally because the column grant rejected the star.
+ * The column grant gets its own dedicated attack further down.
+ */
+const LESSON_COLS = 'id, title, description, duration_seconds, is_free_preview, published_at';
+
 type Result = { name: string; passed: boolean; detail: string };
 const results: Result[] = [];
 
@@ -111,11 +120,11 @@ async function main() {
   console.log('ATTACKS  (must all return zero rows)\n');
 
   {
-    const { data, error } = await probe.from('lessons').select('*').eq('is_free_preview', false);
+    const { data, error } = await probe.from('lessons').select(LESSON_COLS).eq('is_free_preview', false);
     attack('unenrolled student reads paid lessons', data, error);
   }
   {
-    const { data, error } = await probe.from('lessons').select('*').eq('id', paidLesson.id);
+    const { data, error } = await probe.from('lessons').select(LESSON_COLS).eq('id', paidLesson.id);
     attack('unenrolled student reads one paid lesson by id', data, error);
   }
   {
@@ -156,16 +165,19 @@ async function main() {
     );
   }
   {
-    // Even an entitled user must not lift the raw video id — playback is signed.
-    const { data, error } = await probe.from('lessons').select('bunny_video_id');
-    attack('any student reads bunny_video_id directly', data, error);
+    // Even an ENTITLED user must not lift the raw video id — playback is
+    // signed server-side. This is the column grant, not the row policy, which
+    // is why it is tested with the enrolled account rather than the probe.
+    const enrolled = await signIn(CONTROL_EMAIL);
+    const { data, error } = await enrolled.from('lessons').select('bunny_video_id');
+    attack('ENROLLED student reads bunny_video_id directly', data, error);
   }
 
   // --- positive controls ----------------------------------------------------
   console.log('\nCONTROLS  (must all return rows — proves we are not just denying everything)\n');
 
   {
-    const { data, error } = await probe.from('lessons').select('*').eq('id', freeLesson.id);
+    const { data, error } = await probe.from('lessons').select(LESSON_COLS).eq('id', freeLesson.id);
     control('unenrolled student reads the FREE preview lesson', data, error);
   }
   {
@@ -180,7 +192,7 @@ async function main() {
   }
   {
     const enrolled = await signIn(CONTROL_EMAIL);
-    const { data, error } = await enrolled.from('lessons').select('*').eq('id', paidLesson.id);
+    const { data, error } = await enrolled.from('lessons').select(LESSON_COLS).eq('id', paidLesson.id);
     control('ENROLLED student reads the same paid lesson', data, error);
   }
   {

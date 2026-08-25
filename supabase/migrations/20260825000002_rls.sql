@@ -137,7 +137,21 @@ create policy lessons_read_entitled on public.lessons
   );
 
 revoke insert, update, delete on public.lessons from anon, authenticated;
-revoke select (bunny_video_id) on public.lessons from anon, authenticated;
+
+-- Hiding bunny_video_id takes a table-level REVOKE followed by a column-level
+-- GRANT of everything else. A bare `REVOKE SELECT (bunny_video_id)` is a
+-- silent no-op while the role still holds table-level SELECT, which Supabase
+-- grants by default — the column would stay readable and the revoke would
+-- look like it had worked.
+--
+-- Consequence for callers: `select *` on lessons now fails for client roles.
+-- Name the columns. Server-side code that needs the video id uses the service
+-- role client, which is unaffected.
+revoke select on public.lessons from anon, authenticated;
+grant select (
+  id, org_id, module_id, order_index, title, description,
+  duration_seconds, is_free_preview, published_at, created_at
+) on public.lessons to anon, authenticated;
 
 -- -----------------------------------------------------------------------------
 -- curriculum view — controlled public disclosure
@@ -149,7 +163,7 @@ revoke select (bunny_video_id) on public.lessons from anon, authenticated;
 -- else. bunny_video_id is absent by construction.
 -- -----------------------------------------------------------------------------
 create view public.curriculum
-with (security_invoker = off) as
+with (security_invoker = false) as
   select
     m.id            as module_id,
     m.org_id,
