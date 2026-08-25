@@ -1,5 +1,6 @@
 import { cookies } from 'next/headers';
 import { createServerClient } from '@supabase/ssr';
+import type { Database } from '@/types/database';
 import { supabaseAnonKey, supabaseUrl } from './env';
 
 /**
@@ -9,12 +10,11 @@ import { supabaseAnonKey, supabaseUrl } from './env';
  *
  * `cookies()` is async in Next 15+, hence the await.
  *
- * TODO(handoff): add the <Database> generic once types/database.ts is generated.
  */
 export async function createClient() {
   const cookieStore = await cookies();
 
-  return createServerClient(supabaseUrl(), supabaseAnonKey(), {
+  return createServerClient<Database>(supabaseUrl(), supabaseAnonKey(), {
     cookies: {
       getAll() {
         return cookieStore.getAll();

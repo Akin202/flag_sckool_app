@@ -1,6 +1,7 @@
 import 'server-only';
 
 import { createClient } from '@supabase/supabase-js';
+import type { Database } from '@/types/database';
 import { supabaseServiceRoleKey, supabaseUrl } from './env';
 
 /**
@@ -21,7 +22,7 @@ import { supabaseServiceRoleKey, supabaseUrl } from './env';
  * always a missing RLS policy instead.
  */
 export function createAdminClient() {
-  return createClient(supabaseUrl(), supabaseServiceRoleKey(), {
+  return createClient<Database>(supabaseUrl(), supabaseServiceRoleKey(), {
     auth: {
       autoRefreshToken: false,
       persistSession: false,
