@@ -1,6 +1,7 @@
 # Flag Skool
 
 ## What this is
+
 A paid AI education platform selling recorded and live cohort courses to
 Nigerian students, built by Mustang (Solarin Akintunde Oluwatobi), founder of
 FlagIQ and instructor to 750+ students.
@@ -86,16 +87,41 @@ Two audiences:
 
 ## Commands
 
+**Node 22 is required**, not optional. `@supabase/supabase-js` declares
+`engines.node >= 22`, and the `rls:attack` / `seed:test` scripts fail on Node 20
+with `bad option: --experimental-strip-types`. `.nvmrc` pins it — run `nvm use`
+if a script dies confusingly.
+
+Local dev runs on **port 3001**; 3000 is occupied by another project.
+
 ```bash
 npm run dev
 npm run build          # must pass before any commit
-npx supabase db push   # migrations
-npx supabase gen types typescript --local > types/database.ts
+npm run lint           # tsc --noEmit
+
+npm run db:push        # apply migrations to the linked remote project
+npm run db:types       # regenerate types/database.ts from the live schema
+npm run rls:attack     # the paywall acceptance test — must stay 14/14
+ALLOW_TEST_SEED=1 npm run seed:test
 ```
 
+The Supabase CLI is installed globally (`~/.local/bin/supabase`), so these are
+plain `supabase`, not `npx supabase`. Never pass `--local` to `gen types` and
+never run `supabase db reset`: the first needs the Docker stack this project
+deliberately does not use, and the second drops the remote production database.
+
 ## Current state
-Visual layer complete and mock-driven. No backend exists. Everything routes
-through `/lib/data-access.ts`, whose function bodies all return mocks.
+
+**Backend is live and verified.** Supabase project `dgyfjwnyzxfvmhzkevaw` has
+all five migrations applied — schema, RLS, curriculum seed, and the auth
+trigger. Auth is wired end to end, and the RLS attack suite passes 14/14.
+
+**The UI is still mock-driven.** All 29 functions in `/lib/data-access.ts` still
+return values from `lib/mock-data.ts`. Connecting that seam to the real database
+is Stage 2/3 work; the signatures do not change.
+
+See [HANDOFF.md](HANDOFF.md) for the full state, the gotchas that already cost
+real time, and where to pick up.
 
 <!-- BEGIN:nextjs-agent-rules -->
 
