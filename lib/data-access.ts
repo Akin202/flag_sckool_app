@@ -1,10 +1,25 @@
+/**
+ * The single seam between the interface and the database.
+ *
+ * Signatures are a contract — every view component depends on them, and they
+ * do not change. Only the bodies do.
+ *
+ * These functions run in the **browser**, because every `src/views/*` is
+ * imported by a `'use client'` screen and fetches from `useEffect`. That is
+ * deliberate and safe: the browser client carries the user's session, so row
+ * level security applies to it exactly as it does to any other caller. RLS is
+ * the paywall — the attack suite proves it holds against the anon key hitting
+ * PostgREST directly, with no application code in the path at all.
+ *
+ * Server-only work (signed Bunny playback, signed Storage downloads, Paystack)
+ * lives in route handlers under `app/api/`, never here.
+ */
 import {
   CourseProgress,
   Enrollment,
   FAQItem,
   Lesson,
   LessonComment,
-  LessonProgress,
   LessonResource,
   Module,
   ModuleProgress,
@@ -28,37 +43,49 @@ import {
   MOCK_MODULES,
   MOCK_TESTIMONIALS,
   MOCK_FAQS,
-  MOCK_RESOURCES,
   MOCK_COMMENTS,
   MOCK_USER_PROFILE,
-  MOCK_ENROLLMENTS,
   MOCK_ADMIN_TRANSACTIONS,
   MOCK_ADMIN_STUDENTS,
   MOCK_ADMIN_CODES,
   MOCK_ADMIN_MODULES,
 } from '@/lib/mock-data';
+import { fetchCurriculum } from '@/lib/db/curriculum';
+import { fetchLessonContext } from '@/lib/db/lessons';
+import {
+  fetchCourseProgress,
+  setLessonCompletion,
+  saveLessonPosition as saveLessonPositionDb,
+} from '@/lib/db/progress';
+import {
+  fetchEnrollments,
+  fetchUserProfile,
+} from '@/lib/db/profile';
+import {
+  fetchLessonResources,
+  fetchVaultResources,
+} from '@/lib/db/resources';
+import { createClient } from '@/lib/supabase/client';
 
-// Helper to simulate realistic network latency
+// Helper to simulate realistic network latency (mock paths only)
 const delay = (ms: number = 200) => new Promise((resolve) => setTimeout(resolve, ms));
 
-// In-memory mock states for live mutations during the session
-let currentProfile: UserProfile = { ...MOCK_USER_PROFILE };
+/**
+ * The dev state switcher forces boundary states — empty lists, zero progress, a
+ * locked lesson — that real data will not reproduce on demand. Honour those
+ * overrides in development only, so production can never be steered by a
+ * query parameter into rendering fiction.
+ */
+const isDev = process.env.NODE_ENV !== 'production';
+
+// In-memory mock states still used by the not-yet-migrated surfaces
 let currentComments: LessonComment[] = [...MOCK_COMMENTS];
-let completedLessonIds: Set<string> = new Set([
-  'les-0-1',
-  'les-0-2',
-  'les-1-1',
-  'les-1-2',
-]);
 
 // In-memory admin mutable collections
 let adminTransactions: AdminTransaction[] = [...MOCK_ADMIN_TRANSACTIONS];
 let adminStudents: AdminStudent[] = [...MOCK_ADMIN_STUDENTS];
 let adminCodes: AdminDiscountCode[] = [...MOCK_ADMIN_CODES];
 let adminModules: AdminModule[] = JSON.parse(JSON.stringify(MOCK_ADMIN_MODULES));
-
-// TODO(handoff): replace every function body with real queries.
-// Signatures must not change — components depend on them.
 
 /**
  * Returns overall and per-module course completion progress for the active student.
@@ -67,122 +94,20 @@ export async function getCourseProgress(
   variant?: ProgressVariant,
   userId?: string
 ): Promise<CourseProgress> {
-  await delay(200);
-
-  const modules = MOCK_MODULES;
-  const allLessons = modules.flatMap((m) => m.lessons);
-  const totalLessonsCount = allLessons.length;
-
-  if (variant === 'zero') {
-    const zeroModules: ModuleProgress[] = modules.map((m, idx) => ({
-      moduleId: m.id,
-      moduleNumber: m.number,
-      title: m.title,
-      lessonCount: m.lessons.length,
-      completedCount: 0,
-      percentComplete: 0,
-      isUnlocked: idx <= 2,
-    }));
-
-    const firstLesson = modules[0].lessons[0];
-    const nextLesson: LessonProgress = {
-      lessonId: firstLesson.id,
-      moduleId: modules[0].id,
-      moduleNumber: modules[0].number,
-      moduleTitle: modules[0].title,
-      lessonNumber: 1,
-      title: firstLesson.title,
-      durationMinutes: firstLesson.durationMinutes,
-      lastPositionSeconds: 0,
-      totalSeconds: firstLesson.durationMinutes * 60,
-      percentComplete: 0,
-      isCompleted: false,
-    };
-
-    return {
-      completedLessonsCount: 0,
-      totalLessonsCount,
-      percentComplete: 0,
-      nextLesson,
-      modules: zeroModules,
-    };
+  // 'partial' is what the views pass by default and is what real data looks
+  // like anyway; only the two synthetic extremes need the mock path.
+  if (isDev && (variant === 'zero' || variant === 'complete')) {
+    return mockCourseProgress(variant);
   }
-
-  if (variant === 'complete') {
-    const completeModules: ModuleProgress[] = modules.map((m) => ({
-      moduleId: m.id,
-      moduleNumber: m.number,
-      title: m.title,
-      lessonCount: m.lessons.length,
-      completedCount: m.lessons.length,
-      percentComplete: 100,
-      isUnlocked: true,
-    }));
-
-    return {
-      completedLessonsCount: totalLessonsCount,
-      totalLessonsCount,
-      percentComplete: 100,
-      nextLesson: null,
-      modules: completeModules,
-    };
-  }
-
-  // Default / partial: 4 of 13 completed, current is Module 3 · Lesson 2 (Calendar Agent Pt 2)
-  const completedCount = completedLessonIds.size;
-  const percentComplete = Math.round((completedCount / totalLessonsCount) * 100);
-
-  const moduleProgressList: ModuleProgress[] = modules.map((mod) => {
-    const modCompleted = mod.lessons.filter((l) => completedLessonIds.has(l.id)).length;
-    const modPercent = mod.lessons.length > 0 ? Math.round((modCompleted / mod.lessons.length) * 100) : 0;
-    // Assume modules 0 through 4 unlocked, Module 5 unlocked if cohort tier
-    const isUnlocked = mod.number <= 4 || currentProfile.tier === 'cohort';
-
-    return {
-      moduleId: mod.id,
-      moduleNumber: mod.number,
-      title: mod.title,
-      lessonCount: mod.lessons.length,
-      completedCount: modCompleted,
-      percentComplete: modPercent,
-      isUnlocked,
-      upgradeTierId: !isUnlocked ? 'cohort' : undefined,
-    };
-  });
-
-  // Next active lesson: Module 3 · Lesson 2 "Calendar Agent Pt 2"
-  const mod3 = modules.find((m) => m.number === 3) || modules[3];
-  const les32 = mod3?.lessons.find((l) => l.id === 'les-3-2') || mod3?.lessons[1] || allLessons[0];
-
-  const nextLesson: LessonProgress = {
-    lessonId: les32.id,
-    moduleId: mod3.id,
-    moduleNumber: mod3.number,
-    moduleTitle: mod3.title,
-    lessonNumber: 2,
-    title: les32.title,
-    durationMinutes: les32.durationMinutes,
-    lastPositionSeconds: 45 * 60 + 12, // 45:12 into a 115m lesson
-    totalSeconds: les32.durationMinutes * 60,
-    percentComplete: Math.round(((45 * 60 + 12) / (les32.durationMinutes * 60)) * 100),
-    isCompleted: completedLessonIds.has(les32.id),
-  };
-
-  return {
-    completedLessonsCount: completedCount,
-    totalLessonsCount,
-    percentComplete,
-    nextLesson,
-    modules: moduleProgressList,
-  };
+  return fetchCourseProgress();
 }
 
 /**
  * Returns full module hierarchy with all lesson items.
  */
 export async function getModulesWithLessons(userId?: string): Promise<Module[]> {
-  await delay(200);
-  return MOCK_MODULES;
+  const { modules } = await fetchCurriculum();
+  return modules;
 }
 
 /**
@@ -199,46 +124,15 @@ export async function getLessonById(
   isCompleted: boolean;
   isLocked: boolean;
 } | null> {
-  await delay(200);
+  const context = await fetchLessonContext(lessonId);
+  if (!context) return null;
 
-  const modules = MOCK_MODULES;
-  let targetModule: Module | null = null;
-  let targetLesson: Lesson | null = null;
-
-  for (const mod of modules) {
-    const found = mod.lessons.find((l) => l.id === lessonId);
-    if (found) {
-      targetModule = mod;
-      targetLesson = found;
-      break;
-    }
+  // Force the locked treatment over real data rather than substituting a mock
+  // lesson — the surrounding navigation stays truthful that way.
+  if (isDev && accessVariant === 'locked') {
+    return { ...context, isLocked: true };
   }
-
-  if (!targetModule || !targetLesson) {
-    // Default fallback to first lesson if not found
-    targetModule = modules[3];
-    targetLesson = modules[3].lessons[1] || modules[0].lessons[0];
-  }
-
-  // Find adjacent lessons in linear order
-  const allLessons = modules.flatMap((m) => m.lessons);
-  const currentIndex = allLessons.findIndex((l) => l.id === targetLesson!.id);
-  const prevLessonId = currentIndex > 0 ? allLessons[currentIndex - 1].id : null;
-  const nextLessonId =
-    currentIndex < allLessons.length - 1 ? allLessons[currentIndex + 1].id : null;
-
-  const isLocked =
-    accessVariant === 'locked' ||
-    (targetModule.number === 5 && currentProfile.tier !== 'cohort');
-
-  return {
-    lesson: targetLesson,
-    module: targetModule,
-    nextLessonId,
-    prevLessonId,
-    isCompleted: completedLessonIds.has(targetLesson.id),
-    isLocked,
-  };
+  return context;
 }
 
 /**
@@ -248,19 +142,8 @@ export async function getLessonResources(
   lessonId: string,
   variant?: ResourcesVariant
 ): Promise<LessonResource[]> {
-  await delay(200);
-
-  if (variant === 'empty') {
-    return [];
-  }
-
-  const matches = MOCK_RESOURCES.filter((r) => r.lessonId === lessonId);
-  if (matches.length > 0) {
-    return matches;
-  }
-
-  // If no direct matches, return general module resources for realistic demo
-  return MOCK_RESOURCES.slice(0, 2);
+  if (isDev && variant === 'empty') return [];
+  return fetchLessonResources(lessonId);
 }
 
 /**
@@ -269,17 +152,17 @@ export async function getLessonResources(
 export async function getAllVaultResources(
   variant?: ResourcesVariant
 ): Promise<VaultResource[]> {
-  await delay(200);
-
-  if (variant === 'empty') {
-    return [];
-  }
-
-  return MOCK_RESOURCES;
+  if (isDev && variant === 'empty') return [];
+  return fetchVaultResources();
 }
 
 /**
  * Returns flat list of comments for a lesson, newest first, with pinned comments at top.
+ *
+ * TODO(handoff): still mock. Real comments need an author name, and `profiles`
+ * RLS lets a student read only their own row — so this needs a definer-backed
+ * view (like `curriculum`) exposing author name/avatar for entitled readers.
+ * That is a migration, and migrations are Stage 3 work.
  */
 export async function getLessonComments(
   lessonId: string,
@@ -295,7 +178,6 @@ export async function getLessonComments(
     (c) => c.lessonId === lessonId || c.isPinned
   );
 
-  // Sort pinned comments to the top, then newest
   return [...lessonComments].sort((a, b) => {
     if (a.isPinned && !b.isPinned) return -1;
     if (!a.isPinned && b.isPinned) return 1;
@@ -305,6 +187,8 @@ export async function getLessonComments(
 
 /**
  * Posts a new comment to the lesson discussion thread.
+ *
+ * TODO(handoff): still mock — see getLessonComments.
  */
 export async function postLessonComment(
   lessonId: string,
@@ -316,9 +200,9 @@ export async function postLessonComment(
   const newComment: LessonComment = {
     id: `com-${Date.now()}`,
     lessonId,
-    authorName: author?.fullName || currentProfile.fullName,
-    authorEmail: author?.email || currentProfile.email,
-    authorAvatar: author?.avatarUrl || currentProfile.avatarUrl,
+    authorName: author?.fullName || MOCK_USER_PROFILE.fullName,
+    authorEmail: author?.email || MOCK_USER_PROFILE.email,
+    authorAvatar: author?.avatarUrl || MOCK_USER_PROFILE.avatarUrl,
     authorIsAdmin: false,
     createdAt: 'Just now',
     body: body.trim(),
@@ -336,34 +220,69 @@ export async function toggleLessonCompletion(
   lessonId: string,
   completed: boolean
 ): Promise<{ success: boolean; isCompleted: boolean }> {
-  await delay(200);
+  const isCompleted = await setLessonCompletion(lessonId, completed);
+  return { success: true, isCompleted };
+}
 
-  if (completed) {
-    completedLessonIds.add(lessonId);
-  } else {
-    completedLessonIds.delete(lessonId);
+/**
+ * Persists playback position, auto-completing past the configured threshold.
+ *
+ * Called on an interval from the player, so it stays quiet on failure: a
+ * dropped save must not surface an error mid-lesson.
+ */
+export async function saveLessonPosition(
+  lessonId: string,
+  positionSeconds: number,
+  totalSeconds: number
+): Promise<void> {
+  try {
+    await saveLessonPositionDb(lessonId, positionSeconds, totalSeconds);
+  } catch {
+    // Swallowed deliberately: the next tick retries, and the student is
+    // watching a video, not managing a sync queue.
   }
-
-  return { success: true, isCompleted: completed };
 }
 
 /**
  * Returns the logged-in student's profile.
  */
 export async function getUserProfile(userId?: string): Promise<UserProfile> {
-  await delay(200);
-  return { ...currentProfile };
+  const profile = await fetchUserProfile();
+  // The views type this as non-nullable and render immediately. A logged-out
+  // caller only reaches here through the dev switcher, so fall back rather
+  // than throwing into a component that has no error branch for it.
+  return profile ?? { ...MOCK_USER_PROFILE };
 }
 
 /**
  * Updates user profile details (name, email, avatar).
+ *
+ * Only full_name and avatar_url are writable — UPDATE is revoked on the table
+ * and re-granted column-wise, so a student cannot promote themselves to admin.
  */
 export async function updateUserProfile(
   data: Partial<UserProfile>
 ): Promise<UserProfile> {
-  await delay(200);
-  currentProfile = { ...currentProfile, ...data };
-  return { ...currentProfile };
+  const supabase = createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (user) {
+    const patch: { full_name?: string; avatar_url?: string } = {};
+    if (data.fullName !== undefined) patch.full_name = data.fullName;
+    if (data.avatarUrl !== undefined) patch.avatar_url = data.avatarUrl;
+
+    if (Object.keys(patch).length > 0) {
+      const { error } = await supabase
+        .from('profiles')
+        .update(patch)
+        .eq('id', user.id);
+      if (error) throw error;
+    }
+  }
+
+  return getUserProfile();
 }
 
 /**
@@ -373,7 +292,9 @@ export async function changePassword(
   currentPass: string,
   newPass: string
 ): Promise<{ success: boolean }> {
-  await delay(200);
+  const supabase = createClient();
+  const { error } = await supabase.auth.updateUser({ password: newPass });
+  if (error) throw error;
   return { success: true };
 }
 
@@ -381,20 +302,25 @@ export async function changePassword(
  * Returns list of active purchase enrollments with transactions and tiers.
  */
 export async function getEnrollments(userId?: string): Promise<Enrollment[]> {
-  await delay(200);
-  return MOCK_ENROLLMENTS;
+  return fetchEnrollments();
 }
 
 /**
  * Landing page: Returns modules for public syllabus view.
+ *
+ * Reads the `curriculum` view, which is readable by anon — the landing page
+ * must render the full syllabus to a logged-out visitor.
  */
 export async function getCurriculumModules(): Promise<Module[]> {
-  await delay(200);
-  return MOCK_MODULES;
+  const { modules } = await fetchCurriculum();
+  return modules;
 }
 
 /**
  * Landing page: Returns social proof testimonials.
+ *
+ * TODO(handoff): stays static. Testimonials have no table — they are marketing
+ * copy, and the January cohort's have not been collected yet.
  */
 export async function getTestimonials(): Promise<Testimonial[]> {
   await delay(200);
@@ -403,10 +329,71 @@ export async function getTestimonials(): Promise<Testimonial[]> {
 
 /**
  * Landing page: Returns FAQ accordion items.
+ *
+ * TODO(handoff): stays static — no table, and no reason for one.
  */
 export async function getFaqs(): Promise<FAQItem[]> {
   await delay(200);
   return MOCK_FAQS;
+}
+
+/**
+ * The two synthetic progress extremes the dev switcher can force. Development
+ * only — `getCourseProgress` never reaches this in production.
+ */
+function mockCourseProgress(variant: 'zero' | 'complete'): CourseProgress {
+  const modules = MOCK_MODULES;
+  const totalLessonsCount = modules.reduce((n, m) => n + m.lessons.length, 0);
+
+  if (variant === 'complete') {
+    return {
+      completedLessonsCount: totalLessonsCount,
+      totalLessonsCount,
+      percentComplete: 100,
+      nextLesson: null,
+      modules: modules.map((m) => ({
+        moduleId: m.id,
+        moduleNumber: m.number,
+        title: m.title,
+        lessonCount: m.lessons.length,
+        completedCount: m.lessons.length,
+        percentComplete: 100,
+        isUnlocked: true,
+      })),
+    };
+  }
+
+  const zeroModules: ModuleProgress[] = modules.map((m, idx) => ({
+    moduleId: m.id,
+    moduleNumber: m.number,
+    title: m.title,
+    lessonCount: m.lessons.length,
+    completedCount: 0,
+    percentComplete: 0,
+    isUnlocked: idx <= 2,
+  }));
+
+  const firstLesson = modules[0].lessons[0];
+
+  return {
+    completedLessonsCount: 0,
+    totalLessonsCount,
+    percentComplete: 0,
+    nextLesson: {
+      lessonId: firstLesson.id,
+      moduleId: modules[0].id,
+      moduleNumber: modules[0].number,
+      moduleTitle: modules[0].title,
+      lessonNumber: 1,
+      title: firstLesson.title,
+      durationMinutes: firstLesson.durationMinutes,
+      lastPositionSeconds: 0,
+      totalSeconds: firstLesson.durationMinutes * 60,
+      percentComplete: 0,
+      isCompleted: false,
+    },
+    modules: zeroModules,
+  };
 }
 
 // ----------------------------------------------------
