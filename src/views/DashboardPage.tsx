@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   FlagSkoolConfig,
   Page,
@@ -7,7 +7,11 @@ import {
   LoadState,
   UserProfile,
 } from '@/types/index';
-import { getCourseProgress, getUserProfile } from '@/lib/data-access';
+import {
+  getCourseProgress,
+  getModulesWithLessons,
+  getUserProfile,
+} from '@/lib/data-access';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { ProgressBar } from '@/components/ui/ProgressBar';
@@ -42,6 +46,18 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
     status: 'loading',
   });
   const [user, setUser] = useState<UserProfile | undefined>();
+  const [firstLessonByModule, setFirstLessonByModule] = useState<
+    ReadonlyMap<string, string>
+  >(new Map());
+
+  // First lesson of the earliest module, for the "start over" affordance.
+  const firstLessonId = useMemo(() => {
+    if (loadState.status !== 'success') return undefined;
+    const first = [...loadState.data.modules].sort(
+      (a, b) => a.moduleNumber - b.moduleNumber
+    )[0];
+    return first ? firstLessonByModule.get(first.moduleId) : undefined;
+  }, [loadState, firstLessonByModule]);
 
   useEffect(() => {
     let isMounted = true;
@@ -49,11 +65,22 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
 
     Promise.all([
       getCourseProgress(progressVariant as ProgressVariant),
-      getUserProfile('usr-4911'),
+      getUserProfile(),
+      getModulesWithLessons(),
     ])
-      .then(([progress, profile]) => {
+      .then(([progress, profile, modules]) => {
         if (isMounted) {
           setUser(profile);
+          // Module rows link to their first lesson. The id has to come from the
+          // curriculum — it used to be assembled as `les-${n}-1`, which was a
+          // mock-shaped string that matches no real lesson.
+          setFirstLessonByModule(
+            new Map(
+              modules
+                .filter((m) => m.lessons.length > 0)
+                .map((m) => [m.id, m.lessons[0].id] as const)
+            )
+          );
           setLoadState({ status: 'success', data: progress });
         }
       })
@@ -175,7 +202,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
                   <Button
                     variant="secondary"
                     size="md"
-                    onClick={() => onNavigate && onNavigate('learn', 'les-0-1')}
+                    onClick={() => onNavigate && onNavigate('learn', firstLessonId)}
                   >
                     Revisit Module 0
                   </Button>
@@ -276,10 +303,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
                             type="button"
                             onClick={() =>
                               onNavigate &&
-                              onNavigate(
-                                'learn',
-                                mod.moduleNumber === 3 ? 'les-3-2' : `les-${mod.moduleNumber}-1`
-                              )
+                              onNavigate('learn', firstLessonByModule.get(mod.moduleId))
                             }
                             className="text-xs font-medium text-paper-soft bg-ink-border hover:bg-[#2D3A63] px-3.5 py-2 rounded-lg transition-colors focus:ring-2 focus:ring-flag-red flex items-center gap-1"
                           >

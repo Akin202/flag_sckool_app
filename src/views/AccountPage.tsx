@@ -68,7 +68,7 @@ export const AccountPage: React.FC<AccountPageProps> = ({
     setUserState({ status: 'loading' });
     setEnrollmentsState({ status: 'loading' });
 
-    Promise.all([getUserProfile('usr-4911'), getEnrollments('usr-4911')])
+    Promise.all([getUserProfile(), getEnrollments()])
       .then(([profile, enrollments]) => {
         if (!isMounted) return;
         setUserState({ status: 'success', data: profile });
@@ -173,7 +173,9 @@ export const AccountPage: React.FC<AccountPageProps> = ({
                     <span>Personal Profile</span>
                   </h2>
                   <span className="text-xs font-mono text-muted-text">
-                    ID: usr-4911
+                    {userState.status === 'success'
+                      ? `ID: ${userState.data.id.slice(0, 8)}`
+                      : null}
                   </span>
                 </div>
 

@@ -15,8 +15,9 @@ export const CurriculumSection: React.FC<CurriculumSectionProps> = ({
 }) => {
   const [modules, setModules] = useState<Module[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  // Default first module (or Module 1) open for immediate engagement
-  const [openIds, setOpenIds] = useState<string[]>(['mod-1']);
+  // First module open for immediate engagement. Set once the curriculum
+  // lands, because module ids are database uuids and cannot be guessed.
+  const [openIds, setOpenIds] = useState<string[]>([]);
 
   useEffect(() => {
     let isMounted = true;
@@ -25,6 +26,7 @@ export const CurriculumSection: React.FC<CurriculumSectionProps> = ({
       .then((data) => {
         if (isMounted) {
           setModules(data);
+          setOpenIds(data.length > 0 ? [data[0].id] : []);
           setIsLoading(false);
         }
       })

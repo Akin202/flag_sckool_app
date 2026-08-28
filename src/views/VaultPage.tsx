@@ -56,7 +56,7 @@ export const VaultPage: React.FC<VaultPageProps> = ({
 
     Promise.all([
       getAllVaultResources(resourcesVariant),
-      getUserProfile('usr-4911'),
+      getUserProfile(),
     ])
       .then(([vaultItems, profile]) => {
         if (!isMounted) return;
@@ -90,6 +90,27 @@ export const VaultPage: React.FC<VaultPageProps> = ({
     }
     return <FileText className="w-6 h-6 text-[#10B981]" />;
   };
+
+  // Module filter chips, derived from the resources actually loaded.
+  // Hardcoding these meant they carried mock ids and matched nothing once the
+  // vault started returning real rows.
+  const moduleFilters = useMemo(() => {
+    if (loadState.status !== 'success') return [{ id: 'all', label: 'All Modules' }];
+
+    const seen = new Map<string, { number: number; title: string }>();
+    for (const item of loadState.data) {
+      if (item.moduleId && !seen.has(item.moduleId)) {
+        seen.set(item.moduleId, { number: item.moduleNumber, title: item.moduleTitle });
+      }
+    }
+
+    return [
+      { id: 'all', label: 'All Modules' },
+      ...[...seen.entries()]
+        .sort((a, b) => a[1].number - b[1].number)
+        .map(([id, m]) => ({ id, label: `Mod ${m.number}: ${m.title}` })),
+    ];
+  }, [loadState]);
 
   // Filter items
   const filteredResources = useMemo(() => {
@@ -211,14 +232,7 @@ export const VaultPage: React.FC<VaultPageProps> = ({
               <span className="text-muted-text font-mono whitespace-nowrap pl-1 pr-2">
                 Module:
               </span>
-              {[
-                { id: 'all', label: 'All Modules' },
-                { id: 'mod-1', label: 'Mod 1: Foundations' },
-                { id: 'mod-2', label: 'Mod 2: n8n' },
-                { id: 'mod-3', label: 'Mod 3: Agents' },
-                { id: 'mod-4', label: 'Mod 4: RAG' },
-                { id: 'mod-5', label: 'Mod 5: Products' },
-              ].map((m) => (
+              {moduleFilters.map((m) => (
                 <button
                   key={m.id}
                   id={`vault-filter-mod-${m.id}`}

@@ -57,7 +57,8 @@ import {
 
 export interface LearnPageProps {
   config: FlagSkoolConfig;
-  lessonId?: string;
+  /** Route param. Always supplied by LearnScreen; never guessed. */
+  lessonId: string;
   commentsVariant?: CommentsVariant;
   resourcesVariant?: ResourcesVariant;
   lessonAccessVariant?: LessonAccessVariant;
@@ -68,7 +69,7 @@ export interface LearnPageProps {
 
 export const LearnPage: React.FC<LearnPageProps> = ({
   config,
-  lessonId = 'les-3-2',
+  lessonId,
   commentsVariant,
   resourcesVariant,
   lessonAccessVariant,
@@ -132,7 +133,7 @@ export const LearnPage: React.FC<LearnPageProps> = ({
       getModulesWithLessons(),
       getLessonResources(lessonId, resourcesVariant),
       getLessonComments(lessonId, commentsVariant),
-      getUserProfile('usr-4911'),
+      getUserProfile(),
     ])
       .then(([lessonResult, modulesResult, resourcesResult, commentsResult, userResult]) => {
         if (!isMounted) return;
