@@ -14,8 +14,10 @@ Everything below was verified by running it, not by reading the code.
 | Stage | Scope | State |
 |---|---|---|
 | **Stage 1** | Next.js migration, schema, RLS, auth, seed | **Done and verified** |
-| **Stage 2** | Paystack, Bunny signed video, real `data-access` reads | Not started |
-| **Stage 3** | Progress/resume engine, comments, Resend email, admin queries | Not started |
+| **Stage 2a** | Real `data-access` reads, progress/resume engine | **Done and verified** |
+| **Stage 2b** | Paystack money path | Not started (keys are set) |
+| **Stage 2c** | Bunny signed video | **Blocked** — no Bunny account exists |
+| **Stage 3** | Comments, Resend email, admin queries | Not started |
 
 The visual layer was already complete before Stage 1 and is unchanged.
 
@@ -273,9 +275,11 @@ and `db reset` both assume it and will fail or do damage.
 
 ## 7. Deliberately not done
 
-- **`lib/data-access.ts` still returns mocks** — all 29 functions import from
-  `lib/mock-data.ts`. This is the seam between UI and database. Replace the
-  bodies in Stage 2/3; **never change the signatures**.
+- **`lib/data-access.ts` is now mostly real.** The student read path runs live
+  queries through `lib/db/*`. Still mock, each keeping its marker: comments
+  (needs a definer-backed author view — a migration, hence Stage 3), the whole
+  admin surface, and FAQs/testimonials (no tables, and no reason for any).
+  Signatures are unchanged, including the dev-variant parameters.
 - **`lib/mock-data.ts` stays** until the end of Stage 3.
 - **Google OAuth deferred to Stage 2.** The button renders disabled with a
   "coming soon" tooltip. `google: false` confirmed in the live auth settings.
@@ -333,3 +337,67 @@ npm run rls:attack           # → must be 14/14
 grep -rl "$(grep '^SUPABASE_SERVICE_ROLE_KEY=' .env.local | cut -d= -f2-)" .next/static/
 grep -rl "$(grep '^NEXT_PUBLIC_SUPABASE_ANON_KEY=' .env.local | cut -d= -f2-)" .next/static/
 ```
+
+
+---
+
+## 10. Stage 2a — the read path (2026-08-28)
+
+`lib/data-access.ts` no longer invents its data. Curriculum, lessons, profile,
+entitlements, enrollments, course progress, resume position, completion writes,
+and resources are all live queries.
+
+### Where the queries live
+
+`lib/db/` — `curriculum.ts`, `lessons.ts`, `progress.ts`, `profile.ts`,
+`resources.ts`, `mappers.ts`, `client.ts`. `data-access.ts` is a facade over
+them and keeps every signature it had.
+
+### The one structural thing to understand
+
+**The seam runs in the browser.** Every `src/views/*` is imported by a
+`'use client'` screen and fetches from `useEffect`, so `data-access.ts` is
+client-bundled. That is safe rather than sloppy: the browser client carries the
+user's session, so RLS applies to it exactly as the attack suite proves it
+applies to a raw anon-key request.
+
+Queries therefore take an **injectable client** (`lib/db/client.ts`) defaulting
+to the browser one. `app/learn/page.tsx` — the server-side resume redirect, and
+the only server caller — passes `await createClient()` from
+`lib/supabase/server` instead. Calling the browser factory during a server
+render is a hard build error that only surfaces at prerender time.
+
+### Two traps that cost time here
+
+- **supabase-js infers row types from the `select()` string literal.** Building
+  it with `+` collapses it to `string` and loses every column type silently.
+  Keep each select on one literal.
+- **Mock-shaped ids were hardcoded in components.** The dashboard built module
+  links as `` `les-${n}-1` ``, the Vault had five hardcoded `mod-N` filter chips,
+  and the account page printed `ID: usr-4911`. All rendered fine against mocks
+  and all break against uuids. Fixed by deriving ids from data. `grep -rn
+  "les-[0-9]\|'mod-[0-9]\|usr-[0-9]" app src` is worth re-running after any
+  further mock removal — the only remaining hit is the still-mock admin page.
+
+### New acceptance gate
+
+`npm run verify:reads` signs in as the seeded students with the **anon** key and
+checks the read path against live RLS: public curriculum, per-student completion
+counts, locked-module counts (cohort sees 0, recordings sees 1), the resume
+target, and the completed-course null case. It must print `ALL CHECKS PASSED`.
+
+Run it alongside `npm run rls:attack`. Together they cover both halves: reads
+must be correct, and unentitled reads must fail.
+
+### Also fixed
+
+`npm run dev` was bare `next dev`, so it took port 3000 while
+`NEXT_PUBLIC_SITE_URL` and the Supabase redirect URLs both said 3001 — auth
+email links would have bounced. It is now `next dev -p ${PORT:-3001}`.
+
+### Blocked, not forgotten
+
+`app/api/resources/[id]/download/route.ts` is written and enforces entitlement
+correctly — authorization by RLS-scoped read, signing by service role — but no
+Storage bucket exists and the course files are not uploaded, so it returns a 503
+that says so. Set `SUPABASE_RESOURCES_BUCKET` when the bucket is created.
