@@ -145,6 +145,30 @@ async function main() {
     console.log(`  ${email.padEnd(38)} ${s.sku.padEnd(11)} ${s.completed}/${lessons.length} complete`);
   }
 
+  // --- admin ----------------------------------------------------------------
+  // There is no admin account otherwise, so /admin cannot be exercised at all.
+  // Kept in the .test domain like everything else, so the pre-launch cleanup
+  // migration removes it by the same pattern.
+  const adminEmail = `founder@${TEST_DOMAIN}`;
+  const { data: adminUser, error: adminErr } = await admin.auth.admin.createUser({
+    email: adminEmail,
+    password: PASSWORD,
+    email_confirm: true,
+    user_metadata: { full_name: 'Flag Skool Admin' },
+  });
+
+  if (adminErr) {
+    console.log(`\n  skip ${adminEmail} (${adminErr.message})`);
+  } else {
+    // handle_new_user() defaults every profile to 'student'; promote after.
+    const { error: roleErr } = await admin
+      .from('profiles')
+      .update({ role: 'admin' })
+      .eq('id', adminUser.user!.id);
+    if (roleErr) throw new Error(`promoting ${adminEmail}: ${roleErr.message}`);
+    console.log(`\n  ${adminEmail.padEnd(38)} admin`);
+  }
+
   console.log(`\nDone. Every account is @${TEST_DOMAIN} — password: ${PASSWORD}`);
   console.log('Remove it all before launch with the pre_launch_cleanup migration.');
 }
