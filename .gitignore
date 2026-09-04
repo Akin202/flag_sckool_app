@@ -12,3 +12,7 @@ coverage/
 next-env.d.ts
 .vercel
 tsconfig.tsbuildinfo
+
+# Graphify knowledge-graph output — regenerable, ~3.5MB / 579 files.
+# The human-readable export lives in ~/SecondBrain/03-Resources/graphify/.
+graphify-out/
