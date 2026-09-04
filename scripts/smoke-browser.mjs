@@ -158,6 +158,93 @@ const learn = await s.text();
 check('lesson player rendered', COURSE_COMPLETE || (learn.length > 200 && !/Error/i.test(learn.slice(0, 400))),
   COURSE_COMPLETE ? 'n/a (course finished)' : `${learn.length} chars of content`);
 
+// ---------- 4b. Playback authorization, as a real signed-in student ----------
+const lockedExpectedEarly = process.env.EXPECT_LOCKED === '1';
+// Called from page context so the request carries the session cookies. This is
+// the half verify-playback-route.ts cannot reach: it runs logged out, and the
+// entitled path is the one that decides whether a paying student sees video.
+if (!COURSE_COMPLETE && isUuid) {
+  const lessonId = learnUrl.split('/learn/')[1].split(/[?#]/)[0];
+
+  const playback = await s.eval(`
+    fetch('/api/lessons/${lessonId}/playback')
+      .then(r => r.json().then(b => JSON.stringify({ status: r.status, body: b })))
+      .catch(e => JSON.stringify({ status: 0, body: { error: String(e) } }))
+  `);
+  const { status, body } = JSON.parse(playback);
+
+  // 200 once Bunny is wired and the GUID is synced; 409 while bunny_video_id
+  // is empty; 503 while BUNNY_* is unset. All three mean authorization passed.
+  // 401/404 mean it did not, which is the actual regression to catch.
+  check('entitled student clears the playback authorization gate',
+    [200, 409, 503].includes(status),
+    `${status} ${body.error || 'signed URL issued'}`);
+
+  if (status === 200) {
+    check('playback URL is a directory-token HLS manifest',
+      typeof body.url === 'string' && body.url.includes('/bcdn_token=') && body.url.endsWith('playlist.m3u8'),
+      body.url ? body.url.slice(0, 72) + '…' : 'no url');
+    check('playback URL expires, and soon',
+      Number.isFinite(body.expiresAt) && body.expiresAt - Math.floor(Date.now() / 1000) <= 7200,
+      `${body.expiresAt - Math.floor(Date.now() / 1000)}s of life`);
+  } else {
+    check('no signed URL issued while Bunny is unconfigured',
+      typeof body.url !== 'string',
+      body.error || 'none');
+  }
+
+  const unknown = await s.eval(`
+    fetch('/api/lessons/00000000-0000-0000-0000-000000000000/playback')
+      .then(r => JSON.stringify({ status: r.status }))
+      .catch(() => JSON.stringify({ status: 0 }))
+  `);
+  check('unknown lesson id is a 404 for a signed-in student',
+    JSON.parse(unknown).status === 404,
+    `${JSON.parse(unknown).status}`);
+
+  // The case that actually matters: REAL lessons this student is not entitled
+  // to. The outline deliberately lists locked lessons, so their ids are right
+  // there in the DOM — probe every one and confirm the paywall holds per
+  // lesson, not just in aggregate. A bogus uuid only ever proved 404 routing.
+  const probe = await s.eval(`
+    (async () => {
+      const ids = [...new Set([...document.querySelectorAll('[data-lesson-id]')]
+        .map(el => el.getAttribute('data-lesson-id'))
+        .filter(id => id && /^[0-9a-f]{8}-/.test(id)))];
+      const out = [];
+      for (const id of ids) {
+        try {
+          const r = await fetch('/api/lessons/' + id + '/playback');
+          const b = await r.json().catch(() => ({}));
+          out.push({ id, status: r.status, url: typeof b.url === 'string' });
+        } catch { out.push({ id, status: 0, url: false }); }
+      }
+      return JSON.stringify(out);
+    })()
+  `);
+  const probed = JSON.parse(probe);
+  const denied = probed.filter((r) => r.status === 404);
+  const allowed = probed.filter((r) => [200, 409, 503].includes(r.status));
+
+  check('every lesson in the outline resolves to allow or deny, nothing else',
+    probed.length > 0 && probed.every((r) => [200, 404, 409, 503].includes(r.status)),
+    `${probed.length} probed: ${allowed.length} allowed, ${denied.length} denied`);
+
+  check('no lesson ever leaks a signed URL while Bunny is unconfigured',
+    probed.every((r) => !r.url),
+    'none leaked');
+
+  if (lockedExpectedEarly) {
+    check('a student with a locked module is denied at least one real lesson',
+      denied.length > 0,
+      `${denied.length} lesson(s) denied`);
+  } else {
+    check('a fully entitled student is denied no real lesson',
+      denied.length === 0,
+      `${denied.length} lesson(s) denied`);
+  }
+}
+
 // ---------- 5. Vault ----------
 await s.goto(`${BASE}/vault`, 4000);
 const vault = await s.text();
