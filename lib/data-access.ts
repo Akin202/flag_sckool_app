@@ -38,6 +38,7 @@ import {
   AdminLesson,
   GenerateCodesParams,
   AdminLessonUpdatePayload,
+  SignedPlayback,
 } from '@/types/index';
 import {
   MOCK_MODULES,
@@ -123,6 +124,8 @@ export async function getLessonById(
   prevLessonId: string | null;
   isCompleted: boolean;
   isLocked: boolean;
+  /** Where the student stopped, so the player can resume rather than restart. */
+  lastPositionSeconds: number;
 } | null> {
   const context = await fetchLessonContext(lessonId);
   if (!context) return null;
@@ -133,6 +136,51 @@ export async function getLessonById(
     return { ...context, isLocked: true };
   }
   return context;
+}
+
+/**
+ * Raised when playback cannot be issued. `status` distinguishes "you are not
+ * entitled" (404) from "no video attached yet" (409) from "Bunny is not
+ * configured" (503) — three states the player must not blur together, since
+ * only one of them is the student's problem.
+ */
+export class PlaybackError extends Error {
+  readonly status: number;
+
+  constructor(message: string, status: number) {
+    super(message);
+    this.name = 'PlaybackError';
+    this.status = status;
+  }
+}
+
+/**
+ * A short-lived signed HLS manifest URL for a lesson's video.
+ *
+ * The one read here that does NOT go straight to PostgREST. Signing needs the
+ * Bunny pull zone key and a service-role read of `lessons.bunny_video_id`,
+ * neither of which may reach the browser, so the work happens in the route
+ * handler and this is only the fetch.
+ *
+ * Throws on failure rather than returning null, because the player has to tell
+ * the three cases apart: not entitled (404), no video attached yet (409), and
+ * Bunny not configured (503) are three different things to put on screen.
+ */
+export async function getLessonPlayback(lessonId: string): Promise<SignedPlayback> {
+  const response = await fetch(`/api/lessons/${lessonId}/playback`, {
+    // The URL is per-user and expires in minutes; never let it sit in a cache.
+    cache: 'no-store',
+  });
+
+  if (!response.ok) {
+    const body = await response.json().catch(() => ({}));
+    throw new PlaybackError(
+      typeof body?.error === 'string' ? body.error : 'Could not load this video.',
+      response.status
+    );
+  }
+
+  return response.json();
 }
 
 /**

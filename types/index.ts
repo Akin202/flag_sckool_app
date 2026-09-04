@@ -111,6 +111,21 @@ export interface VideoConfig {
   signedUrlTtlSeconds: number;
 }
 
+/**
+ * What the player gets back for a lesson it is entitled to.
+ *
+ * Never the raw Bunny video id — that column is revoked from every client
+ * role. Only this signed, expiring manifest URL crosses to the browser.
+ */
+export interface SignedPlayback {
+  /** Token-signed HLS manifest. Valid until `expiresAt`. */
+  url: string;
+  /** Unix seconds. The player re-signs before this passes, mid-playback. */
+  expiresAt: number;
+  /** True media duration from the database, for the control strip. */
+  durationSeconds: number;
+}
+
 export interface AuthScreenCopy {
   title: string;
   subtitle?: string;

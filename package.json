@@ -11,14 +11,18 @@
     "smoke:browser": "node scripts/smoke-browser.mjs",
     "verify:reads": "node --experimental-strip-types --env-file=.env.local scripts/verify-reads.ts",
     "rls:attack": "node --experimental-strip-types --env-file=.env.local scripts/rls-attack.ts",
+    "verify:bunny": "node --conditions=react-server --experimental-strip-types scripts/verify-bunny-token.ts",
+    "verify:playback": "node --experimental-strip-types --env-file=.env.local scripts/verify-playback-route.ts",
     "seed:test": "node --experimental-strip-types --env-file=.env.local scripts/seed-test-data.ts",
     "db:push": "supabase db push",
-    "db:types": "supabase gen types typescript --linked > types/database.ts"
+    "db:types": "supabase gen types typescript --linked > types/database.ts",
+    "bunny:sync": "node --experimental-strip-types --env-file=.env.local scripts/sync-bunny-videos.ts"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.5",
     "@supabase/supabase-js": "^2.112.4",
     "clsx": "^2.1.1",
+    "hls.js": "^1.7.1",
     "lucide-react": "^0.546.0",
     "motion": "^12.23.24",
     "next": "^16.3.2",

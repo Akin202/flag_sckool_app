@@ -23,6 +23,8 @@ export interface LessonContext {
   prevLessonId: string | null;
   isCompleted: boolean;
   isLocked: boolean;
+  /** Where the student stopped. The player seeks here on loadedmetadata. */
+  lastPositionSeconds: number;
 }
 
 export async function fetchLessonContext(
@@ -53,7 +55,7 @@ export async function fetchLessonContext(
 
   const { data: progress, error } = await supabase
     .from('lesson_progress')
-    .select('completed_at')
+    .select('completed_at, position_seconds')
     .eq('lesson_id', lessonId)
     .maybeSingle();
 
@@ -66,5 +68,6 @@ export async function fetchLessonContext(
     nextLessonId: index >= 0 && index < flat.length - 1 ? flat[index + 1].id : null,
     isCompleted: Boolean(progress?.completed_at),
     isLocked,
+    lastPositionSeconds: progress?.position_seconds ?? 0,
   };
 }

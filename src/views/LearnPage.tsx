@@ -22,8 +22,10 @@ import {
   getLessonComments,
   postLessonComment,
   toggleLessonCompletion,
+  saveLessonPosition,
   getUserProfile,
 } from '@/lib/data-access';
+import { useLessonPlayer } from '@/hooks/useLessonPlayer';
 import { StudentNav } from '@/components/StudentNav';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
@@ -86,6 +88,7 @@ export const LearnPage: React.FC<LearnPageProps> = ({
       prevLessonId: string | null;
       isCompleted: boolean;
       isLocked: boolean;
+      lastPositionSeconds: number;
     }>
   >({ status: 'loading' });
 
@@ -94,9 +97,8 @@ export const LearnPage: React.FC<LearnPageProps> = ({
   const [comments, setComments] = useState<LessonComment[]>([]);
   const [user, setUser] = useState<UserProfile | undefined>();
 
-  // Player state
-  const [isPlaying, setIsPlaying] = useState<boolean>(false);
-  const [currentTimeSeconds, setCurrentTimeSeconds] = useState<number>(45 * 60 + 12); // Initial 45:12 resume point
+  // Player state. Position and playback come from the real <video> via
+  // useLessonPlayer — only the student's own preferences live here.
   const [quality, setQuality] = useState<VideoQuality>(config.player?.defaultQuality || '480p');
   const [dataSaver, setDataSaver] = useState<boolean>(dataSaverVariant === 'on');
   const [isCompleted, setIsCompleted] = useState<boolean>(false);
@@ -160,13 +162,83 @@ export const LearnPage: React.FC<LearnPageProps> = ({
     };
   }, [lessonId, commentsVariant, resourcesVariant, lessonAccessVariant]);
 
-  // Total lesson duration in seconds
+  // Real playback. Everything below reads from this rather than from timers.
+  const player = useLessonPlayer({
+    lessonId,
+    isLocked: loadState.status === 'success' ? loadState.data.isLocked : true,
+    quality,
+    resumeAtSeconds:
+      loadState.status === 'success' ? loadState.data.lastPositionSeconds : 0,
+  });
+
+  const { isPlaying, currentTime: currentTimeSeconds } = player;
+
+  /**
+   * Lesson length.
+   *
+   * Prefer the media's own duration once the browser reports it; fall back to
+   * the curriculum's `durationMinutes` before then so the control strip has a
+   * scale to render against instead of collapsing to 0:00 on first paint.
+   */
   const totalSeconds = useMemo(() => {
+    if (player.duration > 0) return player.duration;
     if (loadState.status === 'success' && loadState.data.lesson) {
       return loadState.data.lesson.durationMinutes * 60;
     }
-    return 115 * 60;
-  }, [loadState]);
+    return 0;
+  }, [player.duration, loadState]);
+
+  /**
+   * Persist playback position.
+   *
+   * Completion is the product, so this is not bookkeeping — it is what makes a
+   * student who watches in fragments over several days able to pick up where
+   * they stopped instead of scrubbing for the spot and giving up. It is also
+   * what marks a lesson complete: `saveLessonPosition` auto-completes past the
+   * configured threshold, so no separate call is needed.
+   *
+   * Reads position from a ref rather than from state so the interval is created
+   * once per lesson instead of being torn down and rebuilt on every timeupdate.
+   */
+  const positionRef = useRef({ current: 0, total: 0 });
+  positionRef.current = { current: currentTimeSeconds, total: totalSeconds };
+
+  useEffect(() => {
+    if (loadState.status !== 'success' || loadState.data.isLocked) return;
+
+    const lessonKey = loadState.data.lesson.id;
+
+    const flush = () => {
+      const { current, total } = positionRef.current;
+      // Zero is the pre-metadata state, not a real position — writing it would
+      // overwrite a good resume point with the start of the lesson.
+      if (current <= 0 || total <= 0) return;
+      void saveLessonPosition(lessonKey, current, total);
+      if (!isCompleted && (current / total) * 100 >= config.player.markCompleteAtPercent) {
+        setIsCompleted(true);
+      }
+    };
+
+    const intervalId = isPlaying
+      ? setInterval(flush, config.player.savePositionEverySeconds * 1000)
+      : undefined;
+
+    // Students close the tab mid-lesson; without this the last interval's worth
+    // of progress is simply lost, and they resume slightly behind where they
+    // actually stopped every single time.
+    const onHide = () => {
+      if (document.visibilityState === 'hidden') flush();
+    };
+    document.addEventListener('visibilitychange', onHide);
+    window.addEventListener('pagehide', flush);
+
+    return () => {
+      if (intervalId) clearInterval(intervalId);
+      document.removeEventListener('visibilitychange', onHide);
+      window.removeEventListener('pagehide', flush);
+      flush();
+    };
+  }, [loadState, isPlaying, isCompleted, config.player.savePositionEverySeconds, config.player.markCompleteAtPercent]);
 
   // Remaining duration in minutes for accurate data usage calculation
   const remainingMinutes = useMemo(() => {
@@ -207,14 +279,10 @@ export const LearnPage: React.FC<LearnPageProps> = ({
 
   // Handle Scrubber Seek
   const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newSec = Number(e.target.value);
-    setCurrentTimeSeconds(newSec);
+    player.seek(Number(e.target.value));
   };
 
-  // Handle Play/Pause
-  const togglePlay = () => {
-    setIsPlaying((prev) => !prev);
-  };
+  const togglePlay = player.togglePlay;
 
   // Handle Fullscreen
   const toggleFullscreen = () => {
@@ -336,17 +404,49 @@ export const LearnPage: React.FC<LearnPageProps> = ({
                     </Button>
                   </div>
                 ) : (
-                  /* VIDEO CANVAS SIMULATION */
-                  <div
-                    onClick={togglePlay}
-                    className="absolute inset-0 bg-gradient-to-t from-ink-deep via-ink-raised/60 to-ink-raised flex items-center justify-center cursor-pointer group"
-                  >
-                    {/* Centered Play Prompt (when paused) */}
-                    {!isPlaying && (
-                      <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-flag-red text-paper-soft flex items-center justify-center shadow-2xl ring-4 ring-flag-red/30 transition-transform group-hover:scale-105">
-                        <Play className="w-8 h-8 sm:w-10 sm:h-10 ml-1 fill-current" />
+                  <div className="absolute inset-0">
+                    {/*
+                      Token-signed HLS, played through our own element rather
+                      than Bunny's iframe — see useLessonPlayer for why. The
+                      poster stays dark so no frame paints before playback.
+                    */}
+                    <video
+                      ref={player.videoRef}
+                      id="lesson-player-video"
+                      className="absolute inset-0 w-full h-full bg-ink-deep"
+                      playsInline
+                      // Never `auto`: preloading a two-hour lesson the student
+                      // may not watch is exactly the data cost this app exists
+                      // to avoid.
+                      preload="metadata"
+                      onClick={togglePlay}
+                    />
+
+                    {player.status === 'error' ? (
+                      <div className="absolute inset-0 bg-ink-deep/95 flex flex-col items-center justify-center p-6 text-center gap-2">
+                        <WifiOff className="w-8 h-8 text-flag-red" />
+                        <p className="text-sm text-paper-soft max-w-sm">
+                          {player.errorMessage}
+                        </p>
                       </div>
-                    )}
+                    ) : player.isBuffering || player.status === 'loading' ? (
+                      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                        <div className="px-3 py-1.5 rounded-lg bg-ink-deep/80 text-xs font-mono text-body-text">
+                          Buffering…
+                        </div>
+                      </div>
+                    ) : !isPlaying ? (
+                      <button
+                        type="button"
+                        onClick={togglePlay}
+                        aria-label="Play lesson"
+                        className="absolute inset-0 flex items-center justify-center group cursor-pointer"
+                      >
+                        <span className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-flag-red text-paper-soft flex items-center justify-center shadow-2xl ring-4 ring-flag-red/30">
+                          <Play className="w-8 h-8 sm:w-10 sm:h-10 ml-1 fill-current" />
+                        </span>
+                      </button>
+                    ) : null}
                   </div>
                 )}
 
@@ -425,13 +525,20 @@ export const LearnPage: React.FC<LearnPageProps> = ({
                           className="min-h-[48px] px-2.5 py-1 text-xs font-mono font-medium rounded-lg bg-ink-border text-paper-soft border border-[#2D3A63] focus:ring-2 focus:ring-flag-red focus:outline-none cursor-pointer"
                           aria-label="Select Video Stream Quality"
                         >
-                          {(config.player?.availableQualities || ['360p', '480p', '720p', '1080p']).map(
-                            (q) => (
-                              <option key={q} value={q} className="bg-ink-raised text-paper-soft">
-                                {q}
-                              </option>
-                            )
-                          )}
+                          {/*
+                            Driven by the manifest once it has parsed, not by
+                            config alone: offering a rendition Bunny did not
+                            encode would silently play a different one. There is
+                            deliberately no "Auto" entry — see useLessonPlayer.
+                          */}
+                          {(player.availableQualities.length > 0
+                            ? player.availableQualities
+                            : config.player?.availableQualities || ['360p', '480p', '720p', '1080p']
+                          ).map((q) => (
+                            <option key={q} value={q} className="bg-ink-raised text-paper-soft">
+                              {q}
+                            </option>
+                          ))}
                         </select>
                       </div>
 
@@ -577,6 +684,11 @@ export const LearnPage: React.FC<LearnPageProps> = ({
                             <button
                               key={les.id}
                               type="button"
+                              // The lesson id is otherwise nowhere in the DOM —
+                              // the outline navigates by handler, not by href.
+                              // smoke-browser.mjs reads these to probe playback
+                              // authorization for every lesson individually.
+                              data-lesson-id={les.id}
                               onClick={() => {
                                 setShowMobileOutline(false);
                                 onNavigate && onNavigate('learn', les.id);
@@ -803,6 +915,7 @@ export const LearnPage: React.FC<LearnPageProps> = ({
                           return (
                             <button
                               key={les.id}
+                              data-lesson-id={les.id}
                               id={`nav-rail-lesson-${les.id}`}
                               type="button"
                               onClick={() => onNavigate && onNavigate('learn', les.id)}
