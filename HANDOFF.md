@@ -293,7 +293,27 @@ and `db reset` both assume it and will fail or do damage.
 
 **Supabase dashboard — Auth → URL Configuration.** Site URL and redirect URLs
 must use **`http://localhost:3001`** (not 3000 — the port changed after that
-instruction was first given) plus `https://flagskool.com/**`.
+instruction was first given) plus `https://flagskool.com/**`. If
+`http://localhost:3001/**` is missing from the allow-list, Supabase silently
+discards `redirect_to` and sends the user to the Site URL instead — a port with
+nothing listening, which reads as "the confirmation link is broken".
+
+**Supabase dashboard — Auth → Email Templates.** These are **not in git**, so
+they are recorded here. The stock templates emit `{{ .ConfirmationURL }}`, which
+routes through Supabase's `/auth/v1/verify` and lands on `/auth/confirm?code=…`
+(PKCE). `app/auth/confirm/route.ts` now handles that shape as a fallback, but
+PKCE only works in the browser that started the flow — the verifier cookie does
+not exist on a second device. Since students sign up on a laptop and open Gmail
+on a phone, rewrite both templates to the `token_hash` shape, which is
+device-independent:
+
+- **Confirm signup** →
+  `{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=signup&next=/dashboard`
+- **Reset password** →
+  `{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=recovery&next=/reset`
+
+`{{ .SiteURL }}` resolves from Auth → URL Configuration, so the two settings
+above must be correct for these to work.
 
 **Supabase dashboard — Auth → SMTP.** Blocked. Resend has **no domains added**
 (checked via its API), and Supabase will not send from an unverified domain.

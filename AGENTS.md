@@ -43,7 +43,8 @@ Two audiences:
 - Tailwind CSS v4, theme driven entirely by `/config/flagskool.config.ts`
 - Motion (`motion`) — transform and opacity only, always behind reduced-motion
 - Supabase — Postgres, Auth, Storage, RLS
-- Bunny Stream — video, token-authenticated *(account not created yet)*
+- Bunny Stream — video, CDN token auth, played through our own hls.js player
+  *(code done; account not created yet)*
 - Paystack — Naira, one-time payments only, no subscriptions
 - Resend — transactional and behavioural email
 - Vercel
@@ -106,6 +107,9 @@ npm run db:push        # apply migrations to the linked remote project
 npm run db:types       # regenerate types/database.ts from the live schema
 npm run rls:attack     # the paywall acceptance test — must stay 14/14
 npm run verify:reads   # the read-path acceptance test — must be ALL CHECKS PASSED
+npm run verify:bunny   # Bunny URL signer vs. BunnyWay's reference vectors (no creds, no network)
+npm run verify:playback # playback route, logged out — needs the dev server up
+npm run bunny:sync     # map Bunny video GUIDs onto lessons; dry run unless -- --apply
 ALLOW_TEST_SEED=1 npm run seed:test   # test students, all @flagskool.test
 ```
 
@@ -143,6 +147,22 @@ Read these before debugging. Each one looked correct and did nothing.
   only one today — passes `await createClient()` from `lib/supabase/server`
   instead. Calling the browser factory during a server render is a hard build
   error, not a warning, and it only shows up at prerender time.
+- **Bunny has two token systems with two different keys.** Embed tokens
+  (`SHA256(key + videoId + expires)`, key at Stream → library → API) secure the
+  iframe player; **CDN tokens** (HMAC-SHA256, key on the **pull zone**) secure
+  the direct files. We use the second. The wrong key signs a well-formed URL
+  that 403s. Relatedly, the token must sit in the **path** (`/bcdn_token=…/`),
+  not the query string — HLS segments are referenced relatively, so a
+  query-string token loads the manifest and then 403s every segment, which
+  presents as the video freezing rather than as an auth error.
+- **`anon` cannot read the `lessons` table at all**, despite
+  `lessons_read_entitled` saying `to anon, authenticated`. The policy calls
+  `user_has_sku()`, which is deliberately revoked from `anon`, so an anonymous
+  select raises 42501 rather than returning the free-preview row — the `or`
+  does not short-circuit around it. The anon surface is the `curriculum` view.
+  Consequence: **logged-out playback of the free preview is not wired**, and
+  making it work needs a definer-backed path for preview videos, not a grant of
+  `user_has_sku` to `anon`.
 - **supabase-js infers row types from the `select()` *string literal*.**
   Building that string with `+` collapses it to `string` and silently loses
   every column type. Keep each select on one literal, however long.
@@ -265,8 +285,15 @@ Still deliberately mock, each keeping its `TODO(handoff)` marker:
 
 Blocked on external accounts, not on code:
 
-- **Bunny Stream** — no account exists, so `BUNNY_*` env vars are empty and no
-  video signing or playback is wired. `Lesson.bunnyVideoId` is `''` by design.
+- **Bunny Stream** — the code is written and tested; only the account is
+  missing. `lib/bunny/token.ts` signs directory tokens (verified byte-identical
+  to BunnyWay's reference signer), `app/api/lessons/[lessonId]/playback/route.ts`
+  issues them after an RLS entitlement check, and `src/hooks/useLessonPlayer.ts`
+  plays them with the level pinned and the token refreshed mid-lesson. With
+  `BUNNY_*` unset the route returns 503 and the player says so. Fill in
+  `BUNNY_CDN_HOSTNAME` + `BUNNY_CDN_TOKEN_KEY` (see `.env.example`), run
+  `npm run bunny:sync`, and it is live. `Lesson.bunnyVideoId` stays `''` by
+  design — the id never reaches the browser, only a signed URL does.
 - **Resource downloads** — `app/api/resources/[id]/download/route.ts` is written
   and enforces entitlement correctly, but no Storage bucket exists and the course
   files are not uploaded, so it returns a 503 explaining that. Set
