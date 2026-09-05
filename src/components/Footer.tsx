@@ -1,6 +1,7 @@
 import React from 'react';
 import { FlagSkoolConfig, Page } from '@/types/index';
 import { Send, Mail, ExternalLink, Shield, Gift, KeyRound } from 'lucide-react';
+import { ThemeToggle } from '@/components/theme/ThemeToggle';
 
 export interface FooterProps {
   config: FlagSkoolConfig;
@@ -125,9 +126,12 @@ export const Footer: React.FC<FooterProps> = ({ config, onOpenRefundModal, onNav
         {/* Bottom Bar */}
         <div className="pt-8 border-t border-ink-border flex flex-col sm:flex-row items-center justify-between gap-4 text-[14px] text-muted-text">
           <p>© {currentYear} {config.org.name}. All rights reserved.</p>
-          <p className="font-mono text-xs text-muted-text">
-            Strictly visual front-end presentation · Zero network calls
-          </p>
+          <div className="flex items-center gap-4">
+            <ThemeToggle id="footer-theme-toggle" variant="pill" />
+            <p className="font-mono text-xs text-muted-text">
+              Optimized for all lighting & network conditions
+            </p>
+          </div>
         </div>
       </div>
     </footer>

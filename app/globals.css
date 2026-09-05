@@ -48,6 +48,168 @@
   }
 }
 
+/*
+ * FlagIQ-inspired light mode tokens matching https://www.flagiq.org/
+ * Canvas: #F7F4EE (FlagIQ --bg)
+ * Surfaces / Cards: #FFFFFF (FlagIQ --bg-white)
+ * Borders: #E5E1D8 (FlagIQ --border)
+ * Primary Accent: #DC2626 (FlagIQ --accent)
+ * Headings & Soft text: #111111 (FlagIQ --text)
+ * Muted Text: #5C5C5C (FlagIQ --text-2)
+ */
+html[data-theme="light"],
+html.light {
+  --color-ink-deep: #F7F4EE;
+  --color-ink-raised: #FFFFFF;
+  --color-ink-border: #E5E1D8;
+  --color-flag-red: #DC2626;
+  --color-body-text: #111111;
+  --color-muted-text: #5C5C5C;
+  --color-paper-soft: #111111;
+  color-scheme: light;
+}
+
+/* Light mode base text & canvas synchronization */
+html[data-theme="light"] body,
+html.light body {
+  background-color: var(--color-ink-deep);
+  color: var(--color-body-text);
+}
+
+/* Text selection in light mode matches FlagIQ ::selection */
+html[data-theme="light"] ::selection,
+html.light ::selection {
+  background-color: #DC2626;
+  color: #FFFFFF;
+}
+
+/* Solid red backgrounds and accents must always preserve white text/icons */
+html[data-theme="light"] .bg-flag-red,
+html[data-theme="light"] .bg-flag-red *,
+html[data-theme="light"] [class*="bg-flag-red"]:not([class*="bg-flag-red/"]),
+html[data-theme="light"] [class*="bg-flag-red"]:not([class*="bg-flag-red/"]) *,
+html.light .bg-flag-red,
+html.light .bg-flag-red *,
+html.light [class*="bg-flag-red"]:not([class*="bg-flag-red/"]),
+html.light [class*="bg-flag-red"]:not([class*="bg-flag-red/"]) * {
+  color: #FFFFFF !important;
+}
+
+/* Red hover states retain white text */
+html[data-theme="light"] .hover\:bg-flag-red:hover,
+html[data-theme="light"] .hover\:bg-flag-red:hover *,
+html.light .hover\:bg-flag-red:hover,
+html.light .hover\:bg-flag-red:hover * {
+  color: #FFFFFF !important;
+}
+
+/* Secondary button adaptation for FlagIQ light palette */
+html[data-theme="light"] button[class*="hover:bg-[#121A3F]"],
+html.light button[class*="hover:bg-[#121A3F]"] {
+  background-color: #FFFFFF;
+  color: #111111;
+  border-color: #E5E1D8;
+}
+
+html[data-theme="light"] button[class*="hover:bg-[#121A3F]"]:hover,
+html.light button[class*="hover:bg-[#121A3F]"]:hover {
+  background-color: #F0EDE5 !important;
+  border-color: #111111 !important;
+  color: #111111 !important;
+}
+
+/* Card hover borders in light mode */
+html[data-theme="light"] [class*="hover:border-[#2D3A63]"]:hover,
+html.light [class*="hover:border-[#2D3A63]"]:hover {
+  border-color: #D1CCC1 !important;
+}
+
+/* Badges adaptation in light mode */
+html[data-theme="light"] [class*="bg-ink-border"][class*="text-[#E2E8F0]"],
+html.light [class*="bg-ink-border"][class*="text-[#E2E8F0]"] {
+  background-color: #F0EDE5 !important;
+  color: #111111 !important;
+  border-color: #E5E1D8 !important;
+}
+
+html[data-theme="light"] [class*="bg-[#064E3B]"],
+html.light [class*="bg-[#064E3B]"] {
+  background-color: #ECFDF5 !important;
+  color: #065F46 !important;
+  border-color: #A7F3D0 !important;
+}
+
+html[data-theme="light"] [class*="bg-[#78350F]"],
+html.light [class*="bg-[#78350F]"] {
+  background-color: #FFFBEB !important;
+  color: #92400E !important;
+  border-color: #FDE68A !important;
+}
+
+/* Form inputs on light mode: FlagIQ style crisp white with warm sand border and dark text */
+html[data-theme="light"] input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+html[data-theme="light"] textarea,
+html[data-theme="light"] select,
+html.light input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+html.light textarea,
+html.light select {
+  background-color: #FFFFFF;
+  color: #111111;
+  border-color: #E5E1D8;
+}
+
+html[data-theme="light"] input:focus,
+html[data-theme="light"] textarea:focus,
+html[data-theme="light"] select:focus,
+html.light input:focus,
+html.light textarea:focus,
+html.light select:focus {
+  border-color: #DC2626 !important;
+}
+
+html[data-theme="light"] input::placeholder,
+html[data-theme="light"] textarea::placeholder,
+html.light input::placeholder,
+html.light textarea::placeholder {
+  color: #909090;
+}
+
+/* FlagIQ subtle warm shadows */
+html[data-theme="light"] .shadow-2xl,
+html[data-theme="light"] .shadow-xl,
+html[data-theme="light"] .shadow-lg,
+html.light .shadow-2xl,
+html.light .shadow-xl,
+html.light .shadow-lg {
+  box-shadow: 0 24px 64px rgba(17, 17, 17, 0.06), 0 4px 16px rgba(17, 17, 17, 0.03);
+}
+
+html[data-theme="light"] .shadow-md,
+html.light .shadow-md {
+  box-shadow: 0 4px 20px rgba(17, 17, 17, 0.04), 0 1px 3px rgba(17, 17, 17, 0.02);
+}
+
+html[data-theme="light"] .shadow-black\/60,
+html[data-theme="light"] .shadow-black\/50,
+html[data-theme="light"] .shadow-black\/20,
+html.light .shadow-black\/60,
+html.light .shadow-black\/50,
+html.light .shadow-black\/20 {
+  box-shadow: 0 4px 20px rgba(17, 17, 17, 0.04), 0 1px 3px rgba(17, 17, 17, 0.02);
+}
+
+/* Video player controls strip remains dark for media legibility */
+#player-control-strip {
+  background-image: linear-gradient(to top, rgba(3, 6, 23, 0.95), rgba(10, 15, 41, 0.8), transparent) !important;
+}
+#player-control-strip,
+#player-control-strip * {
+  color: #F8FAFC;
+}
+#player-watermark {
+  color: #F8FAFC !important;
+}
+
 
 /* Restrict all animations to transform and opacity only. */
 @keyframes subtlePulse {

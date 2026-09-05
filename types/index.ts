@@ -141,6 +141,7 @@ export interface AuthCopyConfig {
 
 export interface FlagSkoolConfig {
   brand: BrandConfig;
+  brandLight?: BrandConfig;
   org: OrgConfig;
   promo: PromoConfig;
   player: PlayerConfig;

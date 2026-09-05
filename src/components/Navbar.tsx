@@ -1,7 +1,10 @@
+'use client';
+
 import React, { useState, useEffect } from 'react';
 import { Button } from './ui/Button';
 import { FlagSkoolConfig } from '@/types/index';
 import { Sparkles } from 'lucide-react';
+import { ThemeToggle } from '@/components/theme/ThemeToggle';
 
 export interface NavbarProps {
   config: FlagSkoolConfig;
@@ -50,7 +53,9 @@ export const Navbar: React.FC<NavbarProps> = ({
         </a>
 
         {/* Action Buttons Right */}
-        <div className="flex items-center gap-2 sm:gap-3.5">
+        <div className="flex items-center gap-2 sm:gap-3">
+          <ThemeToggle id="nav-theme-toggle" size="sm" />
+
           <Button
             id="nav-login-button"
             variant="ghost"

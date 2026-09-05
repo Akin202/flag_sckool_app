@@ -10,6 +10,15 @@ export const config: FlagSkoolConfig = {
     mutedText: '#8492A6',
     paperSoft: '#F8FAFC',
   },
+  brandLight: {
+    inkDeep: '#F7F4EE',
+    inkRaised: '#FFFFFF',
+    inkBorder: '#E5E1D8',
+    flagRed: '#DC2626',
+    bodyText: '#111111',
+    mutedText: '#5C5C5C',
+    paperSoft: '#111111',
+  },
   org: {
     name: 'Flag Skool',
     wordmark: 'FLAG SKOOL',

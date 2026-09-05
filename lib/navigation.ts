@@ -35,8 +35,8 @@ export function pageToPath(page: Page, lessonId?: string): string {
 }
 
 /** Reverse lookup, for components that highlight the active nav item. */
-export function pathToPage(pathname: string): Page {
-  if (pathname === '/' || pathname === '') return 'landing';
+export function pathToPage(pathname?: string | null): Page {
+  if (!pathname || pathname === '/' || pathname === '') return 'landing';
   if (pathname.startsWith('/learn')) return 'learn';
 
   const normalized = pathname.replace(/\/+$/, '');

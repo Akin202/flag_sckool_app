@@ -30,7 +30,9 @@ import {
   Receipt,
   LogOut,
   AlertCircle,
+  Sun,
 } from 'lucide-react';
+import { ThemeToggle } from '@/components/theme/ThemeToggle';
 
 export interface AccountPageProps {
   config: FlagSkoolConfig;
@@ -364,6 +366,25 @@ export const AccountPage: React.FC<AccountPageProps> = ({
                     </Button>
                   </div>
                 </form>
+              </Card>
+
+              {/* Display & Appearance Card */}
+              <Card className="p-6 bg-ink-raised border border-ink-border space-y-4">
+                <div className="flex items-center justify-between pb-3 border-b border-ink-border">
+                  <h2 className="font-display font-bold text-lg text-paper-soft flex items-center gap-2">
+                    <Sun className="w-5 h-5 text-flag-red" />
+                    <span>Display & Appearance</span>
+                  </h2>
+                </div>
+
+                <div className="space-y-3">
+                  <p className="text-xs text-muted-text leading-relaxed">
+                    Select your preferred interface theme. Switch to FlagIQ Light mode to match the official FlagIQ agency aesthetic (#F7F4EE canvas, crisp white cards, and signature red accents).
+                  </p>
+                  <div>
+                    <ThemeToggle id="account-theme-segmented" variant="segmented" />
+                  </div>
+                </div>
               </Card>
             </div>
 

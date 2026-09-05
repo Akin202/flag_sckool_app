@@ -2,6 +2,7 @@ import React from 'react';
 import { FlagSkoolConfig, Page } from '@/types/index';
 import { Card } from '@/components/ui/Card';
 import { ShieldCheck, ArrowLeft } from 'lucide-react';
+import { ThemeToggle } from '@/components/theme/ThemeToggle';
 
 export interface AuthLayoutProps {
   title: string;
@@ -39,16 +40,19 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({
           </span>
         </button>
 
-        {onNavigate && (
-          <button
-            type="button"
-            onClick={() => onNavigate('landing')}
-            className="text-xs font-mono text-muted-text hover:text-body-text flex items-center gap-1 transition-colors"
-          >
-            <ArrowLeft className="w-3.5 h-3.5" />
-            Home
-          </button>
-        )}
+        <div className="flex items-center gap-3">
+          <ThemeToggle id="auth-theme-toggle" size="sm" />
+          {onNavigate && (
+            <button
+              type="button"
+              onClick={() => onNavigate('landing')}
+              className="text-xs font-mono text-muted-text hover:text-body-text flex items-center gap-1 transition-colors"
+            >
+              <ArrowLeft className="w-3.5 h-3.5" />
+              Home
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Centered Auth Card */}

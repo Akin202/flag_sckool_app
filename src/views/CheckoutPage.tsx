@@ -16,6 +16,7 @@ import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { Input } from '@/components/ui/FormControls';
 import { Badge } from '@/components/ui/Badge';
+import { ThemeToggle } from '@/components/theme/ThemeToggle';
 import {
   FlagSkoolConfig,
   CheckoutState,
@@ -172,6 +173,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
         </button>
 
         <div className="flex items-center gap-3 text-xs font-mono text-muted-text">
+          <ThemeToggle id="checkout-theme-toggle" size="sm" />
           <span className="hidden sm:flex items-center gap-1.5 text-[#059669]">
             <Lock className="w-3.5 h-3.5" /> 256-Bit SSL Encrypted
           </span>

@@ -1,9 +1,25 @@
 import type { Metadata, Viewport } from 'next';
 import { Fraunces, Instrument_Sans, JetBrains_Mono } from 'next/font/google';
 import { config } from '@/config/flagskool.config';
+import { ThemeProvider } from '@/components/theme/ThemeProvider';
 import { DevStateProvider } from '@/components/dev/DevStateProvider';
 import { DevStateSwitcherMount } from '@/components/DevStateSwitcherMount';
 import './globals.css';
+
+const themeInitScript = `
+  (function() {
+    try {
+      var saved = localStorage.getItem('flagskool_theme');
+      if (saved === 'light') {
+        document.documentElement.setAttribute('data-theme', 'light');
+        document.documentElement.classList.add('light');
+      } else {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        document.documentElement.classList.add('dark');
+      }
+    } catch (e) {}
+  })();
+`;
 
 // Self-hosted via next/font so the fonts are not a render-blocking
 // third-party request on Slow 4G. `display: swap` keeps text visible.
@@ -60,13 +76,19 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      suppressHydrationWarning
       className={`${instrumentSans.variable} ${fraunces.variable} ${jetbrainsMono.variable}`}
     >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+      </head>
       <body className="min-h-screen bg-ink-deep font-sans text-body-text antialiased selection:bg-flag-red selection:text-paper-soft">
-        <DevStateProvider>
-          {children}
-          <DevStateSwitcherMount />
-        </DevStateProvider>
+        <ThemeProvider>
+          <DevStateProvider>
+            {children}
+            <DevStateSwitcherMount />
+          </DevStateProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

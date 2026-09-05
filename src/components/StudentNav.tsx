@@ -11,6 +11,7 @@ import {
   ChevronRight,
 } from 'lucide-react';
 import { Button } from './ui/Button';
+import { ThemeToggle } from '@/components/theme/ThemeToggle';
 
 export interface StudentNavProps {
   config: FlagSkoolConfig;
@@ -79,8 +80,10 @@ export const StudentNav: React.FC<StudentNavProps> = ({
           </div>
         </div>
 
-        {/* Right side: Telegram VIP + Profile Avatar */}
-        <div className="flex items-center gap-3 sm:gap-4">
+        {/* Right side: Theme Toggle + Telegram VIP + Profile Avatar */}
+        <div className="flex items-center gap-2.5 sm:gap-3">
+          <ThemeToggle id="student-nav-theme-toggle" size="sm" />
+
           <a
             id="student-nav-telegram-btn"
             href={config.org.telegramUrl}
